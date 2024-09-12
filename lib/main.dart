@@ -58,34 +58,43 @@ class _MainPageState extends State<MainPage> {
       body: Center(
         child: _pages.elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.density_medium_outlined),
-            label: 'Progression',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favoris',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Accueil',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.videogame_asset),
-            label: 'Jeux',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Profil',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepPurple, 
-        unselectedItemColor: Colors.grey,
-        backgroundColor: Colors.white,
-        onTap: _onItemTapped,
+      bottomNavigationBar: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(29),
+          topRight: Radius.circular(29),
+        ),  // Bordure arrondie
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.density_medium_outlined),
+              label: 'Progression',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.favorite, size: 30),
+              label: 'Favoris',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home, size: 30),
+              label: 'Accueil',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.videogame_asset, size: 30),
+              label: 'Jeux',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle, size: 30),
+              label: 'Profil',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.deepPurple,
+          unselectedItemColor: Colors.grey,
+          backgroundColor:  Colors.white,
+          selectedFontSize: 20,
+          unselectedFontSize: 20,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }
