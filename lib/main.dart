@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'pages/home_page.dart';
-import 'pages/page_one.dart';
-import 'pages/page_two.dart';
-import 'pages/page_three.dart';
-import 'pages/page_four.dart';
+import 'pages/progression_page.dart';
+import 'pages/favorite_page.dart';
+import 'pages/games_page.dart';
+import 'pages/profile_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Dyschool',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -33,14 +33,14 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 2;  // Index 2 pour la page d'accueil
+  int _selectedIndex = 2;
 
   static const List<Widget> _pages = <Widget>[
-    PageOne(),
-    PageTwo(),
+    ProgressionPage(),
+    FavoritePage(),
     HomePage(),
-    PageThree(),
-    PageFour(),
+    GamesPage(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -56,35 +56,35 @@ class _MainPageState extends State<MainPage> {
         title: const Text('Dyschool'),
       ),
       body: Center(
-        child: _pages.elementAt(_selectedIndex),  // Afficher la page sélectionnée
+        child: _pages.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.pageview),
-            label: 'Page 1',
+            icon: Icon(Icons.density_medium_outlined),
+            label: 'Progression',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.pageview),
-            label: 'Page 2',
+            icon: Icon(Icons.favorite),
+            label: 'Favoris',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: 'Accueil',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.pageview),
-            label: 'Page 3',
+            icon: Icon(Icons.videogame_asset),
+            label: 'Jeux',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.pageview),
-            label: 'Page 4',
+            icon: Icon(Icons.account_circle),
+            label: 'Profil',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepPurple,  // Couleur de l'icône sélectionnée
-        unselectedItemColor: Colors.grey,  // Couleur des icônes non sélectionnées
-        backgroundColor: Colors.white,  // Couleur du fond de la barre de navigation
+        selectedItemColor: Colors.deepPurple, 
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.white,
         onTap: _onItemTapped,
       ),
     );
