@@ -30,7 +30,7 @@ class CustomBottomNavBar extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home, size: 30),
-            label: 'Accueil',
+            label: 'Jouer',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.videogame_asset, size: 30),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/settings_popup.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,7 +11,6 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Prénom et bouton d'accessibilité
             Container(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
               width: double.infinity,
@@ -18,28 +18,21 @@ class HomePage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
                     'Prénom & Nom',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  Row(
-                    children: const [
-                      IconButton(
-                        onPressed: null,
-                        icon: Icon(Icons.circle, size: 16),
-                      ),
-                      IconButton(
-                        onPressed: null,
-                        icon: Icon(Icons.circle, size: 16),
-                      ),
-                      IconButton(
-                        onPressed: null,
-                        icon: Icon(Icons.circle, size: 16),
-                      ),
-                    ],
+                  IconButton(
+                    icon: const Icon(Icons.settings),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const SettingsPopup(),
+                      );
+                    },
                   ),
                 ],
               ),
