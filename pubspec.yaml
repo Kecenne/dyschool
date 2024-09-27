@@ -63,7 +63,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/logo.png
-    - assets/svg/wave.svg
+    - assets/images/placeholder.png
   fonts:
     - family: OpenDyslexic
       fonts:

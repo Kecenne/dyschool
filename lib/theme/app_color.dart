@@ -6,5 +6,5 @@ class AppColors {
   static const Color accentColor = Color(0xFF007A8E); // Light Blue
   static const Color backgroundColor = Color(0xFFF6F6F6); // Light Grey
   static const Color textColor = Color(0xFF1B1212); // Off-White
-  static const Color errorColor = Color(0xFFD53A24); // Rede
+  static const Color errorColor = Color(0xFFD53A24); // Red
 }
