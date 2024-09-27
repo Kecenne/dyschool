@@ -60,7 +60,17 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/logo.png
-
+  fonts:
+    - family: OpenDyslexic
+      fonts:
+        - asset: assets/fonts/open_dyslexic/OpenDyslexic-Regular.otf
+        - asset: assets/fonts/open_dyslexic/OpenDyslexic-Bold.otf
+          weight: 700
+        - asset: assets/fonts/open_dyslexic/OpenDyslexic-Italic.otf
+          style: italic
+        - asset: assets/fonts/open_dyslexic/OpenDyslexic-BoldItalic.otf
+          weight: 700
+          style: italic
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

@@ -3,6 +3,8 @@ import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "widgets/navbar.dart";
 import "../controllers/nav_controller.dart";
+import "pages/login_page.dart";
+import "theme/app_color.dart"; // Importez votre fichier de couleurs
 
 void main() {
   runApp(const MyApp());
@@ -16,9 +18,19 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: "Dyschool",
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        scaffoldBackgroundColor: Colors.white,
+        primaryColor: AppColors.primaryColor,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primaryColor,
+          primary: AppColors.primaryColor,
+          secondary: AppColors.secondaryColor,
+        ),
+        scaffoldBackgroundColor: AppColors.backgroundColor,
+        textTheme: TextTheme(
+          bodyLarge: TextStyle(color: AppColors.textColor), // Mise à jour ici
+          bodyMedium: TextStyle(color: AppColors.textColor), // Mise à jour ici
+        ),
         useMaterial3: true,
+        fontFamily: 'OpenDyslexic',
       ),
       home: const SplashScreen(),
     );
@@ -38,14 +50,15 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Timer(const Duration(seconds: 2, milliseconds: 200), () {
-      Get.off(() => const MainPage()); 
+      // Redirection vers la page de connexion
+      Get.off(() => const LoginPage());
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.backgroundColor, // Utilisation de la couleur de fond
       body: Center(
         child: Image.asset(
           "assets/images/logo.png",
