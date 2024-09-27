@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "../widgets/settings_popup.dart";
+import '../theme/app_color.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class HomePage extends StatelessWidget {
                 children: [
                   const Text(
                     "Prénom & Nom",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.primaryColor,),
                   ),
                   IconButton(
                     icon: const Icon(Icons.settings),
@@ -52,7 +53,7 @@ class HomePage extends StatelessWidget {
                 child: const Center(
                   child: Text(
                     "Récompenses quotidiennes",
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18, color: AppColors.primaryColor,),
                   ),
                 ),
               ),
@@ -72,7 +73,7 @@ class HomePage extends StatelessWidget {
                 child: const Center(
                   child: Text(
                     "Jeu récent",
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18, color: AppColors.primaryColor,),
                   ),
                 ),
               ),
@@ -98,7 +99,7 @@ class HomePage extends StatelessWidget {
                       child: const Center(
                         child: Text(
                           "Jeux récents 2",
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 16, color: AppColors.primaryColor,),
                         ),
                       ),
                     ),
@@ -127,7 +128,7 @@ class HomePage extends StatelessWidget {
                       child: const Center(
                         child: Text(
                           "Recommendations",
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 16, color: AppColors.primaryColor,),
                         ),
                       ),
                     ),
@@ -150,7 +151,7 @@ class HomePage extends StatelessWidget {
                 child: const Center(
                   child: Text(
                     "Graphique",
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18, color: AppColors.primaryColor,),
                   ),
                 ),
               ),
@@ -168,8 +169,13 @@ class HomePage extends StatelessWidget {
                     ),
                     color: Colors.grey[300],
                     child: Container(
-                      height: 100,
-                      child: const Center(child: Text("Herisson or")),
+                      height: 100, 
+                      child: const Center(
+                        child: Text(
+                          "Herisson or",
+                          style: TextStyle(color: AppColors.primaryColor)
+                        )
+                      ),
                     ),
                   ),
                 ),
@@ -182,7 +188,12 @@ class HomePage extends StatelessWidget {
                     color: Colors.grey[300],
                     child: Container(
                       height: 100,
-                      child: const Center(child: Text("Herisson argent")),
+                      child: const Center(
+                        child: Text(
+                          "Herisson argent",
+                          style: TextStyle(color: AppColors.primaryColor)
+                        )
+                      ),
                     ),
                   ),
                 ),
@@ -195,7 +206,12 @@ class HomePage extends StatelessWidget {
                     color: Colors.grey[300],
                     child: Container(
                       height: 100,
-                      child: const Center(child: Text("Herisson bronze")),
+                      child: const Center(
+                        child: Text(
+                          "Herisson bronze",
+                          style: TextStyle(color: AppColors.primaryColor)
+                        )
+                      ),
                     ),
                   ),
                 ),

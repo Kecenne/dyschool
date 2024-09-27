@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/settings_bloc.dart';
 import '../bloc/settings_event.dart';
 import '../bloc/settings_state.dart';
+import '../theme/app_color.dart';
 
 class SettingsPopup extends StatelessWidget {
   const SettingsPopup({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class SettingsPopup extends StatelessWidget {
                   children: [
                     const Text(
                       "POP - UP ACCESSIBILITÉ",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.primaryColor),
                     ),
                     IconButton(
                       icon: const Icon(Icons.close),
@@ -61,7 +62,6 @@ class SettingsPopup extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       childAspectRatio: isTablet ? 2.0 : 2.5,
                       children: [
-                        // Paramètre 1
                         _buildOptionCard(
                           icon: Icons.text_fields,
                           title: "Paramètre 1",
@@ -77,7 +77,7 @@ class SettingsPopup extends StatelessWidget {
                               const SizedBox(width: 16),
                               const Text(
                                 "Unité",
-                                style: TextStyle(fontSize: 16), 
+                                style: TextStyle(fontSize: 16, color: AppColors.primaryColor),
                               ),
                               const SizedBox(width: 16),
                               IconButton(
@@ -89,8 +89,6 @@ class SettingsPopup extends StatelessWidget {
                             ],
                           ),
                         ),
-
-                        // Paramètre 2
                         _buildOptionCard(
                           icon: Icons.palette,
                           title: "Paramètre 2",
@@ -150,8 +148,6 @@ class SettingsPopup extends StatelessWidget {
                                   ],
                                 ),
                         ),
-
-                        // Paramètre 3
                         _buildOptionCard(
                           icon: Icons.format_size,
                           title: "Paramètre 3",
@@ -165,7 +161,10 @@ class SettingsPopup extends StatelessWidget {
                                       ToggleCheckbox(3, 1, value!));
                                 },
                               ),
-                              const Text("Choix 1"),
+                              const Text(
+                                "Choix 1",
+                                style: TextStyle(color: AppColors.primaryColor),
+                              ),
                               const SizedBox(width: 16),
                               Checkbox(
                                 value: state.selectedParam3Choice == 2,
@@ -174,12 +173,13 @@ class SettingsPopup extends StatelessWidget {
                                       ToggleCheckbox(3, 2, value!));
                                 },
                               ),
-                              const Text("Choix 2"),
+                              const Text(
+                                "Choix 2",
+                                style: TextStyle(color: AppColors.primaryColor),
+                              ),
                             ],
                           ),
                         ),
-
-                        // Paramètre 4
                         _buildOptionCard(
                           icon: Icons.line_weight,
                           title: "Paramètre 4",
@@ -195,7 +195,7 @@ class SettingsPopup extends StatelessWidget {
                               const SizedBox(width: 16),
                               const Text(
                                 "Unité",
-                                style: TextStyle(fontSize: 16), 
+                                style: TextStyle(fontSize: 16, color: AppColors.primaryColor),
                               ),
                               const SizedBox(width: 16),
                               IconButton(
@@ -226,7 +226,7 @@ class SettingsPopup extends StatelessWidget {
           value: value,
           onChanged: onChanged,
         ),
-        Text(title),
+        Text(title, style: const TextStyle(color: AppColors.primaryColor)),
       ],
     );
   }
@@ -239,7 +239,7 @@ class SettingsPopup extends StatelessWidget {
           value: value,
           onChanged: onChanged,
         ),
-        Text(title),
+        Text(title, style: const TextStyle(color: AppColors.primaryColor)),
       ],
     );
   }
@@ -269,7 +269,7 @@ class SettingsPopup extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.primaryColor),
                 ),
                 const SizedBox(height: 8),
                 child,
