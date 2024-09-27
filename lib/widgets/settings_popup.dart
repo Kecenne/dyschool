@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class SettingsPopup extends StatelessWidget {
   const SettingsPopup({Key? key}) : super(key: key);
@@ -27,12 +27,11 @@ class SettingsPopup extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Titre de la popup
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'POP - UP ACCESSIBILITÉ',
+                    "POP - UP ACCESSIBILITÉ",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   IconButton(
@@ -56,7 +55,7 @@ class SettingsPopup extends StatelessWidget {
                   // Carte Paramètre 1
                   _buildOptionCard(
                     icon: Icons.text_fields,
-                    title: 'Paramètre 1',
+                    title: "Paramètre 1",
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -66,7 +65,7 @@ class SettingsPopup extends StatelessWidget {
                           },
                         ),
                         const SizedBox(width: 8),
-                        const Text('Unité'),
+                        const Text("Unité"),
                         const SizedBox(width: 8),
                         IconButton(
                           icon: const Icon(Icons.remove),
@@ -81,19 +80,19 @@ class SettingsPopup extends StatelessWidget {
                   // Carte Paramètre 2
                   _buildOptionCard(
                     icon: Icons.palette,
-                    title: 'Paramètre 2',
+                    title: "Paramètre 2",
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
                               Checkbox(
-                                value: true,
+                                value: false,
                                 onChanged: (bool? value) {},
                                 visualDensity: VisualDensity.compact,
                                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
-                              const Text('Choix 1'),
+                              const Text("Choix 1"),
                             ],
                           ),
                           Row(
@@ -104,7 +103,7 @@ class SettingsPopup extends StatelessWidget {
                                 visualDensity: VisualDensity.compact,
                                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
-                              const Text('Choix 2'),
+                              const Text("Choix 2"),
                             ],
                           ),
                           Row(
@@ -115,7 +114,7 @@ class SettingsPopup extends StatelessWidget {
                                 visualDensity: VisualDensity.compact,
                                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
-                              const Text('Choix 3'),
+                              const Text("Choix 3"),
                             ],
                           ),
                         ],
@@ -126,15 +125,15 @@ class SettingsPopup extends StatelessWidget {
                   // Carte Paramètre 3
                   _buildOptionCard(
                     icon: Icons.format_size,
-                    title: 'Paramètre 3',
+                    title: "Paramètre 3",
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Checkbox(value: true, onChanged: (bool? value) {}),
-                        const Text('Choix 1'),
+                        const Text("Choix 1"),
                         const SizedBox(width: 16),
                         Checkbox(value: false, onChanged: (bool? value) {}),
-                        const Text('Choix 2'),
+                        const Text("Choix 2"),
                       ],
                     ),
                   ),
@@ -142,7 +141,7 @@ class SettingsPopup extends StatelessWidget {
                   // Carte Paramètre 4
                   _buildOptionCard(
                     icon: Icons.line_weight,
-                    title: 'Paramètre 4',
+                    title: "Paramètre 4",
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -152,7 +151,7 @@ class SettingsPopup extends StatelessWidget {
                           },
                         ),
                         const SizedBox(width: 8),
-                        const Text('Unité'),
+                        const Text("Unité"),
                         const SizedBox(width: 8),
                         IconButton(
                           icon: const Icon(Icons.remove),
@@ -183,7 +182,7 @@ class SettingsPopup extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
             ),

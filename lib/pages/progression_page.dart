@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class ProgressionPage extends StatelessWidget {
   const ProgressionPage({Key? key}) : super(key: key);
@@ -6,7 +6,7 @@ class ProgressionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text('Progression', style: TextStyle(fontSize: 24)),
+      child: Text("Progression", style: TextStyle(fontSize: 24)),
     );
   }
 }
