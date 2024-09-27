@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "../controllers/nav_controller.dart";
+import '../theme/app_color.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   const CustomBottomNavBar({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class CustomBottomNavBar extends StatelessWidget {
             ),
           ],
           currentIndex: navController.selectedIndex.value,
-          selectedItemColor: Colors.deepPurple,
+          selectedItemColor: AppColors.primaryColor,
           unselectedItemColor: Colors.grey,
           backgroundColor: Colors.white,
           selectedFontSize: 20,
