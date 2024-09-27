@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../main.dart'; // Ajoutez cette importation
 import '../theme/app_color.dart'; // Importez votre fichier de couleurs
+import 'inscription/sign_up_page.dart'; // Importez la page d'inscription
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -31,7 +32,9 @@ class LoginPage extends StatelessWidget {
               ),
             ),
           ),
+
           const SizedBox(height: 20), // Espace au-dessus des boutons
+
           Expanded(
             child: Center(
               child: Padding(
@@ -63,10 +66,12 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 30), // Espace entre les boutons
+
                     // Bouton "S'inscrire"
                     OutlinedButton(
                       onPressed: () {
-                        // Logique pour l'inscription
+                        // Redirection vers la page d'inscription
+                        Get.to(() => const SignUpPage()); // Rediriger vers la page SignUpPage
                       },
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(

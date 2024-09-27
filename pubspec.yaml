@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^4.6.6
+  flutter_svg: ^2.0.4
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -62,6 +63,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/logo.png
+    - assets/svg/wave.svg
   fonts:
     - family: OpenDyslexic
       fonts:
