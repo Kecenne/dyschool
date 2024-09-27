@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
+import "../widgets/settings_popup.dart";
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,7 +11,6 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Prénom et bouton d'accessibilité
             Container(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
               width: double.infinity,
@@ -18,28 +18,21 @@ class HomePage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Prénom & Nom',
+                    "Prénom & Nom",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  Row(
-                    children: const [
-                      IconButton(
-                        onPressed: null,
-                        icon: Icon(Icons.circle, size: 16),
-                      ),
-                      IconButton(
-                        onPressed: null,
-                        icon: Icon(Icons.circle, size: 16),
-                      ),
-                      IconButton(
-                        onPressed: null,
-                        icon: Icon(Icons.circle, size: 16),
-                      ),
-                    ],
+                  IconButton(
+                    icon: const Icon(Icons.settings),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const SettingsPopup(),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -58,7 +51,7 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: const Center(
                   child: Text(
-                    'Récompenses quotidiennes',
+                    "Récompenses quotidiennes",
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
@@ -78,7 +71,7 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: const Center(
                   child: Text(
-                    'Jeu récent',
+                    "Jeu récent",
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
@@ -104,7 +97,7 @@ class HomePage extends StatelessWidget {
                       padding: const EdgeInsets.all(16.0),
                       child: const Center(
                         child: Text(
-                          'Jeux récents 2',
+                          "Jeux récents 2",
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
@@ -133,7 +126,7 @@ class HomePage extends StatelessWidget {
                       padding: const EdgeInsets.all(16.0),
                       child: const Center(
                         child: Text(
-                          'Recommendations',
+                          "Recommendations",
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
@@ -156,7 +149,7 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: const Center(
                   child: Text(
-                    'Graphique',
+                    "Graphique",
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
@@ -176,7 +169,7 @@ class HomePage extends StatelessWidget {
                     color: Colors.grey[300],
                     child: Container(
                       height: 100,
-                      child: const Center(child: Text('Herisson or')),
+                      child: const Center(child: Text("Herisson or")),
                     ),
                   ),
                 ),
@@ -189,7 +182,7 @@ class HomePage extends StatelessWidget {
                     color: Colors.grey[300],
                     child: Container(
                       height: 100,
-                      child: const Center(child: Text('Herisson argent')),
+                      child: const Center(child: Text("Herisson argent")),
                     ),
                   ),
                 ),
@@ -202,7 +195,7 @@ class HomePage extends StatelessWidget {
                     color: Colors.grey[300],
                     child: Container(
                       height: 100,
-                      child: const Center(child: Text('Herisson bronze')),
+                      child: const Center(child: Text("Herisson bronze")),
                     ),
                   ),
                 ),

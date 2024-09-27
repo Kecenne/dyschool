@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class GamesPage extends StatelessWidget {
   const GamesPage({Key? key}) : super(key: key);
@@ -6,7 +6,7 @@ class GamesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text('Jeux', style: TextStyle(fontSize: 24)),
+      child: Text("Jeux", style: TextStyle(fontSize: 24)),
     );
   }
 }

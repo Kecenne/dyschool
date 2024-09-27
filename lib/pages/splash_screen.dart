@@ -1,6 +1,6 @@
-import 'dart:async';
-import 'package:flutter/material.dart';
-import 'home_page.dart'; // Importer la page d'accueil
+import "dart:async";
+import "package:flutter/material.dart";
+import "home_page.dart"; // Importer la page d"accueil
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -24,10 +24,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Choisis la couleur d'arrière-plan de ta splash screen
+      backgroundColor: Colors.white, // Choisis la couleur d"arrière-plan de ta splash screen
       body: Center(
         child: Image.asset(
-          'assets/images/logo.png', // Chemin vers le logo
+          "assets/images/logo.png", // Chemin vers le logo
           width: 150, // Largeur du logo
           height: 150, // Hauteur du logo
         ),
