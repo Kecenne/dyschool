@@ -7,7 +7,6 @@ class GamesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final favoriteController = Get.put(FavoriteController());
 
     return Scaffold(
       appBar: AppBar(
