@@ -13,79 +13,95 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
 
   final Map<String, Widget> sectionContents = {
     'Règles': Container(
-      padding: const EdgeInsets.all(16.0), 
-      child: const Column(
+      padding: const EdgeInsets.all(6.0),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Règles",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.backgroundColor),
+          _buildBlueBlock(
+            title: "Règles",
+            content:
+                "Les troubles d'apprentissage incluent la dyslexie, la dyscalculie, et d'autres difficultés. "
+                "Ce jeu peut être adapté pour aider à travailler sur ces troubles par des exercices spécifiques.",
           ),
-          SizedBox(height: 16.0),
-          Text(
-            "Les troubles d'apprentissage incluent la dyslexie, la dyscalculie, et d'autres difficultés. "
-            "Ce jeu peut être adapté pour aider à travailler sur ces troubles par des exercices spécifiques.",
-            style: TextStyle(fontSize: 18, height: 1.5, color: AppColors.backgroundColor),
+          const SizedBox(height: 16.0),
+          _buildBlueBlock(
+            title: "Adaptations",
+            content:
+                "Pour rendre le jeu accessible, différentes adaptations sont possibles : "
+                "polices lisibles, énoncés simplifiés, et consignes adaptées aux capacités de chaque joueur.",
           ),
         ],
       ),
     ),
-
     'Jeu': Container(
-      padding: const EdgeInsets.all(16.0), 
-      child: const Column(
+      padding: const EdgeInsets.all(6.0),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Jeu",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.backgroundColor),
-          ),
-          SizedBox(height: 16.0),
-          Text(
-            "Les troubles d'apprentissage incluent la dyslexie, la dyscalculie, et d'autres difficultés. "
-            "Ce jeu peut être adapté pour aider à travailler sur ces troubles par des exercices spécifiques.",
-            style: TextStyle(fontSize: 18, height: 1.5, color: AppColors.backgroundColor),
+          _buildBlueBlock(
+            title: "Jeu",
+            content:
+                "Les troubles d'apprentissage incluent la dyslexie, la dyscalculie, et d'autres difficultés. "
+                "Ce jeu peut être adapté pour aider à travailler sur ces troubles par des exercices spécifiques.",
           ),
         ],
       ),
     ),
     'Troubles': Container(
-      padding: const EdgeInsets.all(16.0), 
-      child: const Column(
+      padding: const EdgeInsets.all(6.0),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Troubles",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.backgroundColor),
-          ),
-          SizedBox(height: 16.0),
-          Text(
-            "Les troubles d'apprentissage incluent la dyslexie, la dyscalculie, et d'autres difficultés. "
-            "Ce jeu peut être adapté pour aider à travailler sur ces troubles par des exercices spécifiques.",
-            style: TextStyle(fontSize: 18, height: 1.5, color: AppColors.backgroundColor),
+          _buildBlueBlock(
+            title: "Troubles",
+            content:
+                "Les troubles d'apprentissage incluent la dyslexie, la dyscalculie, et d'autres difficultés. "
+                "Ce jeu peut être adapté pour aider à travailler sur ces troubles par des exercices spécifiques.",
           ),
         ],
       ),
     ),
     'Objectifs': Container(
-      padding: const EdgeInsets.all(16.0), 
-      child: const Column(
+      padding: const EdgeInsets.all(6.0),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Objectifs",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.backgroundColor),
-          ),
-          SizedBox(height: 16.0),
-          Text(
-            "Les troubles d'apprentissage incluent la dyslexie, la dyscalculie, et d'autres difficultés. "
-            "Ce jeu peut être adapté pour aider à travailler sur ces troubles par des exercices spécifiques.",
-            style: TextStyle(fontSize: 18, height: 1.5, color: AppColors.backgroundColor),
+          _buildBlueBlock(
+            title: "Objectifs",
+            content:
+                "Les troubles d'apprentissage incluent la dyslexie, la dyscalculie, et d'autres difficultés. "
+                "Ce jeu peut être adapté pour aider à travailler sur ces troubles par des exercices spécifiques.",
           ),
         ],
       ),
     ),
   };
+
+  static Widget _buildBlueBlock({required String title, required String content}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 32.0),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppColors.primaryColor,
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+                fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.backgroundColor),
+          ),
+          const SizedBox(height: 16.0),
+          Text(
+            content,
+            style: const TextStyle(fontSize: 18, height: 1.5, color: AppColors.backgroundColor),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +150,6 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                 ),
               ],
             ),
-            
             Container(
               padding: const EdgeInsets.all(24.0),
               color: Colors.white,
@@ -148,7 +163,6 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                     ),
                   ),
                   const SizedBox(height: 24.0),
-
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -162,7 +176,6 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                     ],
                   ),
                   const SizedBox(height: 24.0),
-
                   Center(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
@@ -177,13 +190,11 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                     ),
                   ),
                   const SizedBox(height: 36.0),
-
                   const Text(
                     "Explication du jeu",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16.0),
-
                   const Text(
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
                     "Vivamus lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod malesuada. "
@@ -192,7 +203,6 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                     style: TextStyle(fontSize: 18, height: 1.5),
                   ),
                   const SizedBox(height: 36.0),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: sectionContents.keys.map((section) {
@@ -225,17 +235,11 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                     }).toList(),
                   ),
                   const SizedBox(height: 24.0),
-
                   Container(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.all(6.0),
                     width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
                     child: sectionContents[selectedSection]!,
                   ),
-
                 ],
               ),
             ),
