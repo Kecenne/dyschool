@@ -1,11 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import "package:flutter/material.dart";
+import "package:get/get.dart";
+import "../controllers/favorite_controller.dart";
 
 class GamesPage extends StatelessWidget {
   const GamesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final favoriteController = Get.put(FavoriteController());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Liste des Jeux"),
@@ -61,6 +64,8 @@ class GameCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final favoriteController = Get.find<FavoriteController>();
+
     return GestureDetector(
       onTap: () {
         Get.toNamed(route);
@@ -102,12 +107,19 @@ class GameCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.favorite_border),
-                          color: Colors.red,
-                          onPressed: () {
-                          },
-                        ),
+                        Obx(() => IconButton(
+                              icon: Icon(
+                                favoriteController.isFavorite(title)
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                              ),
+                              color: favoriteController.isFavorite(title)
+                                  ? Colors.red
+                                  : Colors.grey,
+                              onPressed: () {
+                                favoriteController.toggleFavorite(title);
+                              },
+                            )),
                       ],
                     ),
                     const SizedBox(height: 8.0),
