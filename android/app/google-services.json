@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "23606384393",
+    "project_id": "dyschool-4ca88",
+    "storage_bucket": "dyschool-4ca88.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23606384393:android:109ffecb3c0e90ee80e5d8",
+        "android_client_info": {
+          "package_name": "fr.dyschool.dyschool"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWFKfFkhhZPjz7fFyd5tfwiYAJ1I_5OQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
