@@ -3,10 +3,16 @@ import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "widgets/navbar.dart";
 import "../controllers/nav_controller.dart";
-import "theme/app_color.dart";
+import "theme/app_color.dart"; // Importez votre fichier de couleurs
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import "controllers/routes_controller.dart";
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
