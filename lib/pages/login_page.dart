@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../main.dart'; // Ajoutez cette importation
 import '../theme/app_color.dart'; // Importez votre fichier de couleurs
 import 'inscription/sign_up_page.dart'; // Importez la page d'inscription
+import './connexion/connexion_page.dart'; // Importe la page ConnexionPage
+
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -46,7 +47,7 @@ class LoginPage extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         // Redirection directe vers MainPage
-                        Get.off(() => const MainPage());
+                         Get.to(() => const ConnexionPage());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor, // Couleur de fond
