@@ -3,7 +3,8 @@ import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "widgets/navbar.dart";
 import "../controllers/nav_controller.dart";
-import "theme/app_color.dart"; // Importez votre fichier de couleurs
+import "../controllers/favorite_controller.dart";
+import "theme/app_color.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import "controllers/routes_controller.dart";
@@ -13,6 +14,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  Get.put(FavoriteController());
   runApp(const MyApp());
 }
 
