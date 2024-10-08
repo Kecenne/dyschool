@@ -8,6 +8,9 @@ import "theme/app_color.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import "controllers/routes_controller.dart";
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'bloc/settings_bloc.dart';
+import 'bloc/settings_state.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,28 +27,46 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: "Dyschool",
-      theme: ThemeData(
-        primaryColor: AppColors.primaryColor,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.primaryColor,
-          primary: AppColors.primaryColor,
-          secondary: AppColors.secondaryColor,
-        ),
-        scaffoldBackgroundColor: AppColors.backgroundColor,
-        textTheme: TextTheme(
-          bodyLarge: TextStyle(color: AppColors.textColor),
-          bodyMedium: TextStyle(color: AppColors.textColor),
-        ),
-        useMaterial3: true,
-        fontFamily: 'OpenDyslexic',
+    return BlocProvider(
+      create: (context) => SettingsBloc(),
+      child: BlocBuilder<SettingsBloc, SettingsState>(
+        builder: (context, state) {
+          return GetMaterialApp(
+            title: "Dyschool",
+            theme: ThemeData(
+              primaryColor: AppColors.primaryColor,
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: AppColors.primaryColor,
+                primary: AppColors.primaryColor,
+                secondary: AppColors.secondaryColor,
+              ),
+              scaffoldBackgroundColor: AppColors.backgroundColor,
+              textTheme: TextTheme(
+                bodyLarge: TextStyle(
+                  color: AppColors.textColor,
+                  fontFamily: state.selectedFontChoice == 2 ? 'OpenDyslexic' : 'Roboto',
+                ),
+                bodyMedium: TextStyle(
+                  color: AppColors.textColor,
+                  fontFamily: state.selectedFontChoice == 2 ? 'OpenDyslexic' : 'Roboto',
+                ),
+                titleLarge: TextStyle(
+                  color: AppColors.textColor,
+                  fontFamily: state.selectedFontChoice == 2 ? 'OpenDyslexic' : 'Roboto',
+                ),
+              ),
+              useMaterial3: true,
+              fontFamily: state.selectedFontChoice == 2 ? 'OpenDyslexic' : 'Roboto',
+            ),
+            getPages: AppRoutes.routes,
+            initialRoute: '/',
+          );
+        },
       ),
-      getPages: AppRoutes.routes,
-      initialRoute: '/',
     );
   }
 }
+
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
