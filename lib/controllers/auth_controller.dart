@@ -30,4 +30,17 @@ class Auth {
       rethrow;
     }
   }
+
+  Future<void> sendVerificationEmail(User user) async {
+  if (!user.emailVerified) {
+    try {
+      await user.sendEmailVerification();
+      // Optionnel : Afficher une notification pour informer que l'email a été envoyé
+      print("Un email de vérification a été envoyé.");
+    } catch (e) {
+      print("Erreur lors de l'envoi de l'email de vérification: $e");
+    }
+  }
+}
+
 }
