@@ -11,11 +11,32 @@ class GamesPage extends StatelessWidget {
         title: const Text("Liste des Jeux"),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(8.0),
-        children: [
-          GameCard(title: "Jeu 1", route: "/jeu1"),
-          GameCard(title: "Jeu 2", route: "/jeu1"),
-          GameCard(title: "Jeu 3", route: "/jeu1"),
+        padding: const EdgeInsets.all(16.0),
+        children: const [
+          GameCard(
+            title: "Jeu de fou",
+            route: "/jeu1",
+            description:
+                "C’est un jeu de cartes où le but est de collecter des ensembles de cartes représentant différentes familles. Les joueurs demandent des cartes spécifiques aux autres pour compléter leurs familles.",
+            tags: ["Dyslexie", "Dyspraxie"],
+            imagePath: "assets/images/placeholder.png",
+          ),
+          GameCard(
+            title: "Jeu de zinzin",
+            route: "/jeu1",
+            description:
+                "C’est un jeu de cartes où le but est de collecter des ensembles de cartes représentant différentes familles. Les joueurs demandent des cartes spécifiques aux autres pour compléter leurs familles.",
+            tags: ["Dyslexie", "Dyspraxie"],
+            imagePath: "assets/images/placeholder.png",
+          ),
+          GameCard(
+            title: "Jeu de maso",
+            route: "/jeu1",
+            description:
+                "C’est un jeu de cartes où le but est de collecter des ensembles de cartes représentant différentes familles. Les joueurs demandent des cartes spécifiques aux autres pour compléter leurs familles.",
+            tags: ["Dyslexie", "Dyspraxie"],
+            imagePath: "assets/images/placeholder.png",
+          ),
         ],
       ),
     );
@@ -25,19 +46,97 @@ class GamesPage extends StatelessWidget {
 class GameCard extends StatelessWidget {
   final String title;
   final String route;
+  final String description;
+  final List<String> tags;
+  final String imagePath;
 
-  const GameCard({Key? key, required this.title, required this.route}) : super(key: key);
+  const GameCard({
+    Key? key,
+    required this.title,
+    required this.route,
+    required this.description,
+    required this.tags,
+    required this.imagePath,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      child: ListTile(
-        title: Text(title, style: const TextStyle(fontSize: 20)),
-        trailing: const Icon(Icons.arrow_forward),
-        onTap: () {
-          Get.toNamed(route);
-        },
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(route);
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        elevation: 5,
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16.0),
+            color: Colors.white,
+          ),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16.0),
+                child: Image.asset(
+                  imagePath,
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(width: 16.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.favorite_border),
+                          color: Colors.red,
+                          onPressed: () {
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      description,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
+                      ),
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 12.0),
+                    Wrap(
+                      spacing: 8.0,
+                      runSpacing: 4.0,
+                      children: tags
+                          .map((tag) => Chip(
+                                label: Text(tag),
+                                backgroundColor: Colors.purple.shade100,
+                              ))
+                          .toList(),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
