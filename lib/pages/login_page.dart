@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../theme/app_color.dart'; // Importez votre fichier de couleurs
 import 'inscription/sign_up_page.dart'; // Importez la page d'inscription
 import './connexion/connexion_page.dart'; // Importe la page ConnexionPage
-
+import '../main.dart'; // Importe la page MainPage
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -46,7 +46,7 @@ class LoginPage extends StatelessWidget {
                     // Bouton "Se connecter"
                     ElevatedButton(
                       onPressed: () {
-                        // Redirection directe vers MainPage
+                        // Redirection directe vers ConnexionPage
                          Get.to(() => const ConnexionPage());
                       },
                       style: ElevatedButton.styleFrom(
@@ -88,6 +88,30 @@ class LoginPage extends StatelessWidget {
                         "S'INSCRIRE",
                         style: TextStyle(
                           color: AppColors.primaryColor,
+                          fontWeight: FontWeight.bold, // Mettre le texte en gras
+                          fontSize: 30, // Taille de police augmentée
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30), // Espace entre les boutons
+
+                    // Nouveau bouton pour accéder directement à MainPage
+                    ElevatedButton(
+                      onPressed: () {
+                        // Redirection vers MainPage
+                        Get.to(() => const MainPage());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green, // Couleur de fond pour différencier le bouton
+                        foregroundColor: Colors.white, // Couleur du texte
+                        fixedSize: const Size(475, 100), // Taille fixe, largeur 475 et hauteur 100
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10), // Bordure arrondie
+                        ),
+                      ),
+                      child: const Text(
+                        "ACCÉDER À LA MAIN PAGE",
+                        style: TextStyle(
                           fontWeight: FontWeight.bold, // Mettre le texte en gras
                           fontSize: 30, // Taille de police augmentée
                         ),
