@@ -5,8 +5,14 @@ import "widgets/navbar.dart";
 import "../controllers/nav_controller.dart";
 import "pages/login_page.dart";
 import "theme/app_color.dart"; // Importez votre fichier de couleurs
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
