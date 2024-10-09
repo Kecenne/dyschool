@@ -57,7 +57,6 @@ class RecentGameCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
 
-                // Utilisation du widget TagList
                 TagList(tags: tags),
               ],
             ),

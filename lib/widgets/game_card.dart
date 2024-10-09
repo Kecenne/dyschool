@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../controllers/favorite_controller.dart';
 import 'favorite_animation.dart';
 import 'favorite_remove_popup.dart';
-import 'tag_list.dart'; // Import du widget TagList
+import 'tag_list.dart'; 
 
 class GameCard extends StatelessWidget {
   final String title;
@@ -104,7 +104,6 @@ class GameCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 12.0),
 
-                    // Utilisation du widget TagList
                     TagList(tags: tags),
                   ],
                 ),

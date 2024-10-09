@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart'; // Assure-toi d'importer Get pour la navigation
+import 'package:get/get.dart';
 
 class SmallGameCard extends StatelessWidget {
   final String title;
   final String imagePath;
-  final String route; // Ajoute la route pour la navigation
+  final String route;
 
   const SmallGameCard({
     Key? key,
