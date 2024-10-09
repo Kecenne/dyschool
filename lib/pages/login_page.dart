@@ -1,154 +1,197 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../theme/app_color.dart'; // Importez votre fichier de couleurs
-import 'inscription/sign_up_page.dart'; // Importez la page d'inscription
-import './connexion/connexion_page.dart'; // Importe la page ConnexionPage
-import './inscription/choix_troubles.dart'; // Importez la page ChoixTroubles
-import '../main.dart'; // Importe la page MainPage
+import 'package:firebase_auth/firebase_auth.dart';
+import '../main.dart';
+import '../widgets/login/login_button.dart';
+import '../widgets/login/login_header.dart';
+import '../controllers/auth_controller.dart';
+import '../widgets/login/connexion_form.dart'; // Importez ConnexionForm
+import '../widgets/login/sign_up_form.dart'; // Importez SignupForm
+import '../widgets/login/troubles_form.dart'; // Importez TroublesForm
 
-class LoginPage extends StatelessWidget {
+enum ViewState { initial, connexion, signup, troubles }
+
+class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  ViewState _currentView = ViewState.initial;
+
+  // Contrôleurs pour le formulaire de connexion
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  // Contrôleurs pour le formulaire d'inscription
+  final TextEditingController signupEmailController = TextEditingController();
+  final TextEditingController signupPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
+  final Auth _auth = Auth();
+
+  void _handleBackButton() {
+    setState(() {
+      if (_currentView == ViewState.connexion || _currentView == ViewState.signup) {
+        _currentView = ViewState.initial;
+      } else if (_currentView == ViewState.troubles) {
+        _currentView = ViewState.signup;
+      }
+    });
+  }
+
+  void _login() async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+        emailController.text.trim(),
+        passwordController.text.trim(),
+      );
+      Get.off(() => const MainPage());
+    } catch (e) {
+      Get.snackbar('Erreur', 'Connexion échouée : ${e.toString()}',
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  Future<void> _signUp() async {
+    if (signupPasswordController.text != confirmPasswordController.text) {
+      Get.snackbar("Erreur", "Les mots de passe ne correspondent pas", snackPosition: SnackPosition.BOTTOM);
+      return;
+    }
+
+    try {
+      await _auth.createUserWithEmailAndPassword(
+        signupEmailController.text.trim(),
+        signupPasswordController.text.trim(),
+      );
+
+      // Naviguer directement vers ChoixTroubles
+      setState(() {
+        _currentView = ViewState.troubles;
+      });
+    } catch (e) {
+      Get.snackbar("Erreur", e.toString(), snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  Widget _buildContent() {
+    switch (_currentView) {
+      case ViewState.connexion:
+        return buildConnexionContent();
+      case ViewState.signup:
+        return buildSignupContent();
+      case ViewState.troubles:
+        return buildTroublesContent();
+      default:
+        return buildInitialButtons();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login"),
-      ),
       body: Column(
         children: [
-          // Grand fond rectangulaire en couleur primaire, collé aux bords
-          Container(
-            height: MediaQuery.of(context).size.height / 3, // Prendre 1/3 de la hauteur de l'écran
-            width: double.infinity, // Largeur de 100%
-            color: AppColors.primaryColor, // Couleur de fond primaire
-            child: const Center(
-              child: Text(
-                "DYSCHOOL",
-                style: TextStyle(
-                  fontFamily: 'OpenDyslexic', // Appliquer la police Open Dyslexic
-                  color: Colors.white, // Couleur du texte
-                  fontSize: 60, // Taille de police
-                  fontWeight: FontWeight.bold, // Mettre le texte en gras
-                ),
-              ),
-            ),
+          // En-tête avec le contrôle du bouton de retour
+          LoginHeader(
+            isBackButtonEnabled: _currentView != ViewState.initial,
+            onBackButtonPressed: _handleBackButton,
           ),
-
-          const SizedBox(height: 20), // Espace au-dessus des boutons
-
           Expanded(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Bouton "Se connecter"
-                    ElevatedButton(
-                      onPressed: () {
-                        // Redirection directe vers ConnexionPage
-                        Get.to(() => const ConnexionPage());
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor, // Couleur de fond
-                        foregroundColor: AppColors.textColor, // Couleur du texte
-                        fixedSize: const Size(475, 100), // Taille fixe, largeur 475 et hauteur 100
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10), // Bordure arrondie
-                        ),
-                      ),
-                      child: const Text(
-                        "SE CONNECTER",
-                        style: TextStyle(
-                          color: AppColors.backgroundColor,
-                          fontWeight: FontWeight.bold, // Mettre le texte en gras
-                          fontSize: 30, // Taille de police augmentée
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 30), // Espace entre les boutons
-
-                    // Bouton "S'inscrire"
-                    OutlinedButton(
-                      onPressed: () {
-                        // Redirection vers la page d'inscription
-                        Get.to(() => const SignUpPage()); // Rediriger vers la page SignUpPage
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: AppColors.primaryColor,
-                          width: 4, // Épaisseur de la bordure augmentée
-                        ),
-                        fixedSize: const Size(475, 100), // Taille fixe, largeur 475 et hauteur 100
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10), // Bordure arrondie
-                        ),
-                      ),
-                      child: Text(
-                        "S'INSCRIRE",
-                        style: TextStyle(
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.bold, // Mettre le texte en gras
-                          fontSize: 30, // Taille de police augmentée
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 30), // Espace entre les boutons
-
-                    // Nouveau bouton pour accéder directement à ChoixTroubles
-                    ElevatedButton(
-                      onPressed: () {
-                        // Redirection vers ChoixTroubles
-                        Get.to(() => const ChoixTroubles());
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent, // Couleur de fond pour différencier le bouton
-                        foregroundColor: Colors.white, // Couleur du texte
-                        fixedSize: const Size(475, 100), // Taille fixe, largeur 475 et hauteur 100
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10), // Bordure arrondie
-                        ),
-                      ),
-                      child: const Text(
-                        "CHOISIR LES TROUBLES",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold, // Mettre le texte en gras
-                          fontSize: 30, // Taille de police augmentée
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 30), // Espace entre les boutons
-
-                    // Bouton pour accéder directement à MainPage
-                    ElevatedButton(
-                      onPressed: () {
-                        // Redirection vers MainPage
-                        Get.to(() => const MainPage());
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green, // Couleur de fond pour différencier le bouton
-                        foregroundColor: Colors.white, // Couleur du texte
-                        fixedSize: const Size(475, 100), // Taille fixe, largeur 475 et hauteur 100
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10), // Bordure arrondie
-                        ),
-                      ),
-                      child: const Text(
-                        "ACCÉDER À LA MAIN PAGE",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold, // Mettre le texte en gras
-                          fontSize: 30, // Taille de police augmentée
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            child: SingleChildScrollView(
+              child: _buildContent(),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget buildInitialButtons() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Bouton "Se connecter"
+          LoginButton(
+            text: "SE CONNECTER",
+            onPressed: () {
+              setState(() {
+                _currentView = ViewState.connexion;
+              });
+            },
+          ),
+          const SizedBox(height: 30),
+          // Bouton "S'inscrire"
+          LoginButton(
+            text: "S'INSCRIRE",
+            onPressed: () {
+              setState(() {
+                _currentView = ViewState.signup;
+              });
+            },
+            isOutlined: true,
+          ),
+          const SizedBox(height: 30),
+          // Bouton pour accéder directement à HomePage (pour le développement)
+          LoginButton(
+            text: "ACCÉDER À LA HOME PAGE",
+            onPressed: () {
+              Get.to(() => const MainPage());
+            },
+            backgroundColor: Colors.green,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildConnexionContent() {
+    return ConnexionForm(
+      emailController: emailController,
+      passwordController: passwordController,
+      onLoginPressed: _login,
+      onSignupLinkPressed: () {
+        setState(() {
+          _currentView = ViewState.signup;
+        });
+      },
+    );
+  }
+
+  Widget buildSignupContent() {
+    return SignupForm(
+      emailController: signupEmailController,
+      passwordController: signupPasswordController,
+      confirmPasswordController: confirmPasswordController,
+      onSignupPressed: _signUp,
+      onLoginLinkPressed: () {
+        setState(() {
+          _currentView = ViewState.connexion;
+        });
+      },
+    );
+  }
+
+  Widget buildTroublesContent() {
+    return TroublesForm(
+      onTroublesSaved: () {
+        Get.off(() => const MainPage());
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    // Dispose des contrôleurs pour éviter les fuites de mémoire
+    emailController.dispose();
+    passwordController.dispose();
+    signupEmailController.dispose();
+    signupPasswordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
   }
 }
