@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Importez Firebase Auth
 import '../../theme/app_color.dart'; // Importez votre fichier de couleurs
-import 'choix_troubles.dart'; // Importez votre page de choix
 import '../../controllers/auth_controller.dart'; // Importez votre contrôleur d'authentification
 
 
@@ -19,44 +18,33 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
 
-  // Définir une constante pour la largeur de la bordure
-  final double borderThickness = 4.0;
+  final double borderThickness = 4.0; // Largeur de la bordure
 
   Future<void> _signUp() async {
-  if (passwordController.text != confirmPasswordController.text) {
-    // Afficher un message d'erreur si les mots de passe ne correspondent pas
-    Get.snackbar("Erreur", "Les mots de passe ne correspondent pas", snackPosition: SnackPosition.BOTTOM);
-    return;
-  }
-
-  try {
-    // Créer un utilisateur avec l'email et le mot de passe
-    await Auth().createUserWithEmailAndPassword(
-      emailController.text.trim(),
-      passwordController.text.trim(),
-    );
-
-    // Récupérer l'utilisateur courant
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      // Envoyer l'email de vérification
-      await Auth().sendVerificationEmail(user);
-      
-      // Afficher une notification indiquant que l'email de vérification a été envoyé
-      Get.snackbar("Vérification", "Un email de vérification a été envoyé à ${user.email}. Veuillez vérifier votre boîte de réception.",
-          snackPosition: SnackPosition.BOTTOM);
+    if (passwordController.text != confirmPasswordController.text) {
+      Get.snackbar("Erreur", "Les mots de passe ne correspondent pas", snackPosition: SnackPosition.BOTTOM);
+      return;
     }
 
-    // Rediriger vers la page principale après l'enregistrement
-    Get.off(() => const MainPage());
+    try {
+      await Auth().createUserWithEmailAndPassword(
+        emailController.text.trim(),
+        passwordController.text.trim(),
+      );
 
-  } catch (e) {
-    // Afficher un message d'erreur
-    Get.snackbar("Erreur", e.toString(), snackPosition: SnackPosition.BOTTOM);
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        await Auth().sendVerificationEmail(user);
+        Get.snackbar("Vérification", "Un email de vérification a été envoyé à ${user.email}.",
+            snackPosition: SnackPosition.BOTTOM);
+      }
+
+      Get.off(() => const MainPage());
+    } catch (e) {
+      Get.snackbar("Erreur", e.toString(), snackPosition: SnackPosition.BOTTOM);
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,131 +52,154 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(
         title: const Text("Inscription"),
       ),
-      body: Column(
-        children: [
-          // Grand fond rectangulaire en couleur primaire
-          Container(
-            height: MediaQuery.of(context).size.height / 3,
-            width: double.infinity,
-            color: AppColors.primaryColor,
-            child: const Center(
-              child: Text(
-                "DYSCHOOL",
-                style: TextStyle(
-                  fontFamily: 'OpenDyslexic',
-                  color: Colors.white,
-                  fontSize: 60,
-                  fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Fond rectangulaire avec couleur primaire
+            Container(
+              height: MediaQuery.of(context).size.height / 3,
+              width: double.infinity,
+              color: AppColors.primaryColor,
+              child: const Center(
+                child: Text(
+                  "DYSCHOOL",
+                  style: TextStyle(
+                    fontFamily: 'OpenDyslexic',
+                    color: Colors.white,
+                    fontSize: 60,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 100),
+            const SizedBox(height: 60),
 
-          // Champs de texte pour l'email, le mot de passe et la confirmation
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 475,
-                  height: 100,
-                  child: TextField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(left: 20, top: 30, bottom: 30),
-                      hintText: 'Email',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: AppColors.primaryColor, width: borderThickness),
+            // Champs de texte pour l'email, le mot de passe et la confirmation
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: 600, // Largeur augmentée
+                    height: 100, // Hauteur augmentée
+                    child:TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        labelStyle: TextStyle(color: Colors.grey[500], fontSize: 24), // Texte plus grand
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30), // Plus d'espace
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: AppColors.primaryColor,
+                            width: borderThickness,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: AppColors.primaryColor,
+                            width: borderThickness,
+                          ),
+                        ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: AppColors.primaryColor, width: borderThickness),
-                      ),
+                      style: const TextStyle(fontSize: 28, height: 1.5), // Police plus grande
                     ),
-                    style: const TextStyle(fontSize: 24, height: 1.5),
                   ),
-                ),
-                const SizedBox(height: 20),
-
-                SizedBox(
-                  width: 475,
-                  height: 100,
-                  child: TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(left: 20, top: 30, bottom: 30),
-                      hintText: 'Mot de passe',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: AppColors.primaryColor, width: borderThickness),
+                  const SizedBox(height: 20),
+                  
+                  SizedBox(
+                    width: 600, // Largeur augmentée
+                    height: 100, // Hauteur augmentée
+                    child: TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Mot de passe',
+                        labelStyle: TextStyle(color: Colors.grey[500], fontSize: 24), // Texte plus grand
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30), // Plus d'espace
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: AppColors.primaryColor,
+                            width: borderThickness,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: AppColors.primaryColor,
+                            width: borderThickness,
+                          ),
+                        ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: AppColors.primaryColor, width: borderThickness),
-                      ),
+                      style: const TextStyle(fontSize: 28, height: 1.5), // Police plus grande
                     ),
-                    style: const TextStyle(fontSize: 24, height: 1.5),
                   ),
-                ),
-                const SizedBox(height: 20),
-
-                SizedBox(
-                  width: 475,
-                  height: 100,
-                  child: TextField(
-                    controller: confirmPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(left: 20, top: 30, bottom: 30),
-                      hintText: 'Confirmer le mot de passe',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: AppColors.primaryColor, width: borderThickness),
+                  const SizedBox(height: 20),
+                  
+                  SizedBox(
+                    width: 600, // Largeur augmentée
+                    height: 100, // Hauteur augmentée
+                    child: TextFormField(
+                      controller: confirmPasswordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Confirmer le mot de passe',
+                        labelStyle: TextStyle(color: Colors.grey[500], fontSize: 24), // Texte plus grand
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30), // Plus d'espace
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: AppColors.primaryColor,
+                            width: borderThickness,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: AppColors.primaryColor,
+                            width: borderThickness,
+                          ),
+                        ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: AppColors.primaryColor, width: borderThickness),
-                      ),
+                      style: const TextStyle(fontSize: 28, height: 1.5), // Police plus grande
                     ),
-                    style: const TextStyle(fontSize: 24, height: 1.5),
                   ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          // Bouton "Inscription"
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: _signUp, // Appeler la fonction _signUp
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryColor,
-                foregroundColor: AppColors.textColor,
-                fixedSize: const Size(475, 100),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                "INSCRIPTION",
-                style: TextStyle(
-                  color: AppColors.backgroundColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
-                ),
+                ],
               ),
             ),
-          ),
-        ],
+
+            const SizedBox(height: 40),
+
+            // Bouton "Inscription" agrandi
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: _signUp, // Appeler la fonction _signUp
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryColor,
+                  foregroundColor: AppColors.textColor,
+                  fixedSize: const Size(600, 100), // Taille augmentée
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                child: const Text(
+                  "INSCRIPTION",
+                  style: TextStyle(
+                    color: AppColors.backgroundColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 36, // Taille de police augmentée
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
