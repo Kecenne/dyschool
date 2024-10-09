@@ -43,38 +43,59 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _login() async {
-    try {
-      await _auth.signInWithEmailAndPassword(
-        emailController.text.trim(),
-        passwordController.text.trim(),
-      );
-      Get.off(() => const MainPage());
-    } catch (e) {
-      Get.snackbar('Erreur', 'Connexion échouée : ${e.toString()}',
-          snackPosition: SnackPosition.BOTTOM);
-    }
+  try {
+    await _auth.signInWithEmailAndPassword(
+      emailController.text.trim(),
+      passwordController.text.trim(),
+    );
+    // Naviguer vers MainPage après la connexion
+    Get.offNamed('/main');
+  } catch (e) {
+    Get.snackbar('Erreur', 'Connexion échouée : ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM);
   }
+}
 
   Future<void> _signUp() async {
-    if (signupPasswordController.text != confirmPasswordController.text) {
-      Get.snackbar("Erreur", "Les mots de passe ne correspondent pas", snackPosition: SnackPosition.BOTTOM);
-      return;
-    }
+  if (signupPasswordController.text != confirmPasswordController.text) {
+    Get.snackbar(
+      "Erreur",
+      "Les mots de passe ne correspondent pas",
+      snackPosition: SnackPosition.BOTTOM,
+    );
+    return;
+  }
 
-    try {
-      await _auth.createUserWithEmailAndPassword(
-        signupEmailController.text.trim(),
-        signupPasswordController.text.trim(),
-      );
+  try {
+    await _auth.createUserWithEmailAndPassword(
+      signupEmailController.text.trim(),
+      signupPasswordController.text.trim(),
+    );
 
-      // Naviguer directement vers ChoixTroubles
+    // Vérifier si l'utilisateur est connecté
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // Naviguer vers la vue des troubles
       setState(() {
         _currentView = ViewState.troubles;
       });
-    } catch (e) {
-      Get.snackbar("Erreur", e.toString(), snackPosition: SnackPosition.BOTTOM);
+    } else {
+      // Si l'utilisateur n'est pas connecté pour une raison quelconque
+      Get.snackbar(
+        "Erreur",
+        "Inscription réussie mais impossible de se connecter",
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
+  } catch (e) {
+    Get.snackbar(
+      "Erreur",
+      e.toString(),
+      snackPosition: SnackPosition.BOTTOM,
+    );
   }
+}
 
   Widget _buildContent() {
     switch (_currentView) {
