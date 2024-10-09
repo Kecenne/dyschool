@@ -127,35 +127,58 @@ class SettingsPopup extends StatelessWidget {
                       _buildOptionCard(
                         icon: Icons.format_size,
                         title: "Type de police",
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                        child: Column(
                           children: [
-                            Checkbox(
-                              value: state.selectedParam3Choice == 1,
-                              onChanged: (value) {
-                                context.read<SettingsBloc>().add(ToggleCheckbox(3, 1, value!));
+                            GestureDetector(
+                              onTap: () {
+                                context.read<SettingsBloc>().add(ToggleCheckbox(3, 1, true));
                                 context.read<SettingsBloc>().add(ChangeFontEvent(1));
                               },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Checkbox(
+                                    value: state.selectedParam3Choice == 1,
+                                    onChanged: (value) {
+                                      context.read<SettingsBloc>().add(ToggleCheckbox(3, 1, value!));
+                                      context.read<SettingsBloc>().add(ChangeFontEvent(1));
+                                    },
+                                  ),
+                                  Text(
+                                    "Roboto",
+                                    style: dynamicTextStyle,
+                                  ),
+                                  const SizedBox(width: 16),
+                                ],
+                              ),
                             ),
-                            Text(
-                              "Roboto",
-                              style: dynamicTextStyle,
-                            ),
-                            const SizedBox(width: 16),
-                            Checkbox(
-                              value: state.selectedParam3Choice == 2,
-                              onChanged: (value) {
-                                context.read<SettingsBloc>().add(ToggleCheckbox(3, 2, value!));
-                                context.read<SettingsBloc>().add(ChangeFontEvent(2)); 
+                            const SizedBox(height: 8),
+                            GestureDetector(
+                              onTap: () {
+                                context.read<SettingsBloc>().add(ToggleCheckbox(3, 2, true));
+                                context.read<SettingsBloc>().add(ChangeFontEvent(2));
                               },
-                            ),
-                            Text(
-                              "OpenDyslexic", 
-                              style: dynamicTextStyle,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Checkbox(
+                                    value: state.selectedParam3Choice == 2,
+                                    onChanged: (value) {
+                                      context.read<SettingsBloc>().add(ToggleCheckbox(3, 2, value!));
+                                      context.read<SettingsBloc>().add(ChangeFontEvent(2));
+                                    },
+                                  ),
+                                  Text(
+                                    "OpenDyslexic",
+                                    style: dynamicTextStyle,
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
+
                       _buildOptionCard(
                         icon: Icons.line_weight,
                         title: "Paramètre 4",
@@ -195,14 +218,19 @@ class SettingsPopup extends StatelessWidget {
   }
 
   Widget _buildCheckboxRow({required BuildContext context, required String title, required bool value, required Function(bool?) onChanged}) {
-    return Row(
-      children: [
-        Checkbox(
-          value: value,
-          onChanged: onChanged,
-        ),
-        Text(title, style: const TextStyle(color: AppColors.primaryColor)),
-      ],
+    return InkWell(
+      onTap: () {
+        onChanged(!value);
+      },
+      child: Row(
+        children: [
+          Checkbox(
+            value: value,
+            onChanged: onChanged,
+          ),
+          Text(title, style: const TextStyle(color: AppColors.primaryColor)),
+        ],
+      ),
     );
   }
 
@@ -213,33 +241,38 @@ class SettingsPopup extends StatelessWidget {
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
+      child: GestureDetector(
+        onTap: () {
+        },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, size: 24),
             ),
-            child: Icon(icon, size: 24),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.primaryColor),
-                ),
-                const SizedBox(height: 8),
-                child,
-              ],
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.primaryColor),
+                  ),
+                  const SizedBox(height: 8),
+                  child,
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+
 }
