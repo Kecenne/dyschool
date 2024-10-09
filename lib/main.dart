@@ -1,16 +1,17 @@
-import "dart:async";
-import "package:flutter/material.dart";
-import "package:get/get.dart";
-import "widgets/navbar.dart";
-import "../controllers/nav_controller.dart";
-import "../controllers/favorite_controller.dart";
-import "theme/app_color.dart";
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'widgets/navbar.dart';
+import 'controllers/nav_controller.dart';
+import 'controllers/favorite_controller.dart';
+import 'theme/app_color.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import "controllers/routes_controller.dart";
+import 'controllers/routes_controller.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/settings_bloc.dart';
 import 'bloc/settings_state.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import pour FirebaseAuth
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,22 +45,30 @@ class MyApp extends StatelessWidget {
               textTheme: TextTheme(
                 bodyLarge: TextStyle(
                   color: AppColors.textColor,
-                  fontFamily: state.selectedFontChoice == 2 ? 'OpenDyslexic' : 'Roboto',
+                  fontFamily: state.selectedFontChoice == 2
+                      ? 'OpenDyslexic'
+                      : 'Roboto',
                 ),
                 bodyMedium: TextStyle(
                   color: AppColors.textColor,
-                  fontFamily: state.selectedFontChoice == 2 ? 'OpenDyslexic' : 'Roboto',
+                  fontFamily: state.selectedFontChoice == 2
+                      ? 'OpenDyslexic'
+                      : 'Roboto',
                 ),
                 titleLarge: TextStyle(
                   color: AppColors.textColor,
-                  fontFamily: state.selectedFontChoice == 2 ? 'OpenDyslexic' : 'Roboto',
+                  fontFamily: state.selectedFontChoice == 2
+                      ? 'OpenDyslexic'
+                      : 'Roboto',
                 ),
               ),
               useMaterial3: true,
-              fontFamily: state.selectedFontChoice == 2 ? 'OpenDyslexic' : 'Roboto',
+              fontFamily: state.selectedFontChoice == 2
+                  ? 'OpenDyslexic'
+                  : 'Roboto',
             ),
             getPages: AppRoutes.routes,
-            initialRoute: '/',
+            initialRoute: '/', // Assurez-vous que l'initialRoute est bien '/'
           );
         },
       ),
@@ -67,7 +76,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
+// SplashScreen qui vérifie l'état de l'utilisateur
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -79,8 +88,18 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+
+    // Démarrer un timer pour simuler un écran de chargement
     Timer(const Duration(seconds: 2, milliseconds: 200), () {
-      Get.offNamed('/login');
+      // Vérifier l'état de l'utilisateur
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        // L'utilisateur est connecté, naviguer vers MainPage
+        Get.offNamed('/main');
+      } else {
+        // L'utilisateur n'est pas connecté, naviguer vers LoginPage
+        Get.offNamed('/login');
+      }
     });
   }
 
