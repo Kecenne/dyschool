@@ -1,12 +1,17 @@
 import "package:flutter/material.dart";
 import "../widgets/settings_popup.dart";
 import '../theme/app_color.dart';
+import "../widgets/recent_game_card.dart";
+import "../widgets/small_game_card.dart";
+import "../data/games_data.dart";
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final firstGame = gamesList[0];
+    final recentGames = gamesList.sublist(1);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -61,48 +66,28 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Jeu récent
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              color: Colors.grey[300],
-              child: Container(
-                height: 150,
-                width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                child: const Center(
-                  child: Text(
-                    "Jeu récent",
-                    style: TextStyle(fontSize: 18, color: AppColors.primaryColor,),
-                  ),
-                ),
-              ),
+            RecentGameCard(
+              title: firstGame['title'],
+              imagePath: firstGame['imagePath'],
+              description: firstGame['description'],
+              tags: List<String>.from(firstGame['tags']),
+              route: firstGame['route'],
             ),
             const SizedBox(height: 16),
 
             // Jeux récents 2
             SizedBox(
-              height: 150,
+              height: MediaQuery.of(context).size.width * 0.23 + 20,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: 8,
+                itemCount: recentGames.length,
                 separatorBuilder: (context, index) => const SizedBox(width: 16),
                 itemBuilder: (context, index) {
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    color: Colors.grey[300],
-                    child: Container(
-                      width: 150,
-                      padding: const EdgeInsets.all(16.0),
-                      child: const Center(
-                        child: Text(
-                          "Jeux récents 2",
-                          style: TextStyle(fontSize: 16, color: AppColors.primaryColor,),
-                        ),
-                      ),
-                    ),
+                  final game = recentGames[index];
+                  return SmallGameCard(
+                    title: game['title'],
+                    imagePath: game['imagePath'],
+                    route: game['route'],
                   );
                 },
               ),

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../controllers/favorite_controller.dart';
 import 'favorite_animation.dart';
 import 'favorite_remove_popup.dart';
+import 'tag_list.dart'; // Import du widget TagList
 
 class GameCard extends StatelessWidget {
   final String title;
@@ -102,23 +103,9 @@ class GameCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 12.0),
-                    Wrap(
-                      spacing: 8.0,
-                      runSpacing: 4.0,
-                      children: tags
-                          .map((tag) => Chip(
-                                label: Text(tag),
-                                backgroundColor: Colors.cyan.shade50,
-                                  shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                    color: Colors.cyan.shade50,
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                              ))
-                          .toList(),
-                    ),
+
+                    // Utilisation du widget TagList
+                    TagList(tags: tags),
                   ],
                 ),
               ),
