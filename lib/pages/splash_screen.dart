@@ -1,35 +1,50 @@
-import "dart:async";
-import "package:flutter/material.dart";
-import "home_page.dart"; // Importer la page d"accueil
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
+import 'package:get/get.dart'; // Use Get for navigation
+import 'login_page.dart'; // Import LoginPage
+import '../main.dart'; // Import MainPage
+import '../theme/app_color.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  SplashScreenState createState() => SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    _checkAuthState(); // Check authentication state
+  }
 
-    // Démarre un Timer qui attend 2,2 secondes avant de rediriger
-    Timer(Duration(seconds: 1, milliseconds: 900), () {
-      // Redirection vers la HomePage après 2,2 secondes
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    });
+  void _checkAuthState() async {
+    // Wait for 2.2 seconds to show the splash screen
+    await Future.delayed(const Duration(seconds: 2, milliseconds: 200));
+
+    // Check the current user
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      // Navigate to LoginPage
+      Get.off(() => const LoginPage());
+    } else {
+      // Navigate to MainPage
+      Get.off(() => const MainPage());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Choisis la couleur d"arrière-plan de ta splash screen
+      backgroundColor: AppColors.backgroundColor,
       body: Center(
         child: Image.asset(
-          "assets/images/logo.png", // Chemin vers le logo
-          width: 150, // Largeur du logo
-          height: 150, // Hauteur du logo
+          "assets/images/logo.png",
+          width: 150,
+          height: 150,
         ),
       ),
     );
