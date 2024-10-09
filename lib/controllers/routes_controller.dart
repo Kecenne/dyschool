@@ -10,6 +10,7 @@ class AppRoutes {
     GetPage(name: '/', page: () => const SplashScreen()),
     GetPage(name: '/login', page: () => const LoginPage()),
     GetPage(name: '/games', page: () => const GamesPage()),
+    GetPage(name: '/main', page: () => const MainPage()),
     GetPage(name: '/jeu1', page: () => const TemplateJeuPage()),
   ];
 }
