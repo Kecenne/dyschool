@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_color.dart';
+import '../games/memory_game.dart';
 
 class TemplateJeuPage extends StatefulWidget {
   const TemplateJeuPage({Key? key}) : super(key: key);
@@ -180,7 +181,11 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => MemoryGamePage()),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 20.0),
                           backgroundColor: AppColors.primaryColor,

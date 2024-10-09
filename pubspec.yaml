@@ -68,6 +68,14 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/images/placeholder.png
+    - assets/images/memory-1.png
+    - assets/images/memory-2.png
+    - assets/images/memory-3.jpeg
+    - assets/images/memory-4.jpeg
+    - assets/images/memory-5.png
+    - assets/images/memory-6.png
+    - assets/images/memory-7.png
+    - assets/images/memory-8.jpeg
   fonts:
     - family: OpenDyslexic
       fonts:
