@@ -45,7 +45,7 @@ class GameCard extends StatelessWidget {
           child: Row(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(16.0),
+                borderRadius: BorderRadius.circular(22.0),
                 child: Image.asset(
                   imagePath,
                   width: 150,
@@ -108,7 +108,14 @@ class GameCard extends StatelessWidget {
                       children: tags
                           .map((tag) => Chip(
                                 label: Text(tag),
-                                backgroundColor: Colors.purple.shade100,
+                                backgroundColor: Colors.cyan.shade50,
+                                  shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    color: Colors.cyan.shade50,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
                               ))
                           .toList(),
                     ),
