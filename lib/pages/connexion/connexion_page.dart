@@ -38,114 +38,119 @@ class _ConnexionPageState extends State<ConnexionPage> {
       appBar: AppBar(
         title: const Text("Connexion"),
       ),
-      body: Column(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height / 3,
-            width: double.infinity,
-            color: AppColors.primaryColor,
-            child: const Center(
-              child: Text(
-                "DYSCHOOL",
-                style: TextStyle(
-                  fontFamily: 'OpenDyslexic',
-                  color: Colors.white,
-                  fontSize: 60,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 100),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 475,
-                  height: 100,
-                  child: TextField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(left: 20, top: 30, bottom: 30),
-                      hintText: 'Email',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: AppColors.primaryColor,
-                          width: borderThickness,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: AppColors.primaryColor,
-                          width: borderThickness,
-                        ),
-                      ),
-                    ),
-                    style: const TextStyle(fontSize: 24, height: 1.5),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height / 3,
+              width: double.infinity,
+              color: AppColors.primaryColor,
+              child: const Center(
+                child: Text(
+                  "DYSCHOOL",
+                  style: TextStyle(
+                    fontFamily: 'OpenDyslexic',
+                    color: Colors.white,
+                    fontSize: 60,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 20),
-                // Champ mot de passe
-                SizedBox(
-                  width: 475,
-                  height: 100,
-                  child: TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(left: 20, top: 30, bottom: 30),
-                      hintText: 'Mot de passe',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: AppColors.primaryColor,
-                          width: borderThickness,
+              ),
+            ),
+            const SizedBox(height: 150),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  // Champ email agrandi
+                  SizedBox(
+                    width: 600, // Largeur augmentée
+                    height: 100, // Hauteur augmentée
+                    child: TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        labelStyle: TextStyle(color: Colors.grey[500], fontSize: 24), // Texte plus grand
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30), // Plus d'espace
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: AppColors.primaryColor,
+                            width: borderThickness,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: AppColors.primaryColor,
+                            width: borderThickness,
+                          ),
                         ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: AppColors.primaryColor,
-                          width: borderThickness,
-                        ),
-                      ),
+                      style: const TextStyle(fontSize: 28, height: 1.5), // Police plus grande
                     ),
-                    style: const TextStyle(fontSize: 24, height: 1.5),
+                  ),
+                  const SizedBox(height: 20),
+                  // Champ mot de passe agrandi
+                  SizedBox(
+                    width: 600, // Largeur augmentée
+                    height: 100, // Hauteur augmentée
+                    child: TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Mot de passe',
+                        labelStyle: TextStyle(color: Colors.grey[500], fontSize: 24), // Texte plus grand
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30), // Plus d'espace
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: AppColors.primaryColor,
+                            width: borderThickness,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: AppColors.primaryColor,
+                            width: borderThickness,
+                          ),
+                        ),
+                      ),
+                      style: const TextStyle(fontSize: 28, height: 1.5), // Police plus grande
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Bouton "Connexion" agrandi
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: _login,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryColor,
+                  foregroundColor: AppColors.textColor,
+                  fixedSize: const Size(600, 100), // Taille augmentée
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          // Bouton "Connexion"
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: _login, // Liez à la fonction _login
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryColor,
-                foregroundColor: AppColors.textColor,
-                fixedSize: const Size(475, 100),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                "CONNEXION",
-                style: TextStyle(
-                  color: AppColors.backgroundColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
+                child: const Text(
+                  "CONNEXION",
+                  style: TextStyle(
+                    color: AppColors.backgroundColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 36, // Police augmentée
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

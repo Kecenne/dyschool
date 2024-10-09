@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../theme/app_color.dart'; // Importez votre fichier de couleurs
 import 'inscription/sign_up_page.dart'; // Importez la page d'inscription
 import './connexion/connexion_page.dart'; // Importe la page ConnexionPage
+import './inscription/choix_troubles.dart'; // Importez la page ChoixTroubles
 import '../main.dart'; // Importe la page MainPage
 
 class LoginPage extends StatelessWidget {
@@ -47,7 +48,7 @@ class LoginPage extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         // Redirection directe vers ConnexionPage
-                         Get.to(() => const ConnexionPage());
+                        Get.to(() => const ConnexionPage());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor, // Couleur de fond
@@ -63,7 +64,7 @@ class LoginPage extends StatelessWidget {
                           color: AppColors.backgroundColor,
                           fontWeight: FontWeight.bold, // Mettre le texte en gras
                           fontSize: 30, // Taille de police augmentée
-                        ), 
+                        ),
                       ),
                     ),
                     const SizedBox(height: 30), // Espace entre les boutons
@@ -95,7 +96,31 @@ class LoginPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 30), // Espace entre les boutons
 
-                    // Nouveau bouton pour accéder directement à MainPage
+                    // Nouveau bouton pour accéder directement à ChoixTroubles
+                    ElevatedButton(
+                      onPressed: () {
+                        // Redirection vers ChoixTroubles
+                        Get.to(() => const ChoixTroubles());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent, // Couleur de fond pour différencier le bouton
+                        foregroundColor: Colors.white, // Couleur du texte
+                        fixedSize: const Size(475, 100), // Taille fixe, largeur 475 et hauteur 100
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10), // Bordure arrondie
+                        ),
+                      ),
+                      child: const Text(
+                        "CHOISIR LES TROUBLES",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold, // Mettre le texte en gras
+                          fontSize: 30, // Taille de police augmentée
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30), // Espace entre les boutons
+
+                    // Bouton pour accéder directement à MainPage
                     ElevatedButton(
                       onPressed: () {
                         // Redirection vers MainPage
