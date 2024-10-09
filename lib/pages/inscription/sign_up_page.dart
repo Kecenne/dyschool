@@ -1,9 +1,9 @@
-import 'package:dyschool/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Importez Firebase Auth
 import '../../theme/app_color.dart'; // Importez votre fichier de couleurs
 import '../../controllers/auth_controller.dart'; // Importez votre contrôleur d'authentification
+import 'choix_troubles.dart'; // Importez la page ChoixTroubles
 
 
 class SignUpPage extends StatefulWidget {
@@ -37,10 +37,10 @@ class _SignUpPageState extends State<SignUpPage> {
       if (user != null) {
         await Auth().sendVerificationEmail(user);
         Get.snackbar("Vérification", "Un email de vérification a été envoyé à ${user.email}.",
-            snackPosition: SnackPosition.BOTTOM);
+            snackPosition: SnackPosition.TOP);
       }
 
-      Get.off(() => const MainPage());
+      Get.off(() => const ChoixTroubles());
     } catch (e) {
       Get.snackbar("Erreur", e.toString(), snackPosition: SnackPosition.BOTTOM);
     }
