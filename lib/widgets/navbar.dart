@@ -4,6 +4,8 @@ import "../controllers/nav_controller.dart";
 import '../theme/app_color.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
+  static final GlobalKey favoriteIconKey = GlobalKey();
+
   const CustomBottomNavBar({Key? key}) : super(key: key);
 
   @override
@@ -18,24 +20,24 @@ class CustomBottomNavBar extends StatelessWidget {
       child: Obx(
         () => BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
+          items: <BottomNavigationBarItem>[
+            const BottomNavigationBarItem(
               icon: Icon(Icons.density_medium_outlined),
               label: "Progression",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.favorite, size: 30),
+              icon: Icon(Icons.favorite, key: favoriteIconKey, size: 30),
               label: "Favoris",
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.home, size: 30),
               label: "Jouer",
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.videogame_asset, size: 30),
               label: "Jeux",
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.account_circle, size: 30),
               label: "Profil",
             ),
