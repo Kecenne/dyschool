@@ -11,6 +11,10 @@ import 'controllers/routes_controller.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/settings_bloc.dart';
 import 'bloc/settings_state.dart';
+import 'services/settings_service.dart';
+import 'bloc/settings_event.dart';
+
+import 'package:firebase_auth/firebase_auth.dart'; // Import pour FirebaseAuth
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
