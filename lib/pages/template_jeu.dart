@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_color.dart';
 import '../games/memory_game.dart';
+import "../games/seven_family_game.dart";
 
 class TemplateJeuPage extends StatefulWidget {
   const TemplateJeuPage({Key? key}) : super(key: key);
@@ -184,6 +185,23 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                         onPressed: () {
                           Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => MemoryGamePage()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 20.0),
+                          backgroundColor: AppColors.primaryColor,
+                        ),
+                        child: const Text("JOUER", style: TextStyle(fontSize: 20, color: AppColors.backgroundColor, fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => SevenFamilyGamePage()),
                           );
                         },
                         style: ElevatedButton.styleFrom(
