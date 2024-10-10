@@ -8,6 +8,8 @@ import '../controllers/auth_controller.dart';
 import '../widgets/login/connexion_form.dart'; // Importez ConnexionForm
 import '../widgets/login/sign_up_form.dart'; // Importez SignupForm
 import '../widgets/login/troubles_form.dart'; // Importez TroublesForm
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/settings_bloc.dart';
 
 enum ViewState { initial, connexion, signup, troubles }
 
@@ -21,11 +23,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   ViewState _currentView = ViewState.initial;
 
-  // Contrôleurs pour le formulaire de connexion
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  // Contrôleurs pour le formulaire d'inscription
   final TextEditingController signupEmailController = TextEditingController();
   final TextEditingController signupPasswordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
@@ -43,59 +43,59 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _login() async {
-  try {
-    await _auth.signInWithEmailAndPassword(
-      emailController.text.trim(),
-      passwordController.text.trim(),
-    );
-    // Naviguer vers MainPage après la connexion
-    Get.offNamed('/main');
-  } catch (e) {
-    Get.snackbar('Erreur', 'Connexion échouée : ${e.toString()}',
-        snackPosition: SnackPosition.BOTTOM);
+    try {
+      final settingsBloc = context.read<SettingsBloc>();
+      await _auth.signInWithEmailAndPassword(
+        emailController.text.trim(),
+        passwordController.text.trim(),
+        settingsBloc,
+      );
+      Get.offNamed('/main');
+    } catch (e) {
+      Get.snackbar('Erreur', 'Connexion échouée : ${e.toString()}',
+          snackPosition: SnackPosition.BOTTOM);
+    }
   }
-}
 
   Future<void> _signUp() async {
-  if (signupPasswordController.text != confirmPasswordController.text) {
-    Get.snackbar(
-      "Erreur",
-      "Les mots de passe ne correspondent pas",
-      snackPosition: SnackPosition.BOTTOM,
-    );
-    return;
-  }
-
-  try {
-    await _auth.createUserWithEmailAndPassword(
-      signupEmailController.text.trim(),
-      signupPasswordController.text.trim(),
-    );
-
-    // Vérifier si l'utilisateur est connecté
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      // Naviguer vers la vue des troubles
-      setState(() {
-        _currentView = ViewState.troubles;
-      });
-    } else {
-      // Si l'utilisateur n'est pas connecté pour une raison quelconque
+    if (signupPasswordController.text != confirmPasswordController.text) {
       Get.snackbar(
         "Erreur",
-        "Inscription réussie mais impossible de se connecter",
+        "Les mots de passe ne correspondent pas",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    try {
+      final settingsBloc = context.read<SettingsBloc>();
+      await _auth.createUserWithEmailAndPassword(
+        signupEmailController.text.trim(),
+        signupPasswordController.text.trim(),
+        settingsBloc,
+      );
+
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        setState(() {
+          _currentView = ViewState.troubles;
+        });
+      } else {
+        Get.snackbar(
+          "Erreur",
+          "Inscription réussie mais impossible de se connecter",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Erreur",
+        e.toString(),
         snackPosition: SnackPosition.BOTTOM,
       );
     }
-  } catch (e) {
-    Get.snackbar(
-      "Erreur",
-      e.toString(),
-      snackPosition: SnackPosition.BOTTOM,
-    );
   }
-}
 
   Widget _buildContent() {
     switch (_currentView) {
@@ -207,7 +207,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    // Dispose des contrôleurs pour éviter les fuites de mémoire
     emailController.dispose();
     passwordController.dispose();
     signupEmailController.dispose();

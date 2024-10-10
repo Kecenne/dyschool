@@ -131,17 +131,15 @@ class SettingsPopup extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                context.read<SettingsBloc>().add(ToggleCheckbox(3, 1, true));
-                                context.read<SettingsBloc>().add(ChangeFontEvent(1));
+                                context.read<SettingsBloc>().add(ChangeFontEvent(1)); // Roboto
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Checkbox(
-                                    value: state.selectedParam3Choice == 1,
+                                    value: state.selectedFontChoice == 1, // Utiliser uniquement selectedFontChoice pour la coche
                                     onChanged: (value) {
-                                      context.read<SettingsBloc>().add(ToggleCheckbox(3, 1, value!));
-                                      context.read<SettingsBloc>().add(ChangeFontEvent(1));
+                                      context.read<SettingsBloc>().add(ChangeFontEvent(1)); // Roboto
                                     },
                                   ),
                                   Text(
@@ -155,17 +153,15 @@ class SettingsPopup extends StatelessWidget {
                             const SizedBox(height: 8),
                             GestureDetector(
                               onTap: () {
-                                context.read<SettingsBloc>().add(ToggleCheckbox(3, 2, true));
-                                context.read<SettingsBloc>().add(ChangeFontEvent(2));
+                                context.read<SettingsBloc>().add(ChangeFontEvent(2)); // OpenDyslexic
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Checkbox(
-                                    value: state.selectedParam3Choice == 2,
+                                    value: state.selectedFontChoice == 2, // Utiliser uniquement selectedFontChoice pour la coche
                                     onChanged: (value) {
-                                      context.read<SettingsBloc>().add(ToggleCheckbox(3, 2, value!));
-                                      context.read<SettingsBloc>().add(ChangeFontEvent(2));
+                                      context.read<SettingsBloc>().add(ChangeFontEvent(2)); // OpenDyslexic
                                     },
                                   ),
                                   Text(
@@ -178,6 +174,7 @@ class SettingsPopup extends StatelessWidget {
                           ],
                         ),
                       ),
+
 
                       _buildOptionCard(
                         icon: Icons.line_weight,

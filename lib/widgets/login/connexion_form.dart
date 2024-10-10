@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'login_input.dart';
 import 'login_button.dart';
 import '/theme/app_color.dart';

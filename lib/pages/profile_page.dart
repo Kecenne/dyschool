@@ -2,31 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'dart:math'; // Pour générer un identifiant aléatoire
+import 'dart:math'; 
 import '../theme/app_color.dart';
+import "../controllers/auth_controller.dart";
+import "../bloc/settings_bloc.dart";
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
-  // Méthode pour gérer la déconnexion
-  void _logout() async {
-    await FirebaseAuth.instance.signOut();
-    Get.offAllNamed('/login'); // Naviguer vers LoginPage et supprimer toutes les routes précédentes
+  void _logout(BuildContext context) async {
+    final authController = Auth();
+
+    await authController.signOut(BlocProvider.of<SettingsBloc>(context));
+    print("Déconnexion réussie");
+    Get.offAllNamed('/login');
   }
 
-  // Méthode pour générer un identifiant aléatoire
   String _generateRandomId() {
     var rng = Random();
-    return 'User_${rng.nextInt(100000)}'; // Génère un nombre aléatoire entre 0 et 99999
+    return 'User_${rng.nextInt(100000)}'; 
   }
 
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
 
-    // Vérifier si l'utilisateur est connecté
     if (user == null) {
-      // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Get.offAllNamed('/login');
       });
@@ -44,15 +46,11 @@ class ProfilePage extends StatelessWidget {
       body: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
         builder: (context, snapshot) {
-          // Gérer les états de la future
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // En attente des données
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            // En cas d'erreur
             return Center(child: Text('Erreur : ${snapshot.error}'));
           } else if (snapshot.hasData && snapshot.data != null) {
-            // Les données sont disponibles
             var userData = snapshot.data!.data() as Map<String, dynamic>?;
 
             String displayName;
@@ -61,7 +59,6 @@ class ProfilePage extends StatelessWidget {
               String prenom = userData['prenom'] ?? '';
               displayName = '$prenom $nom';
             } else {
-              // Générer un identifiant aléatoire si le nom n'est pas disponible
               displayName = _generateRandomId();
             }
 
@@ -100,7 +97,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 40),
                   ElevatedButton(
-                    onPressed: _logout, // Appel de la méthode _logout lors du clic
+                    onPressed: () => _logout(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryColor,
                       padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
@@ -119,7 +116,6 @@ class ProfilePage extends StatelessWidget {
               ),
             );
           } else {
-            // Aucune donnée disponible
             return Center(child: Text('Aucune donnée disponible'));
           }
         },

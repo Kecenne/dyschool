@@ -11,6 +11,9 @@ import "controllers/routes_controller.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/settings_bloc.dart';
 import 'bloc/settings_state.dart';
+import 'services/settings_service.dart';
+import 'bloc/settings_event.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,16 +22,20 @@ void main() async {
   );
 
   Get.put(FavoriteController());
-  runApp(const MyApp());
+  final settingsService = SettingsService();
+  runApp(MyApp(settingsService: settingsService));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SettingsService settingsService;
+  const MyApp({super.key, required this.settingsService});
 
   @override
   Widget build(BuildContext context) {
+    final settingsService = SettingsService();
+
     return BlocProvider(
-      create: (context) => SettingsBloc(),
+      create: (context) => SettingsBloc(settingsService)..add(LoadFontPreferenceEvent()),
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
           return GetMaterialApp(
