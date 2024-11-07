@@ -20,7 +20,7 @@ class GameFilters extends StatelessWidget {
               labelText: 'Type de troubles',
               border: OutlineInputBorder(),
             ),
-            items: ["", "Dyslexie", "Dyspraxie"]
+            items: ["", "Dyslexie", "Dyspraxie", "Dysorthographie", "Dysgraphie", "Dyscalculie", "Dysphasie", "Dyséxécutif"]
                 .map((trouble) => DropdownMenuItem(
                       value: trouble,
                       child: Text(
