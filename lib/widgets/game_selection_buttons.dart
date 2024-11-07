@@ -18,6 +18,26 @@ class GameSelectionButtons extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        // Nouveau bouton "Mes jeux" (inactif pour l'instant)
+        ElevatedButton(
+          onPressed: () {
+            // Action à définir plus tard
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.backgroundColor,
+            foregroundColor: AppColors.primaryColor,
+            side: BorderSide(color: AppColors.primaryColor),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          child: const Text(
+            "Mes jeux",
+            style: TextStyle(color: AppColors.primaryColor),
+          ),
+        ),
+
+        // Bouton "Tous les jeux"
         ElevatedButton(
           onPressed: onShowAll,
           style: ElevatedButton.styleFrom(
@@ -27,7 +47,7 @@ class GameSelectionButtons extends StatelessWidget {
             foregroundColor: showFavoritesOnly
                 ? AppColors.primaryColor
                 : AppColors.backgroundColor,
-            side: const BorderSide(color: AppColors.primaryColor),
+            side: BorderSide(color: AppColors.primaryColor),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),
@@ -41,6 +61,8 @@ class GameSelectionButtons extends StatelessWidget {
             ),
           ),
         ),
+
+        // Bouton "Favoris"
         ElevatedButton(
           onPressed: onShowFavorites,
           style: ElevatedButton.styleFrom(

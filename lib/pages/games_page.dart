@@ -4,6 +4,7 @@ import '../widgets/search_bar.dart' as custom_widgets;
 import '../widgets/game_filters.dart';
 import '../widgets/game_selection_buttons.dart';
 import '../widgets/game_list.dart';
+import '../widgets/page_header.dart';
 import '../controllers/favorite_controller.dart';
 import '../data/games_data.dart';
 
@@ -40,14 +41,12 @@ class _GamesPageState extends State<GamesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Liste des Jeux"),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Boutons de sélection de jeux
+            const PageHeader(title: "Liste des Jeux"),
+            const SizedBox(height: 16),
             GameSelectionButtons(
               showFavoritesOnly: showFavoritesOnly,
               onShowAll: () {
@@ -61,9 +60,7 @@ class _GamesPageState extends State<GamesPage> {
                 });
               },
             ),
-            const SizedBox(height: 16.0),
-
-            // Barre de recherche
+            const SizedBox(height: 16),
             custom_widgets.SearchBar(
               onSearchChanged: (value) {
                 setState(() {
@@ -71,9 +68,7 @@ class _GamesPageState extends State<GamesPage> {
                 });
               },
             ),
-            const SizedBox(height: 16.0),
-
-            // Filtres
+            const SizedBox(height: 16),
             GameFilters(
               onTroubleChanged: (value) {
                 setState(() {
@@ -86,9 +81,7 @@ class _GamesPageState extends State<GamesPage> {
                 });
               },
             ),
-            const SizedBox(height: 16.0),
-
-            // Liste des jeux filtrés
+            const SizedBox(height: 16),
             Expanded(
               child: GameList(games: filteredGames),
             ),
