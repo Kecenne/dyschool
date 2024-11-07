@@ -55,21 +55,12 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
       if (currentPlayer == 'User') {
         currentPlayer = 'Left';
         statusMessage = "C'est au tour de l'ordinateur de gauche de jouer...";
-        Future.delayed(const Duration(seconds: 4), () {
-          computerPlay('Left');
-        });
       } else if (currentPlayer == 'Left') {
         currentPlayer = 'Top';
         statusMessage = "C'est au tour de l'ordinateur du haut de jouer...";
-        Future.delayed(const Duration(seconds: 4), () {
-          computerPlay('Top');
-        });
       } else if (currentPlayer == 'Top') {
         currentPlayer = 'Right';
         statusMessage = "C'est au tour de l'ordinateur de droite de jouer...";
-        Future.delayed(const Duration(seconds: 4), () {
-          computerPlay('Right');
-        });
       } else {
         currentPlayer = 'User';
         statusMessage = 'Votre tour de jouer !';
@@ -78,20 +69,17 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
   }
 
   void computerPlay(String player) {
-    setState(() {
-      String family = families[Random().nextInt(families.length)];
-      String member = familyMembers[Random().nextInt(familyMembers.length)];
-      String targetCard = '$family - $member';
+    String family = families[Random().nextInt(families.length)];
+    String member = familyMembers[Random().nextInt(familyMembers.length)];
+    String targetCard = '$family - $member';
 
-      String opponent = ['User', 'Left', 'Top', 'Right'][Random().nextInt(4)];
-      while (opponent == player) {
-        opponent = ['User', 'Left', 'Top', 'Right'][Random().nextInt(4)];
-      }
+    String opponent = ['User', 'Left', 'Top', 'Right'][Random().nextInt(4)];
+    while (opponent == player) {
+      opponent = ['User', 'Left', 'Top', 'Right'][Random().nextInt(4)];
+    }
 
-      handleComputerRequest(player, opponent, targetCard);
-    });
+    handleComputerRequest(player, opponent, targetCard);
   }
-
 
   void handleComputerRequest(String player, String opponent, String card) {
     setState(() {
@@ -112,14 +100,14 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
         if (player == 'Left') leftDeck.add(card);
         if (player == 'Top') topDeck.add(card);
         if (player == 'Right') rightDeck.add(card);
+
+        if (checkForCompleteFamily(player == 'Left' ? leftDeck : player == 'Top' ? topDeck : rightDeck)) {
+          return; // Stop the game if a family is completed
+        }
       } else {
         statusMessage = "$player a demandé $card à $opponent, mais il ne l'a pas. $player pioche une carte.";
         drawCard(player);
       }
-
-      Future.delayed(const Duration(seconds: 4), () {
-        nextTurn();
-      });
     });
   }
 
@@ -140,6 +128,31 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
     }
   }
 
+  List<String> getAvailableFamilies(List<String> deck) {
+    return families.where((family) {
+      return deck.any((card) => card.startsWith(family));
+    }).toList();
+  }
+
+  List<String> getAvailableMembers(List<String> deck, String family) {
+    return familyMembers.where((member) {
+      String card = '$family - $member';
+      return !deck.contains(card);
+    }).toList();
+  }
+
+  bool checkForCompleteFamily(List<String> deck) {
+    for (var family in families) {
+      if (familyMembers.every((member) => deck.contains('$family - $member'))) {
+        setState(() {
+          statusMessage = '$family complétée par ${currentPlayer == 'User' ? "Vous" : "l\'ordinateur $currentPlayer"} !';
+        });
+        return true;
+      }
+    }
+    return false;
+  }
+
   void handleUserRequest(String opponent) {
     String requestedCard = '$selectedFamily - $selectedCharacter';
     setState(() {
@@ -157,137 +170,152 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
         statusMessage = "Vous avez pris $requestedCard de l'ordinateur $opponent !";
         userDeck.add(requestedCard);
         opponentDeck.remove(requestedCard);
+
+        if (checkForCompleteFamily(userDeck)) {
+          return;
+        }
       } else {
         statusMessage = "L'ordinateur $opponent n'a pas $requestedCard. Vous piochez une carte.";
         drawCard('User');
       }
-
-      Future.delayed(const Duration(seconds: 4), () {
-        nextTurn();
-      });
     });
   }
 
   void showSelectionPopup() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-          return AlertDialog(
-            title: const Text("Choisissez une carte"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                DropdownButton<String>(
-                  value: selectedFamily,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedFamily = newValue!;
-                      selectedCharacter = familyMembers.first;
-                    });
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            List<String> availableFamilies = getAvailableFamilies(userDeck);
+            List<String> availableMembers = selectedFamily.isNotEmpty ? getAvailableMembers(userDeck, selectedFamily) : [];
+
+            if (!availableFamilies.contains(selectedFamily) && availableFamilies.isNotEmpty) {
+              selectedFamily = availableFamilies.first;
+            } else if (availableFamilies.isEmpty) {
+              selectedFamily = '';
+            }
+
+            if (!availableMembers.contains(selectedCharacter) && availableMembers.isNotEmpty) {
+              selectedCharacter = availableMembers.first;
+            } else if (availableMembers.isEmpty) {
+              selectedCharacter = '';
+            }
+
+            return AlertDialog(
+              title: const Text("Choisissez une carte"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DropdownButton<String>(
+                    value: selectedFamily.isNotEmpty ? selectedFamily : null,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedFamily = newValue!;
+                        selectedCharacter = getAvailableMembers(userDeck, selectedFamily).first;
+                      });
+                    },
+                    items: availableFamilies.map<DropdownMenuItem<String>>((String family) {
+                      return DropdownMenuItem<String>(
+                        value: family,
+                        child: Text(family),
+                      );
+                    }).toList(),
+                  ),
+                  DropdownButton<String>(
+                    value: selectedCharacter.isNotEmpty ? selectedCharacter : null,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedCharacter = newValue!;
+                      });
+                    },
+                    items: availableMembers.map<DropdownMenuItem<String>>((String character) {
+                      return DropdownMenuItem<String>(
+                        value: character,
+                        child: Text(character),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
                   },
-                  items: families.map<DropdownMenuItem<String>>((String family) {
-                    return DropdownMenuItem<String>(
-                      value: family,
-                      child: Text(family),
-                    );
-                  }).toList(),
+                  child: const Text("Annuler"),
                 ),
-                DropdownButton<String>(
-                  value: selectedCharacter,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedCharacter = newValue!;
-                    });
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    showChooseOpponentPopup();
                   },
-                  items: familyMembers.map<DropdownMenuItem<String>>((String character) {
-                    return DropdownMenuItem<String>(
-                      value: character,
-                      child: Text(character),
-                    );
-                  }).toList(),
+                  child: const Text("Confirmer"),
                 ),
               ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Annuler"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  showChooseOpponentPopup();
-                },
-                child: const Text("Confirmer"),
-              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void showChooseOpponentPopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Choisissez un adversaire"),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              buildOpponentButton('Gauche'),
+              buildOpponentButton('Haut'),
+              buildOpponentButton('Droite'),
             ],
-          );
-        },
-      );
-    },
-  );
-}
+          ),
+        );
+      },
+    );
+  }
 
-void showChooseOpponentPopup() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text("Choisissez un adversaire"),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            buildOpponentButton('Gauche'),
-            buildOpponentButton('Haut'),
-            buildOpponentButton('Droite'),
-          ],
-        ),
-      );
-    },
-  );
-}
+  Widget buildOpponentButton(String opponent) {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.of(context).pop();
+        handleCardRequest(opponent);
+      },
+      child: Text(opponent),
+    );
+  }
 
-Widget buildOpponentButton(String opponent) {
-  return ElevatedButton(
-    onPressed: () {
-      Navigator.of(context).pop();
-      handleCardRequest(opponent);
-    },
-    child: Text(opponent),
-  );
-}
+  void handleCardRequest(String opponent) {
+    String requestedCard = '$selectedFamily - $selectedCharacter';
+    setState(() {
+      List<String> opponentDeck;
 
-void handleCardRequest(String opponent) {
-  String requestedCard = '$selectedFamily - $selectedCharacter';
-  setState(() {
-    List<String> opponentDeck;
+      if (opponent == 'Gauche') {
+        opponentDeck = leftDeck;
+      } else if (opponent == 'Haut') {
+        opponentDeck = topDeck;
+      } else {
+        opponentDeck = rightDeck;
+      }
 
-    if (opponent == 'Gauche') {
-      opponentDeck = leftDeck;
-    } else if (opponent == 'Haut') {
-      opponentDeck = topDeck;
-    } else {
-      opponentDeck = rightDeck;
-    }
+      if (opponentDeck.contains(requestedCard)) {
+        statusMessage = "Vous avez pris $requestedCard de l'ordinateur $opponent !";
+        userDeck.add(requestedCard);
+        opponentDeck.remove(requestedCard);
 
-    if (opponentDeck.contains(requestedCard)) {
-      statusMessage = "Vous avez pris $requestedCard de l'ordinateur $opponent !";
-      userDeck.add(requestedCard);
-      opponentDeck.remove(requestedCard);
-    } else {
-      statusMessage = "L'ordinateur $opponent n'a pas $requestedCard. Vous piochez une carte.";
-      drawCard('User');
-    }
-
-    Future.delayed(const Duration(seconds: 2), () {
-      nextTurn();
+        if (checkForCompleteFamily(userDeck)) {
+          return;
+        }
+      } else {
+        statusMessage = "L'ordinateur $opponent n'a pas $requestedCard. Vous piochez une carte.";
+        drawCard('User');
+      }
     });
-  });
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -329,13 +357,11 @@ void handleCardRequest(String opponent) {
               ),
             ),
           ),
-
           Positioned(
             top: MediaQuery.of(context).size.height * 0.15,
             right: 20,
             child: buildDeck('Ordi Droit', rightDeck, true),
           ),
-
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -377,24 +403,42 @@ void handleCardRequest(String opponent) {
               ),
             ),
           ),
-
-          // Message d'état
           SafeArea(
             child: Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.6, 
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                decoration: BoxDecoration(
-                  color: Colors.black12,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  statusMessage,
-                  textAlign: TextAlign.center,
-                  maxLines: 3, 
-                  softWrap: true, 
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.6, 
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      statusMessage,
+                      textAlign: TextAlign.center,
+                      maxLines: 3, 
+                      softWrap: true, 
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  if (statusMessage != 'Votre tour de jouer !') // Affiche le bouton "Continuer" sauf si c'est le tour du joueur
+                    ElevatedButton(
+                      onPressed: () {
+                        if (currentPlayer != 'User') {
+                          computerPlay(currentPlayer);
+                        }
+                        nextTurn();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      ),
+                      child: const Text("Continuer", style: TextStyle(fontSize: 18)),
+                    ),
+                ],
               ),
             ),
           ),
@@ -413,7 +457,6 @@ void handleCardRequest(String opponent) {
                 child: const Text("Sélectionner une carte", style: TextStyle(fontSize: 18)),
               ),
             ),
-
         ],
       ),
     );
