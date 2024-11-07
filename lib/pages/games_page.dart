@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import '../widgets/game_card.dart';
+import 'package:get/get.dart';
+import '../widgets/search_bar.dart' as custom_widgets;
+import '../widgets/game_filters.dart';
+import '../widgets/game_selection_buttons.dart';
+import '../widgets/game_list.dart';
+import '../controllers/favorite_controller.dart';
 import '../data/games_data.dart';
 
 class GamesPage extends StatefulWidget {
@@ -10,12 +15,19 @@ class GamesPage extends StatefulWidget {
 }
 
 class _GamesPageState extends State<GamesPage> {
+  final favoriteController = Get.find<FavoriteController>();
+
   String searchQuery = "";
   String selectedTrouble = "";
   String selectedGameType = "";
+  bool showFavoritesOnly = false;
 
   List<Map<String, dynamic>> get filteredGames {
-    return gamesList.where((game) {
+    final gamesToShow = showFavoritesOnly
+        ? gamesList.where((game) => favoriteController.favoriteGames.contains(game["title"])).toList()
+        : gamesList;
+
+    return gamesToShow.where((game) {
       final matchesSearchQuery = game["title"]
           .toLowerCase()
           .contains(searchQuery.toLowerCase());
@@ -35,13 +47,25 @@ class _GamesPageState extends State<GamesPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'Rechercher un jeu',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (value) {
+            // Boutons de sélection de jeux
+            GameSelectionButtons(
+              showFavoritesOnly: showFavoritesOnly,
+              onShowAll: () {
+                setState(() {
+                  showFavoritesOnly = false;
+                });
+              },
+              onShowFavorites: () {
+                setState(() {
+                  showFavoritesOnly = true;
+                });
+              },
+            ),
+            const SizedBox(height: 16.0),
+
+            // Barre de recherche
+            custom_widgets.SearchBar(
+              onSearchChanged: (value) {
                 setState(() {
                   searchQuery = value;
                 });
@@ -49,70 +73,24 @@ class _GamesPageState extends State<GamesPage> {
             ),
             const SizedBox(height: 16.0),
 
-            Row(
-              children: [
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(
-                      labelText: 'Type de troubles',
-                      border: OutlineInputBorder(),
-                    ),
-                    items: ["", "Dyslexie", "Dyspraxie", "Dysorthographie", "Dysgraphie", "Dyscalculie", "Dysphasie", "Dyséxécutif"]
-                        .map((trouble) => DropdownMenuItem(
-                              value: trouble,
-                              child: Text(
-                                  trouble.isEmpty ? "Tous les troubles" : trouble),
-                            ))
-                        .toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedTrouble = value ?? "";
-                      });
-                    },
-                    value: selectedTrouble,
-                  ),
-                ),
-                const SizedBox(width: 16.0),
-
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(
-                      labelText: 'Type de jeux',
-                      border: OutlineInputBorder(),
-                    ),
-                    items: ["", "Type 1", "Type 2", "Type 3"]
-                        .map((gameType) => DropdownMenuItem(
-                              value: gameType,
-                              child: Text(
-                                  gameType.isEmpty ? "Tous les types" : gameType),
-                            ))
-                        .toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedGameType = value ?? "";
-                      });
-                    },
-                    value: selectedGameType,
-                  ),
-                ),
-              ],
+            // Filtres
+            GameFilters(
+              onTroubleChanged: (value) {
+                setState(() {
+                  selectedTrouble = value ?? "";
+                });
+              },
+              onGameTypeChanged: (value) {
+                setState(() {
+                  selectedGameType = value ?? "";
+                });
+              },
             ),
             const SizedBox(height: 16.0),
 
+            // Liste des jeux filtrés
             Expanded(
-              child: ListView(
-                children: filteredGames
-                    .map(
-                      (game) => GameCard(
-                        title: game["title"],
-                        route: game["route"],
-                        description: game["description"],
-                        tags: game["tags"].cast<String>(),
-                        imagePath: game["imagePath"],
-                      ),
-                    )
-                    .toList(),
-              ),
+              child: GameList(games: filteredGames),
             ),
           ],
         ),
