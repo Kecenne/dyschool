@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
-import "../widgets/settings_popup.dart";
 import '../theme/app_color.dart';
 import "../widgets/recent_game_card.dart";
 import "../widgets/small_game_card.dart";
 import "../data/games_data.dart";
+import "../widgets/page_header.dart";
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,35 +17,9 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Prénom & Nom",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.primaryColor,),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.settings),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => const SettingsPopup(),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+            const PageHeader(title: "Accueil"),
             const SizedBox(height: 16),
 
-            // Récompenses quotidiennes
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
