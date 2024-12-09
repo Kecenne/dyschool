@@ -120,6 +120,71 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                   ),
                   const SizedBox(height: 24.0),
 
+                  // Temps de jeu
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.access_time, size: 20),
+                      SizedBox(width: 8),
+                      Text("15 minutes", style: TextStyle(fontSize: 18)),
+                      SizedBox(width: 24),
+                      Icon(Icons.access_time, size: 20),
+                      SizedBox(width: 8),
+                      Text("1h34", style: TextStyle(fontSize: 18)),
+                    ],
+                  ),
+                  const SizedBox(height: 24.0),
+
+                  // Bouton "JOUER"
+                  Center(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (game['id'] == 'jeu-de-memoire') {
+                            // Redirection vers le jeu de mémoire
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => MemoryGamePage()),
+                            );
+                          } else if (game['id'] == 'jeu-des-7-familles') {
+                            // Redirection vers le jeu des 7 familles
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => SevenFamilyGamePage()),
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 20.0),
+                          backgroundColor: AppColors.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        child: const Text(
+                          "JOUER",
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: AppColors.backgroundColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 36.0),
+
+                  // Explication du jeu
+                  const Text(
+                    "Explication du jeu",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Text(
+                    game['description'],
+                    style: const TextStyle(fontSize: 18, height: 1.5),
+                  ),
+                  const SizedBox(height: 36.0),
+
                   // Onglets
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -162,42 +227,6 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
 
                   // Contenu de la section sélectionnée
                   getSectionContent(),
-
-                  const SizedBox(height: 36.0),
-
-                  // Bouton "JOUER"
-                  Center(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (game['id'] == 'jeu-de-memoire') {
-                            // Redirection vers le jeu de mémoire
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => MemoryGamePage()),
-                            );
-                          } else if (game['id'] == 'jeu-des-7-familles') {
-                            // Redirection vers le jeu des 7 familles
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => SevenFamilyGamePage()),
-                            );
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 20.0),
-                          backgroundColor: AppColors.primaryColor,
-                        ),
-                        child: const Text(
-                          "JOUER",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: AppColors.backgroundColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -210,6 +239,7 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
   // Widget générique pour afficher une section avec titre et contenu
   Widget _buildBlueBlock({required String title, required String content}) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
       margin: const EdgeInsets.only(bottom: 16.0),
       decoration: BoxDecoration(
