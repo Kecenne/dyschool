@@ -30,7 +30,12 @@ class GameCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Get.toNamed(route);
+        Get.toNamed(route, arguments: {
+          'title': title,
+          'description': description,
+          'tags': tags,
+          'imagePath': imagePath,
+        });
       },
       child: Card(
         shape: RoundedRectangleBorder(

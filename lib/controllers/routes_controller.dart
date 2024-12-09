@@ -5,12 +5,14 @@ import '../pages/template_jeu.dart';
 import '../main.dart';
 
 class AppRoutes {
-  // Définition des routes principales de l'application
   static final routes = [
     GetPage(name: '/', page: () => const SplashScreen()),
     GetPage(name: '/login', page: () => const LoginPage()),
     GetPage(name: '/games', page: () => const GamesPage()),
     GetPage(name: '/main', page: () => const MainPage()),
-    GetPage(name: '/jeu1', page: () => const TemplateJeuPage()),
+    GetPage(
+      name: '/jeu/:id',
+      page: () => const TemplateJeuPage(),
+    ),
   ];
 }
