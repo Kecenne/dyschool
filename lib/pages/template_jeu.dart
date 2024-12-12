@@ -5,6 +5,7 @@ import '../theme/app_color.dart';
 import '../games/memory_game.dart';
 import '../games/seven_family_game.dart';
 import '../games/connect_four_game.dart';
+import '../games/guess_who_game.dart';
 
 
 class TemplateJeuPage extends StatefulWidget {
@@ -155,7 +156,11 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                             Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) => ConnectFourGamePage()),
                             );
-                          }
+                          } else if (game['id'] == 'qui-est-ce') {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => GuessWhoGamePage()),
+                              );
+}
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 20.0),

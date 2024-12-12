@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import '../theme/app_color.dart';
 
 class ConnectFourGamePage extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
   static const int cols = 7;
 
   List<List<String>> grid = List.generate(rows, (_) => List.filled(cols, ''));
-  String currentPlayer = 'Rouge';
+  String currentPlayer = 'Orange';
   bool isGameOver = false;
   bool isTwoPlayer = false;
 
@@ -62,7 +63,7 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
     for (int row = rows - 1; row >= 0; row--) {
       if (grid[row][col] == '') {
         setState(() {
-          grid[row][col] = currentPlayer == 'Rouge' ? 'X' : 'O';
+          grid[row][col] = currentPlayer == 'Orange' ? 'X' : 'O';
         });
         if (checkVictory(row, col)) {
           setState(() {
@@ -84,15 +85,15 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
 
   void switchTurn() {
     if (isTwoPlayer) {
-      currentPlayer = currentPlayer == 'Rouge' ? 'Jaune' : 'Rouge';
+      currentPlayer = currentPlayer == 'Orange' ? 'Bleu' : 'Orange';
     } else {
-      if (currentPlayer == 'Rouge') {
+      if (currentPlayer == 'Orange') {
         currentPlayer = 'Computer';
         Future.delayed(const Duration(milliseconds: 500), () {
           computerMove();
         });
       } else {
-        currentPlayer = 'Rouge';
+        currentPlayer = 'Orange';
       }
     }
   }
@@ -171,7 +172,7 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
   void resetGame() {
     setState(() {
       grid = List.generate(rows, (_) => List.filled(cols, ''));
-      currentPlayer = 'Rouge';
+      currentPlayer = 'Orange';
       isGameOver = false;
     });
     _showGameModeDialog();
@@ -196,7 +197,7 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
                 int col = index % cols;
                 return GestureDetector(
                   onTap: () {
-                    if (currentPlayer == 'Rouge' || (isTwoPlayer && currentPlayer == 'Jaune')) {
+                    if (currentPlayer == 'Orange' || (isTwoPlayer && currentPlayer == 'Bleu')) {
                       dropPiece(col);
                     }
                   },
@@ -206,7 +207,7 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
                       shape: BoxShape.circle,
                       color: grid[row][col] == ''
                           ? Colors.grey[300]
-                          : (grid[row][col] == 'X' ? Colors.red : Colors.yellow),
+                          : (grid[row][col] == 'X' ? AppColors.orangeColor : AppColors.blueColor),
                     ),
                   ),
                 );
@@ -218,7 +219,7 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
             child: Text(
               isGameOver
                   ? 'Partie terminée !'
-                  : '${isTwoPlayer ? currentPlayer : (currentPlayer == "Rouge" ? "Votre tour" : "Tour de l\'ordinateur")}',
+                  : '${isTwoPlayer ? currentPlayer : (currentPlayer == "Orange" ? "Votre tour" : "Tour de l\'ordinateur")}',
               style: const TextStyle(fontSize: 24),
             ),
           ),

@@ -60,5 +60,24 @@ const List<Map<String, dynamic>> gamesList = [
   "tags": ["Dyslexie", "Dyspraxie"],
   "objectives": "Développer la logique et la réflexion stratégique.",
   "imagePath": "assets/images/placeholder.png",
-},
-];
+  },
+  {
+  "id": "qui-est-ce",
+  "title": "Qui-est-ce ?",
+  "route": "/jeu/qui-est-ce",
+  "description": "Devinez qui est décrit en choisissant parmi les cartes proposées.",
+  "rules": [
+    {
+      "title": "Introduction",
+      "content": "Une phrase décrit un personnage, sélectionnez la bonne carte.",
+    },
+    {
+      "title": "Objectif",
+      "content": "Répondre correctement aux 10 questions pour obtenir un score parfait.",
+    },
+  ],
+  "tags": ["Dyslexie", "Dysphasie"],
+  "objectives": "Améliorer les capacités d'inférence et de compréhension.",
+  "imagePath": "assets/images/placeholder.png",
+  }
+];  
