@@ -4,6 +4,8 @@ import '../data/games_data.dart';
 import '../theme/app_color.dart';
 import '../games/memory_game.dart';
 import '../games/seven_family_game.dart';
+import '../games/connect_four_game.dart';
+
 
 class TemplateJeuPage extends StatefulWidget {
   const TemplateJeuPage({Key? key}) : super(key: key);
@@ -142,14 +144,16 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (game['id'] == 'jeu-de-memoire') {
-                            // Redirection vers le jeu de mémoire
                             Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) => MemoryGamePage()),
                             );
                           } else if (game['id'] == 'jeu-des-7-familles') {
-                            // Redirection vers le jeu des 7 familles
                             Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) => SevenFamilyGamePage()),
+                            );
+                          } else if (game['id'] == 'puissance-4') {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => ConnectFourGamePage()),
                             );
                           }
                         },

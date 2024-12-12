@@ -41,4 +41,24 @@ const List<Map<String, dynamic>> gamesList = [
     "objectives": "Développer les compétences sociales et la planification stratégique.",
     "imagePath": "assets/images/placeholder.png",
   },
+  {
+  "id": "puissance-4",
+  "title": "Puissance 4",
+  "route": "/jeu/puissance-4",
+  "description":
+      "Un jeu classique où le but est d'aligner 4 pions de sa couleur horizontalement, verticalement ou en diagonale.",
+  "rules": [
+    {
+      "title": "Introduction",
+      "content": "Les joueurs déposent tour à tour un pion dans une colonne de la grille.",
+    },
+    {
+      "title": "Objectif",
+      "content": "Être le premier à aligner 4 pions de sa couleur.",
+    },
+  ],
+  "tags": ["Dyslexie", "Dyspraxie"],
+  "objectives": "Développer la logique et la réflexion stratégique.",
+  "imagePath": "assets/images/placeholder.png",
+},
 ];
