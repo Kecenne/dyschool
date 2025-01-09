@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../data/games_data.dart';
 import '../theme/app_color.dart';
-import '../games/memory_game.dart';
-import '../games/seven_family_game.dart';
-import '../games/connect_four_game.dart';
-import '../games/guess_who_game.dart';
-import '../games/simon_game.dart';
+import '../games/memoire/memory_game.dart';
+import '../games/7-familles/seven_family_game.dart';
+import '../games/puissance-4/connect_four_game.dart';
+import '../games/qui-est-ce/guess_who_game.dart';
+import '../games/simon/simon_game.dart';
 
 
 

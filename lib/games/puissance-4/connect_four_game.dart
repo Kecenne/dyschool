@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-import '../theme/app_color.dart';
+import '../../theme/app_color.dart';
 
 class ConnectFourGamePage extends StatefulWidget {
   @override
