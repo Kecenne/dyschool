@@ -70,7 +70,7 @@ class _SimonGamePageState extends State<SimonGamePage> {
   }
 
   Future<void> _playSound(int colorIndex) async {
-    final player = AudioPlayer(); // Nouvelle instance pour chaque son
+    final player = AudioPlayer();
     await player.play(AssetSource(sounds[colorIndex]));
   }
 
@@ -83,17 +83,14 @@ class _SimonGamePageState extends State<SimonGamePage> {
       isPlayerTurn = false;
     });
 
-    // Add a new random color to the sequence
     sequence.add(random.nextInt(4));
 
-    // Increase speed at certain levels
     if (currentLevel == 5 || currentLevel == 10 || currentLevel == 15) {
-      speed = max(speed - 100, 300); // Reduce display time
+      speed = max(speed - 100, 300); 
     }
 
-    // Animate the sequence
     for (int index in sequence) {
-      await _flashColor(index); // Flash color and play sound
+      await _flashColor(index); 
     }
 
     await Future.delayed(const Duration(milliseconds: 500));
@@ -110,19 +107,19 @@ class _SimonGamePageState extends State<SimonGamePage> {
     if (!mounted) return;
 
     setState(() {
-      currentColor = colorIndex; // Highlight the color
+      currentColor = colorIndex; 
     });
 
-    await _playSound(colorIndex); // Play sound at the same time
+    await _playSound(colorIndex);
 
-    await Future.delayed(Duration(milliseconds: speed)); // Wait for the flash duration
+    await Future.delayed(Duration(milliseconds: speed));
     if (!mounted) return;
 
     setState(() {
-      currentColor = -1; // Reset the color
+      currentColor = -1;
     });
 
-    await Future.delayed(const Duration(milliseconds: 100)); // Pause between flashes
+    await Future.delayed(const Duration(milliseconds: 100)); 
   }
 
   void _handlePlayerInput(int colorIndex) async {
@@ -131,30 +128,27 @@ class _SimonGamePageState extends State<SimonGamePage> {
     if (!mounted) return;
 
     setState(() {
-      currentColor = colorIndex; // Highlight button briefly
+      currentColor = colorIndex; 
     });
 
-    await _playSound(colorIndex); // Play sound for the player's click
+    await _playSound(colorIndex);
 
     await Future.delayed(const Duration(milliseconds: 200));
     if (!mounted) return;
 
     setState(() {
-      currentColor = -1; // Reset button highlight
+      currentColor = -1; 
     });
 
-    // Prevent invalid access
     if (playerInput.length >= sequence.length) return;
 
     playerInput.add(colorIndex);
 
-    // Check if the player's input is correct
     if (playerInput[playerInput.length - 1] != sequence[playerInput.length - 1]) {
       _showEndDialog("Perdu ! Vous avez atteint le niveau ${currentLevel + 1}.");
       return;
     }
 
-    // If the player completes the sequence
     if (playerInput.length == sequence.length) {
       if (currentLevel == 19) {
         _showEndDialog("Bravo ! Vous avez terminé les 20 manches !");
@@ -206,14 +200,12 @@ class _SimonGamePageState extends State<SimonGamePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Display level
           Text(
             "Niveau : ${currentLevel + 1}/20",
             style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 24.0),
 
-          // Game board
           Expanded(
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -230,8 +222,8 @@ class _SimonGamePageState extends State<SimonGamePage> {
                     duration: const Duration(milliseconds: 200),
                     decoration: BoxDecoration(
                       color: currentColor == index
-                          ? colors[index] // Highlight color
-                          : Colors.grey[400], // Default color
+                          ? colors[index] 
+                          : Colors.grey[400], 
                       borderRadius: BorderRadius.circular(16.0),
                     ),
                   ),
@@ -240,7 +232,6 @@ class _SimonGamePageState extends State<SimonGamePage> {
             ),
           ),
 
-          // Instructions
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
