@@ -79,5 +79,33 @@ const List<Map<String, dynamic>> gamesList = [
   "tags": ["Dyslexie", "Dysphasie"],
   "objectives": "Améliorer les capacités d'inférence et de compréhension.",
   "imagePath": "assets/images/placeholder.png",
-  }
+  },
+  {
+  "id": "jeu-du-simon",
+  "title": "Jeu du Simon",
+  "route": "/jeu/jeu-du-simon",
+  "description":
+      "Un jeu de mémoire et de concentration où il faut reproduire des séquences lumineuses de plus en plus longues.",
+  "rules": [
+    {
+      "title": "Introduction",
+      "content":
+          "Le Simon affiche une séquence de couleurs que vous devez mémoriser et reproduire dans le même ordre.",
+    },
+    {
+      "title": "Objectif",
+      "content":
+          "Répétez correctement les séquences pendant 20 manches pour gagner.",
+    },
+    {
+      "title": "Attention",
+      "content":
+          "Chaque manche ajoute une couleur à la séquence, et la vitesse augmente à certains paliers.",
+    }
+  ],
+  "tags": ["Dyslexie", "Dyspraxie", "Dysphasie"],
+  "objectives":
+      "Renforcer la mémoire auditive et visuelle, ainsi que la concentration et la rapidité de réaction.",
+  "imagePath": "assets/images/placeholder.png",
+}
 ];  

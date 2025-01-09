@@ -6,6 +6,8 @@ import '../games/memory_game.dart';
 import '../games/seven_family_game.dart';
 import '../games/connect_four_game.dart';
 import '../games/guess_who_game.dart';
+import '../games/simon_game.dart';
+
 
 
 class TemplateJeuPage extends StatefulWidget {
@@ -20,11 +22,9 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Récupère les données transmises via les paramètres de la route
     final gameId = Get.parameters['id'];
     final game = gamesList.firstWhere((g) => g['id'] == gameId);
 
-    // Section : Règles
     Widget buildRules() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +160,11 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(builder: (context) => GuessWhoGamePage()),
                               );
-}
+                          } else if (game['id'] == 'jeu-du-simon') {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => SimonGamePage()),
+                              );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 20.0),

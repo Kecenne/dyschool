@@ -32,7 +32,8 @@ dependencies:
     sdk: flutter
   get: ^4.6.6
   flutter_svg: ^2.0.4
-  flutter_animate: ^3.0.0 
+  flutter_animate: ^4.5.2
+  audioplayers: ^6.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -54,7 +55,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -78,6 +79,10 @@ flutter:
     - assets/images/memory-6.png
     - assets/images/memory-7.png
     - assets/images/memory-8.jpeg
+    - assets/audio/simon/simon_rouge.mp3
+    - assets/audio/simon/simon_bleu.mp3
+    - assets/audio/simon/simon_vert.mp3
+    - assets/audio/simon/simon_jaune.mp3
   fonts:
     - family: OpenDyslexic
       fonts:
