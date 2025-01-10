@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-
+import '../../widgets/game_end_overlay.dart';
 class MemoryGamePage extends StatefulWidget {
   @override
   _MemoryGamePageState createState() => _MemoryGamePageState();
@@ -16,7 +16,6 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
     'assets/images/memory-6.png',
     'assets/images/memory-7.png',
     'assets/images/memory-8.jpeg',
-
   ];
 
   List<bool> cardFlips = [];
@@ -26,18 +25,15 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
   int timeLeft = 60;
   Timer? timer;
   bool isProcessing = false;
+  bool showGameEndOverlay = false;
+  String endMessage = '';
 
   @override
   void initState() {
     super.initState();
-
     List<String> tempImages = List.from(images);
     images.addAll(tempImages);
     images.shuffle();
-
-    if (images.isEmpty) {
-      throw Exception("La liste des images est vide. Vérifie les chemins des fichiers.");
-    }
 
     cardData = List<String>.from(images);
     cardFlips = List<bool>.filled(cardData.length, false);
@@ -52,38 +48,19 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
           timeLeft--;
         } else {
           timer.cancel();
-          showEndDialog('Temps écoulé ! Réessayez.');
+          endGame('Temps écoulé ! Réessayez.');
         }
       });
     });
   }
 
-  void showEndDialog(String message) {
-    showDialog(
-      context: context,
-      barrierDismissible: false, 
-      builder: (_) => AlertDialog(
-        title: Text(message),
-        actions: [
-          TextButton(
-            child: const Text('Recommencer'),
-            onPressed: () {
-              Navigator.of(context).pop();
-              resetGame();
-            },
-          ),
-          TextButton(
-            child: const Text('Quitter'),
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      ),
-    );
+  void endGame(String message) {
+    setState(() {
+      timer?.cancel();
+      showGameEndOverlay = true;
+      endMessage = message;
+    });
   }
-
 
   void resetGame() {
     setState(() {
@@ -91,6 +68,7 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
       images.shuffle();
       score = 0;
       timeLeft = 60;
+      showGameEndOverlay = false;
       startTimer();
     });
   }
@@ -103,8 +81,7 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
         score++;
       });
       if (score == cardData.length ~/ 2) {
-        timer?.cancel();
-        showEndDialog('Bravo ! Vous avez gagné.');
+        endGame('Bravo ! Vous avez gagné.');
       }
     } else {
       setState(() {
@@ -134,62 +111,85 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
       appBar: AppBar(
         title: const Text("Jeu de Mémoire"),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Temps restant : $timeLeft secondes',
-              style: const TextStyle(fontSize: 24),
-            ),
-          ),
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                mainAxisSpacing: 10.0,
-                crossAxisSpacing: 10.0,
+          // Main game content
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Temps restant : $timeLeft secondes',
+                  style: const TextStyle(fontSize: 24),
+                ),
               ),
-              padding: const EdgeInsets.all(16.0),
-              itemCount: cardData.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    if (isProcessing || cardFlips[index] || selectedCards.length >= 2) {
-                      return;
-                    }
-
-                    setState(() {
-                      cardFlips[index] = true;
-                      selectedCards.add(index);
-
-                      if (selectedCards.length == 2) {
-                        checkMatch();
-                      }
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.blue[100],
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: cardFlips[index]
-                        ? Image.asset(cardData[index], fit: BoxFit.cover)
-                        : const Center(
-                            child: Text(
-                              "?",
-                              style: TextStyle(
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 10.0,
                   ),
+                  padding: const EdgeInsets.all(16.0),
+                  itemCount: cardData.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        if (isProcessing ||
+                            cardFlips[index] ||
+                            selectedCards.length >= 2 ||
+                            showGameEndOverlay) {
+                          return;
+                        }
+
+                        setState(() {
+                          cardFlips[index] = true;
+                          selectedCards.add(index);
+
+                          if (selectedCards.length == 2) {
+                            checkMatch();
+                          }
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue[100],
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: cardFlips[index]
+                            ? Image.asset(cardData[index], fit: BoxFit.cover)
+                            : const Center(
+                                child: Text(
+                                  "?",
+                                  style: TextStyle(
+                                    fontSize: 36,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+
+          // Overlay
+          if (showGameEndOverlay) ...[
+            ModalBarrier(color: Colors.black.withOpacity(0.5)), // Blocks interaction
+            GameEndOverlay(
+              message: endMessage,
+              onRestart: resetGame,
+              onQuit: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/main',
+                  (route) => false,
                 );
               },
             ),
-          ),
+          ],
         ],
       ),
     );

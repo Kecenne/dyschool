@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import '../../widgets/game_end_overlay.dart';
 
 class SimonGamePage extends StatefulWidget {
   @override
@@ -25,6 +26,8 @@ class _SimonGamePageState extends State<SimonGamePage> {
   bool isAnimating = false;
   int speed = 800;
   int currentColor = -1;
+  bool showGameEndOverlay = false;
+  String endMessage = '';
 
   @override
   void initState() {
@@ -65,6 +68,7 @@ class _SimonGamePageState extends State<SimonGamePage> {
       sequence = [];
       playerInput = [];
       isPlayerTurn = false;
+      showGameEndOverlay = false;
       _nextRound();
     });
   }
@@ -86,11 +90,11 @@ class _SimonGamePageState extends State<SimonGamePage> {
     sequence.add(random.nextInt(4));
 
     if (currentLevel == 5 || currentLevel == 10 || currentLevel == 15) {
-      speed = max(speed - 100, 300); 
+      speed = max(speed - 100, 300);
     }
 
     for (int index in sequence) {
-      await _flashColor(index); 
+      await _flashColor(index);
     }
 
     await Future.delayed(const Duration(milliseconds: 500));
@@ -107,7 +111,7 @@ class _SimonGamePageState extends State<SimonGamePage> {
     if (!mounted) return;
 
     setState(() {
-      currentColor = colorIndex; 
+      currentColor = colorIndex;
     });
 
     await _playSound(colorIndex);
@@ -119,25 +123,22 @@ class _SimonGamePageState extends State<SimonGamePage> {
       currentColor = -1;
     });
 
-    await Future.delayed(const Duration(milliseconds: 100)); 
+    await Future.delayed(const Duration(milliseconds: 100));
   }
 
   void _handlePlayerInput(int colorIndex) async {
-    if (!isPlayerTurn || isAnimating) return;
-
-    if (!mounted) return;
+    if (!isPlayerTurn || isAnimating || showGameEndOverlay) return;
 
     setState(() {
-      currentColor = colorIndex; 
+      currentColor = colorIndex;
     });
 
     await _playSound(colorIndex);
 
     await Future.delayed(const Duration(milliseconds: 200));
-    if (!mounted) return;
 
     setState(() {
-      currentColor = -1; 
+      currentColor = -1;
     });
 
     if (playerInput.length >= sequence.length) return;
@@ -145,13 +146,13 @@ class _SimonGamePageState extends State<SimonGamePage> {
     playerInput.add(colorIndex);
 
     if (playerInput[playerInput.length - 1] != sequence[playerInput.length - 1]) {
-      _showEndDialog("Perdu ! Vous avez atteint le niveau ${currentLevel + 1}.");
+      _endGame("Perdu ! Vous avez atteint le niveau ${currentLevel + 1}.");
       return;
     }
 
     if (playerInput.length == sequence.length) {
       if (currentLevel == 19) {
-        _showEndDialog("Bravo ! Vous avez terminé les 20 manches !");
+        _endGame("Bravo ! Vous avez terminé les 20 manches !");
       } else {
         setState(() {
           currentLevel++;
@@ -163,32 +164,11 @@ class _SimonGamePageState extends State<SimonGamePage> {
     }
   }
 
-  void _showEndDialog(String message) {
-    if (!mounted) return;
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => AlertDialog(
-        title: Text(message),
-        actions: [
-          TextButton(
-            child: const Text('Recommencer'),
-            onPressed: () {
-              Navigator.of(context).pop();
-              _startGame();
-            },
-          ),
-          TextButton(
-            child: const Text('Quitter'),
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      ),
-    );
+  void _endGame(String message) {
+    setState(() {
+      endMessage = message;
+      showGameEndOverlay = true;
+    });
   }
 
   @override
@@ -197,51 +177,70 @@ class _SimonGamePageState extends State<SimonGamePage> {
       appBar: AppBar(
         title: const Text("Simon"),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
         children: [
-          Text(
-            "Niveau : ${currentLevel + 1}/20",
-            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 24.0),
-
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 16.0,
-                crossAxisSpacing: 16.0,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Niveau : ${currentLevel + 1}/20",
+                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
-              padding: const EdgeInsets.all(16.0),
-              itemCount: 4,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () => _handlePlayerInput(index),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    decoration: BoxDecoration(
-                      color: currentColor == index
-                          ? colors[index] 
-                          : Colors.grey[400], 
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
+              const SizedBox(height: 24.0),
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 16.0,
+                    crossAxisSpacing: 16.0,
                   ),
+                  padding: const EdgeInsets.all(16.0),
+                  itemCount: 4,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () => _handlePlayerInput(index),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        decoration: BoxDecoration(
+                          color: currentColor == index
+                              ? colors[index]
+                              : Colors.grey[400],
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  isPlayerTurn
+                      ? "C'est à vous de jouer !"
+                      : "Regardez et mémorisez la séquence.",
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 24.0),
+            ],
+          ),
+          if (showGameEndOverlay) ...[
+            ModalBarrier(color: Colors.black.withOpacity(0.5)),
+            GameEndOverlay(
+              message: endMessage,
+              onRestart: _startGame,
+              onQuit: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/main',
+                  (route) => false,
                 );
               },
             ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              isPlayerTurn ? "C'est à vous de jouer !" : "Regardez et mémorisez la séquence.",
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          ),
-
-          const SizedBox(height: 24.0),
+          ],
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import '../../theme/app_color.dart';
+import '../../widgets/game_end_overlay.dart';
 
 class ConnectFourGamePage extends StatefulWidget {
   @override
@@ -15,6 +16,8 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
   String currentPlayer = 'Orange';
   bool isGameOver = false;
   bool isTwoPlayer = false;
+  String endMessage = '';
+  bool showGameEndOverlay = false;
 
   @override
   void initState() {
@@ -66,15 +69,9 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
           grid[row][col] = currentPlayer == 'Orange' ? 'X' : 'O';
         });
         if (checkVictory(row, col)) {
-          setState(() {
-            isGameOver = true;
-          });
-          showEndDialog('${currentPlayer} a gagné !');
+          _endGame('${currentPlayer} a gagné !');
         } else if (isGridFull()) {
-          setState(() {
-            isGameOver = true;
-          });
-          showEndDialog('Égalité !');
+          _endGame('Égalité !');
         } else {
           switchTurn();
         }
@@ -143,30 +140,12 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
     return count >= 4;
   }
 
-  void showEndDialog(String message) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => AlertDialog(
-        title: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              resetGame();
-            },
-            child: const Text('Recommencer'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-            child: const Text('Quitter'),
-          ),
-        ],
-      ),
-    );
+  void _endGame(String message) {
+    setState(() {
+      isGameOver = true;
+      endMessage = message;
+      showGameEndOverlay = true;
+    });
   }
 
   void resetGame() {
@@ -174,6 +153,7 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
       grid = List.generate(rows, (_) => List.filled(cols, ''));
       currentPlayer = 'Orange';
       isGameOver = false;
+      showGameEndOverlay = false;
     });
     _showGameModeDialog();
   }
@@ -184,45 +164,67 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
       appBar: AppBar(
         title: const Text('Puissance 4'),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: cols,
-              ),
-              itemCount: rows * cols,
-              itemBuilder: (context, index) {
-                int row = index ~/ cols;
-                int col = index % cols;
-                return GestureDetector(
-                  onTap: () {
-                    if (currentPlayer == 'Orange' || (isTwoPlayer && currentPlayer == 'Bleu')) {
-                      dropPiece(col);
-                    }
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: grid[row][col] == ''
-                          ? Colors.grey[300]
-                          : (grid[row][col] == 'X' ? AppColors.orangeColor : AppColors.blueColor),
-                    ),
+          Column(
+            children: [
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: cols,
                   ),
+                  itemCount: rows * cols,
+                  itemBuilder: (context, index) {
+                    int row = index ~/ cols;
+                    int col = index % cols;
+                    return GestureDetector(
+                      onTap: () {
+                        if ((currentPlayer == 'Orange' || (isTwoPlayer && currentPlayer == 'Bleu')) &&
+                            !showGameEndOverlay) {
+                          dropPiece(col);
+                        }
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: grid[row][col] == ''
+                              ? Colors.grey[300]
+                              : (grid[row][col] == 'X'
+                                  ? AppColors.orangeColor
+                                  : AppColors.blueColor),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  isGameOver
+                      ? 'Partie terminée !'
+                      : isTwoPlayer
+                          ? currentPlayer
+                          : (currentPlayer == 'Orange' ? "Votre tour" : "Tour de l'ordinateur"),
+                  style: const TextStyle(fontSize: 24),
+                ),
+              ),
+            ],
+          ),
+          if (showGameEndOverlay) ...[
+            ModalBarrier(color: Colors.black.withOpacity(0.5)),
+            GameEndOverlay(
+              message: endMessage,
+              onRestart: resetGame,
+              onQuit: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/main',
+                  (route) => false,
                 );
               },
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              isGameOver
-                  ? 'Partie terminée !'
-                  : '${isTwoPlayer ? currentPlayer : (currentPlayer == "Orange" ? "Votre tour" : "Tour de l\'ordinateur")}',
-              style: const TextStyle(fontSize: 24),
-            ),
-          ),
+          ],
         ],
       ),
     );

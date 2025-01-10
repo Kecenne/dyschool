@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_color.dart';
-
+import '../../widgets/game_end_overlay.dart';
 
 class GuessWhoGamePage extends StatefulWidget {
   @override
@@ -163,6 +163,8 @@ class _GuessWhoGamePageState extends State<GuessWhoGamePage> {
 
   int currentQuestionIndex = 0;
   int score = 0;
+  bool showGameEndOverlay = false;
+  String endMessage = '';
 
   void handleAnswer(bool isCorrect) {
     if (isCorrect) {
@@ -176,34 +178,43 @@ class _GuessWhoGamePageState extends State<GuessWhoGamePage> {
         currentQuestionIndex++;
       });
     } else {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => AlertDialog(
-          title: Text("Partie terminée !"),
-          content: Text("Votre score : $score/${questions.length}"),
-          actions: [
-            TextButton(
-              child: Text("Rejouer"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                setState(() {
-                  currentQuestionIndex = 0;
-                  score = 0;
-                });
-              },
-            ),
-            TextButton(
-              child: Text("Quitter"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      );
+      _showResultsDialog();
     }
+  }
+
+  void _showResultsDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        title: const Text("Partie terminée !"),
+        content: Text("Votre score : $score/${questions.length}"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _triggerGameEndOverlay();
+            },
+            child: const Text("Continuer"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _triggerGameEndOverlay() {
+    setState(() {
+      endMessage = "Votre score : $score/${questions.length}";
+      showGameEndOverlay = true;
+    });
+  }
+
+  void resetGame() {
+    setState(() {
+      currentQuestionIndex = 0;
+      score = 0;
+      showGameEndOverlay = false;
+    });
   }
 
   @override
@@ -212,58 +223,77 @@ class _GuessWhoGamePageState extends State<GuessWhoGamePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Qui-est-ce ?"),
+        title: const Text("Qui-est-ce ?"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Question ${currentQuestionIndex + 1}/${questions.length}",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
-            Text(
-              question["question"],
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(height: 24),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 5,
-                  mainAxisSpacing: 16.0,
-                  crossAxisSpacing: 16.0, 
-                  childAspectRatio: 1.5, 
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Question ${currentQuestionIndex + 1}/${questions.length}",
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                itemCount: question["choices"].length,
-                itemBuilder: (context, index) {
-                  final choice = question["choices"][index];
-                  return GestureDetector(
-                    onTap: () {
-                      handleAnswer(choice["correct"]);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryColor,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Center(
-                        child: Text(
-                          choice["name"],
-                          style: const TextStyle(fontSize: 14, color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                const SizedBox(height: 16),
+                Text(
+                  question["question"],
+                  style: const TextStyle(fontSize: 20),
+                ),
+                const SizedBox(height: 24),
+                Expanded(
+                  child: GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5,
+                      mainAxisSpacing: 16.0,
+                      crossAxisSpacing: 16.0,
+                      childAspectRatio: 1.5,
                     ),
-                  );
-                },
-              ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    itemCount: question["choices"].length,
+                    itemBuilder: (context, index) {
+                      final choice = question["choices"][index];
+                      return GestureDetector(
+                        onTap: () {
+                          if (!showGameEndOverlay) {
+                            handleAnswer(choice["correct"]);
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryColor,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Center(
+                            child: Text(
+                              choice["name"],
+                              style: const TextStyle(fontSize: 14, color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (showGameEndOverlay) ...[
+            ModalBarrier(color: Colors.black.withOpacity(0.5)),
+            GameEndOverlay(
+              message: endMessage,
+              onRestart: resetGame,
+              onQuit: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/main',
+                  (route) => false,
+                );
+              },
             ),
           ],
-        ),
+        ],
       ),
     );
   }

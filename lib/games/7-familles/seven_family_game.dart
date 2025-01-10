@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import '../../widgets/game_end_overlay.dart';
 
 class SevenFamilyGamePage extends StatefulWidget {
   @override
@@ -21,6 +22,9 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
   String selectedCharacter = 'Fils';
   String currentPlayer = 'User'; 
   String statusMessage = '';
+
+  bool showGameEndOverlay = false;
+  String endMessage = '';
 
   @override
   void initState() {
@@ -145,7 +149,8 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
     for (var family in families) {
       if (familyMembers.every((member) => deck.contains('$family - $member'))) {
         setState(() {
-          statusMessage = '$family complétée par ${currentPlayer == 'User' ? "Vous" : "l\'ordinateur $currentPlayer"} !';
+          endMessage = '$family complétée par ${currentPlayer == 'User' ? "Vous" : "l\'ordinateur $currentPlayer"} !';
+          showGameEndOverlay = true;
         });
         return true;
       }
@@ -178,6 +183,13 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
         statusMessage = "L'ordinateur $opponent n'a pas $requestedCard. Vous piochez une carte.";
         drawCard('User');
       }
+    });
+  }
+
+  void resetGame() {
+    initializeGame();
+    setState(() {
+      showGameEndOverlay = false;
     });
   }
 
@@ -457,6 +469,19 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
                 child: const Text("Sélectionner une carte", style: TextStyle(fontSize: 18)),
               ),
             ),
+                    if (showGameEndOverlay) ...[
+          ModalBarrier(color: Colors.black.withOpacity(0.5)),
+          GameEndOverlay(
+            message: endMessage,
+            onRestart: resetGame,
+            onQuit: () {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                '/main',
+                (route) => false,
+              );
+            },
+          ),
+        ],
         ],
       ),
     );
