@@ -4,6 +4,9 @@ import 'package:dyschool/theme/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../../widgets/game_end_overlay.dart';
+import '../../services/game_time_tracker.dart';
+import 'package:provider/provider.dart';
+import '../../services/playtime_manager.dart';
 
 class SimonGamePage extends StatefulWidget {
   @override
@@ -30,16 +33,33 @@ class _SimonGamePageState extends State<SimonGamePage> {
   bool showGameEndOverlay = false;
   String endMessage = '';
 
+  PlaytimeManager? _playtimeManager;
+  int _elapsedSeconds = 0;
+
   @override
   void initState() {
     super.initState();
+    final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
+    gameTimeTracker.startTimer();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showReadyDialog();
     });
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _playtimeManager ??= Provider.of<PlaytimeManager>(context, listen: false);
+  }
+
+  @override
   void dispose() {
+    if (_playtimeManager != null) {
+      int minutesPlayed = (_elapsedSeconds / 60).ceil();
+      Future.delayed(Duration.zero, () {
+        _playtimeManager!.addPlaytime(minutesPlayed);
+      });
+    }
     super.dispose();
   }
 
@@ -235,6 +255,8 @@ class _SimonGamePageState extends State<SimonGamePage> {
               message: endMessage,
               onRestart: _startGame,
               onQuit: () {
+                final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
+                gameTimeTracker.stopTimer(context);
                 Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
               },
               gameName: 'Simon',

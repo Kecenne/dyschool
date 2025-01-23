@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_color.dart';
 import '../../widgets/game_end_overlay.dart';
+import '../../services/game_time_tracker.dart';
+import 'package:provider/provider.dart';
+import '../../services/playtime_manager.dart';
 
 class GuessWhoGamePage extends StatefulWidget {
   @override
@@ -166,6 +169,9 @@ class _GuessWhoGamePageState extends State<GuessWhoGamePage> {
   bool showGameEndOverlay = false;
   String endMessage = '';
 
+  PlaytimeManager? _playtimeManager;
+  int _elapsedSeconds = 0;
+
   void handleAnswer(bool isCorrect) {
     if (isCorrect) {
       setState(() {
@@ -218,7 +224,26 @@ class _GuessWhoGamePageState extends State<GuessWhoGamePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _playtimeManager ??= Provider.of<PlaytimeManager>(context, listen: false);
+  }
+
+  @override
+  void dispose() {
+    if (_playtimeManager != null) {
+      int minutesPlayed = (_elapsedSeconds / 60).ceil();
+      Future.delayed(Duration.zero, () {
+        _playtimeManager!.addPlaytime(minutesPlayed);
+      });
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
+    gameTimeTracker.startTimer();
     final question = questions[currentQuestionIndex];
 
     return Scaffold(
@@ -286,6 +311,8 @@ class _GuessWhoGamePageState extends State<GuessWhoGamePage> {
               message: endMessage,
               onRestart: resetGame,
               onQuit: () {
+                final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
+                gameTimeTracker.stopTimer(context);
                 Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
               },
               gameName: 'Guess Who',

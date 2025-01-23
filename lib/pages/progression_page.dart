@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../services/playtime_manager.dart';
 import '../widgets/page_header.dart';
 import "../widgets/reward_graph.dart";
+import "../widgets/weekly_playtime_graph.dart";
 
 class ProgressionPage extends StatelessWidget {
   const ProgressionPage({Key? key}) : super(key: key);
@@ -16,39 +19,10 @@ class ProgressionPage extends StatelessWidget {
             const PageHeader(title: "Progression"),
             const SizedBox(height: 16),
 
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              color: Colors.grey[300],
-              child: const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Text("Temps de Jeu"),
-                    SizedBox(height: 8),
-                    SizedBox(
-                      height: 200,
-                      child: Center(child: Text("Graphique Placeholder")),
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("AUJOURD'HUI"),
-                        Text("6 MIN"),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("7 DERNIERS JOURS"),
-                        Text("76 MIN"),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+            Consumer<PlaytimeManager>(
+              builder: (context, playtimeManager, child) {
+                return WeeklyPlaytimeGraph(weeklyData: playtimeManager.getWeeklyPlaytime());
+              },
             ),
             const SizedBox(height: 16),
 

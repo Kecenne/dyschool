@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../widgets/game_end_overlay.dart';
+import '../../services/game_time_tracker.dart';
+import 'package:provider/provider.dart';
+import '../../services/playtime_manager.dart';
+
 class MemoryGamePage extends StatefulWidget {
   @override
   _MemoryGamePageState createState() => _MemoryGamePageState();
@@ -28,9 +32,14 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
   bool showGameEndOverlay = false;
   String endMessage = '';
 
+  PlaytimeManager? _playtimeManager;
+  int _elapsedSeconds = 0;
+
   @override
   void initState() {
     super.initState();
+    final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
+    gameTimeTracker.startTimer();
     List<String> tempImages = List.from(images);
     images.addAll(tempImages);
     images.shuffle();
@@ -100,8 +109,19 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _playtimeManager ??= Provider.of<PlaytimeManager>(context, listen: false);
+  }
+
+  @override
   void dispose() {
-    timer?.cancel();
+    if (_playtimeManager != null) {
+      int minutesPlayed = (_elapsedSeconds / 60).ceil();
+      Future.delayed(Duration.zero, () {
+        _playtimeManager!.addPlaytime(minutesPlayed);
+      });
+    }
     super.dispose();
   }
 
@@ -183,6 +203,8 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
               message: endMessage,
               onRestart: resetGame,
               onQuit: () {
+                final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
+                gameTimeTracker.stopTimer(context);
                 Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
               },
               gameName: 'Memory Game',

@@ -2,6 +2,9 @@ import 'dart:math';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../widgets/game_end_overlay.dart';
+import '../../services/game_time_tracker.dart';
+import 'package:provider/provider.dart';
+import '../../services/playtime_manager.dart';
 
 class SevenFamilyGamePage extends StatefulWidget {
   @override
@@ -30,10 +33,16 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
   int gameTime = 0; 
   Timer? gameTimer;
 
+  PlaytimeManager? _playtimeManager;
+  int _elapsedSeconds = 0;
+
   @override
   void initState() {
     super.initState();
+    final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
+    gameTimeTracker.startTimer();
     initializeGame();
+
   }
 
   void initializeGame() {
@@ -56,9 +65,13 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
     gameTime = 0;
     gameTimer?.cancel();
     gameTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        gameTime++;
-      });
+      if (mounted) {
+        setState(() {
+          gameTime++;
+        });
+      } else {
+        timer.cancel(); 
+      }
     });
 
     setState(() {
@@ -344,6 +357,23 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _playtimeManager ??= Provider.of<PlaytimeManager>(context, listen: false);
+  }
+
+  @override
+  void dispose() {
+    if (_playtimeManager != null) {
+      int minutesPlayed = (_elapsedSeconds / 60).ceil();
+      Future.delayed(Duration.zero, () {
+        _playtimeManager!.addPlaytime(minutesPlayed);
+      });
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -489,6 +519,8 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
                 message: endMessage,
                 onRestart: resetGame,
                 onQuit: () {
+                  final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
+                  gameTimeTracker.stopTimer(context);
                   Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
                 },
                 gameName: 'Seven Families',

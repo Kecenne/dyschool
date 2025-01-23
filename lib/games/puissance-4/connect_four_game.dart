@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import '../../theme/app_color.dart';
 import '../../widgets/game_end_overlay.dart';
+import '../../services/game_time_tracker.dart';
+import 'package:provider/provider.dart';
+import '../../services/playtime_manager.dart';
 
 class ConnectFourGamePage extends StatefulWidget {
   @override
@@ -21,9 +24,14 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
   String endMessage = '';
   bool showGameEndOverlay = false;
 
+  PlaytimeManager? _playtimeManager;
+  int _elapsedSeconds = 0;
+
   @override
   void initState() {
     super.initState();
+    final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
+    gameTimeTracker.startTimer();
     _showGameModeDialog();
   }
 
@@ -172,6 +180,23 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _playtimeManager ??= Provider.of<PlaytimeManager>(context, listen: false);
+  }
+
+  @override
+  void dispose() {
+    if (_playtimeManager != null) {
+      int minutesPlayed = (_elapsedSeconds / 60).ceil();
+      Future.delayed(Duration.zero, () {
+        _playtimeManager!.addPlaytime(minutesPlayed);
+      });
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -231,6 +256,8 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
               message: endMessage,
               onRestart: resetGame,
               onQuit: () {
+                final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
+                gameTimeTracker.stopTimer(context);
                 Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
               },
               gameName: 'Connect Four',

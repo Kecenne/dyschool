@@ -14,7 +14,10 @@ import 'bloc/settings_state.dart';
 import 'services/settings_service.dart';
 import 'bloc/settings_event.dart';
 import 'services/medal_manager.dart';
+import 'services/playtime_manager.dart';
+import 'services/game_time_tracker.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:firebase_auth/firebase_auth.dart'; 
 
@@ -24,12 +27,16 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await initializeDateFormatting('fr_FR', null);
+
   Get.put(FavoriteController());
   final settingsService = SettingsService();
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => MedalManager()), // 🔥 Ajout de MedalManager
+        ChangeNotifierProvider(create: (context) => MedalManager()),
+        ChangeNotifierProvider(create: (context) => PlaytimeManager()),
+        ChangeNotifierProvider(create: (context) => GameTimeTracker()),
         BlocProvider(create: (context) => SettingsBloc(settingsService)..add(LoadFontPreferenceEvent())),
       ],
       child: MyApp(settingsService: settingsService),
