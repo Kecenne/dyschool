@@ -16,6 +16,7 @@ class FavoritePageBody extends StatefulWidget {
 
 class _FavoritePageBodyState extends State<FavoritePageBody> {
   final favoriteController = Get.find<FavoriteController>();
+  final GlobalKey favoriteIconKey = GlobalKey();
 
   String searchQuery = "";
   String selectedTrouble = "";
@@ -83,6 +84,7 @@ class _FavoritePageBodyState extends State<FavoritePageBody> {
                             description: game["description"],
                             tags: game["tags"].cast<String>(),
                             imagePath: game["imagePath"],
+                            favoriteIconKey: favoriteIconKey,
                             onFavoriteRemove: () {
                               showRemoveFavoriteDialog(
                                 context: context,

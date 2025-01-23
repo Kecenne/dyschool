@@ -14,7 +14,7 @@ import 'bloc/settings_state.dart';
 import 'services/settings_service.dart';
 import 'bloc/settings_event.dart';
 
-import 'package:firebase_auth/firebase_auth.dart'; // Import pour FirebaseAuth
+import 'package:firebase_auth/firebase_auth.dart'; 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -132,12 +132,14 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(NavController());
 
+    final GlobalKey favoriteIconKey = GlobalKey();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Dyschool"),
       ),
       body: const BodyContent(),
-      bottomNavigationBar: const CustomBottomNavBar(),
+      bottomNavigationBar: CustomBottomNavBar(favoriteIconKey: favoriteIconKey),
     );
   }
 }

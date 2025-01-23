@@ -17,6 +17,7 @@ class GamesPage extends StatefulWidget {
 
 class _GamesPageState extends State<GamesPage> {
   final favoriteController = Get.find<FavoriteController>();
+  final GlobalKey favoriteIconKey = GlobalKey(); 
 
   String searchQuery = "";
   String selectedTrouble = "";
@@ -83,7 +84,10 @@ class _GamesPageState extends State<GamesPage> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: GameList(games: filteredGames),
+              child: GameList(
+                games: filteredGames,
+                favoriteIconKey: favoriteIconKey, 
+              ),
             ),
           ],
         ),

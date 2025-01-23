@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'animated_heart.dart';
-import '../widgets/navbar.dart';
 
-void startFavoriteAnimation(GlobalKey iconKey, BuildContext context) {
+void startFavoriteAnimation(GlobalKey iconKey, GlobalKey favoriteIconKey, BuildContext context) { // ✅ Accept favoriteIconKey as a parameter
   final overlay = Overlay.of(context);
   final iconBox = iconKey.currentContext?.findRenderObject() as RenderBox?;
-  final navBox = CustomBottomNavBar.favoriteIconKey.currentContext?.findRenderObject() as RenderBox?;
+  final navBox = favoriteIconKey.currentContext?.findRenderObject() as RenderBox?;
 
   if (iconBox != null && navBox != null) {
     final iconPosition = iconBox.localToGlobal(Offset.zero);

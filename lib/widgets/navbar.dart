@@ -4,9 +4,9 @@ import "../controllers/nav_controller.dart";
 import '../theme/app_color.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
-  static final GlobalKey favoriteIconKey = GlobalKey();
+  final GlobalKey favoriteIconKey;
 
-  const CustomBottomNavBar({Key? key}) : super(key: key);
+  const CustomBottomNavBar({Key? key, required this.favoriteIconKey}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

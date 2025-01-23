@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../controllers/favorite_controller.dart';
 import 'favorite_animation.dart';
 import 'favorite_remove_popup.dart';
-import 'tag_list.dart'; 
+import 'tag_list.dart';
 
 class GameCard extends StatelessWidget {
   final String title;
@@ -12,6 +12,7 @@ class GameCard extends StatelessWidget {
   final List<String> tags;
   final String imagePath;
   final VoidCallback? onFavoriteRemove;
+  final GlobalKey favoriteIconKey; 
 
   const GameCard({
     Key? key,
@@ -20,13 +21,14 @@ class GameCard extends StatelessWidget {
     required this.description,
     required this.tags,
     required this.imagePath,
+    required this.favoriteIconKey, 
     this.onFavoriteRemove,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final favoriteController = Get.find<FavoriteController>();
-    final GlobalKey iconKey = GlobalKey();
+    final GlobalKey iconKey = GlobalKey(); 
 
     return GestureDetector(
       onTap: () {
@@ -75,11 +77,15 @@ class GameCard extends StatelessWidget {
                           ),
                         ),
                         Obx(() => IconButton(
-                              key: iconKey,
+                              key: iconKey, 
                               icon: Icon(
-                                favoriteController.isFavorite(title) ? Icons.favorite : Icons.favorite_border,
+                                favoriteController.isFavorite(title)
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
                               ),
-                              color: favoriteController.isFavorite(title) ? Colors.red : Colors.grey,
+                              color: favoriteController.isFavorite(title)
+                                  ? Colors.red
+                                  : Colors.grey,
                               onPressed: () {
                                 if (favoriteController.isFavorite(title)) {
                                   showRemoveFavoriteDialog(
@@ -90,7 +96,7 @@ class GameCard extends StatelessWidget {
                                     },
                                   );
                                 } else {
-                                  startFavoriteAnimation(iconKey, context);
+                                  startFavoriteAnimation(iconKey, favoriteIconKey, context); 
                                   favoriteController.toggleFavorite(title);
                                 }
                               },
