@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/page_header.dart';
+import "../widgets/reward_graph.dart";
 
 class ProgressionPage extends StatelessWidget {
   const ProgressionPage({Key? key}) : super(key: key);
@@ -52,32 +53,9 @@ class ProgressionPage extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Section Récompenses
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              color: Colors.grey[300],
-              child: const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(Icons.arrow_back),
-                        Text("Tous"),
-                        Icon(Icons.arrow_forward),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    SizedBox(
-                      height: 150,
-                      child: Center(child: Text("Hérissons Placeholder")),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            const SizedBox(height: 32),
+            const RewardGraph(),
+            const SizedBox(height: 16),
             const SizedBox(height: 16),
 
             // Section Statistiques

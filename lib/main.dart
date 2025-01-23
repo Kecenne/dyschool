@@ -13,6 +13,8 @@ import 'bloc/settings_bloc.dart';
 import 'bloc/settings_state.dart';
 import 'services/settings_service.dart';
 import 'bloc/settings_event.dart';
+import 'services/medal_manager.dart';
+import 'package:provider/provider.dart';
 
 import 'package:firebase_auth/firebase_auth.dart'; 
 
@@ -24,7 +26,15 @@ void main() async {
 
   Get.put(FavoriteController());
   final settingsService = SettingsService();
-  runApp(MyApp(settingsService: settingsService));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => MedalManager()), // 🔥 Ajout de MedalManager
+        BlocProvider(create: (context) => SettingsBloc(settingsService)..add(LoadFontPreferenceEvent())),
+      ],
+      child: MyApp(settingsService: settingsService),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

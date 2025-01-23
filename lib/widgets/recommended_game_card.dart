@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SmallGameCard extends StatelessWidget {
+class RecommendedGameCard extends StatelessWidget {
   final String title;
   final String imagePath;
   final String route;
 
-  const SmallGameCard({
+  const RecommendedGameCard({
     Key? key,
     required this.title,
     required this.imagePath,
@@ -15,7 +15,7 @@ class SmallGameCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double cardWidth = MediaQuery.of(context).size.width * 0.4;
+    double cardWidth = MediaQuery.of(context).size.width * 0.6;
 
     return GestureDetector(
       onTap: () {

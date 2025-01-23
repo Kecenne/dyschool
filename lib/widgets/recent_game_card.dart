@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import "tag_list.dart";
-import "../theme/app_color.dart";
 
 class RecentGameCard extends StatelessWidget {
   final String title;
@@ -21,65 +19,46 @@ class RecentGameCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      elevation: 5,
-      child: Container(
-        height: 400,
-        padding: const EdgeInsets.all(16.0),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.asset(
-                    imagePath,
-                    width: double.infinity,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  title,
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  description,
-                  style: const TextStyle(fontSize: 16, color: Colors.black54),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 12),
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(route);
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        elevation: 5,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Stack(
+            children: [
+              Image.asset(imagePath, width: double.infinity, height: 450, fit: BoxFit.cover),
+              Container(
+                width: double.infinity,
+                height: 450,
+                color: Colors.black.withOpacity(0.4), 
+              ),
 
-                TagList(tags: tags),
-              ],
-            ),
-            Positioned(
-              bottom: 8,
-              right: 8,
-              child: ElevatedButton(
-                onPressed: () {
-                  Get.toNamed(route);
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  backgroundColor: AppColors.primaryColor,
-                ),
-                child: const Text(
-                  'Jouer',
-                  style: TextStyle(color: Colors.white),
+              Positioned(
+                top: 12,
+                left: 12,
+                right: 12,
+                child: Text(
+                  title,
+                  style: const TextStyle(color: Colors.white, fontSize: 64, fontWeight: FontWeight.bold),
                 ),
               ),
-            ),
-          ],
+
+              Positioned(
+                bottom: 12,
+                left: 12,
+                child: Wrap(
+                  spacing: 8.0,
+                  children: tags.map((tag) => Chip(label: Text(tag, style: const TextStyle(color: Colors.white)), backgroundColor: Colors.black54)).toList(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

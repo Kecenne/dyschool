@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../services/medal_manager.dart';
 
 class GameRewardWidget extends StatelessWidget {
   final String gameName;
-  final dynamic result; 
+  final dynamic result;
 
   const GameRewardWidget({required this.gameName, required this.result, Key? key}) : super(key: key);
 
@@ -41,6 +43,21 @@ class GameRewardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String reward = getReward();
+
+    if (reward != 'No Reward') {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final medalManager = Provider.of<MedalManager>(context, listen: false);
+
+        if (reward == 'Gold') {
+          medalManager.addGoldMedal();
+        } else if (reward == 'Silver') {
+          medalManager.addSilverMedal();
+        } else if (reward == 'Bronze') {
+          medalManager.addBronzeMedal();
+        }
+      });
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
