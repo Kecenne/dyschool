@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:dyschool/theme/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../../widgets/game_end_overlay.dart';
@@ -10,7 +11,7 @@ class SimonGamePage extends StatefulWidget {
 }
 
 class _SimonGamePageState extends State<SimonGamePage> {
-  final List<Color> colors = [Colors.red, Colors.green, Colors.blue, Colors.yellow];
+  final List<Color> colors = [AppColors.vifblueColor, AppColors.orangeColor, AppColors.lightPink, AppColors.blueColor];
   final List<String> sounds = [
     "audio/simon/simon_rouge.mp3",
     "audio/simon/simon_vert.mp3",
@@ -187,6 +188,19 @@ class _SimonGamePageState extends State<SimonGamePage> {
                 style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24.0),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  isPlayerTurn
+                      ? "C'est à vous de jouer !"
+                      : "Regardez et mémorisez la séquence.",
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
               Expanded(
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -210,19 +224,6 @@ class _SimonGamePageState extends State<SimonGamePage> {
                       ),
                     );
                   },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  isPlayerTurn
-                      ? "C'est à vous de jouer !"
-                      : "Regardez et mémorisez la séquence.",
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
                 ),
               ),
               const SizedBox(height: 24.0),

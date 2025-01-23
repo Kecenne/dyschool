@@ -181,6 +181,17 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
         children: [
           Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  isGameOver
+                      ? 'Partie terminée !'
+                      : isTwoPlayer
+                          ? currentPlayer
+                          : (currentPlayer == 'Orange' ? "Votre tour" : "Tour de l'ordinateur"),
+                  style: const TextStyle(fontSize: 24),
+                ),
+              ),
               Expanded(
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -210,17 +221,6 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
                       ),
                     );
                   },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  isGameOver
-                      ? 'Partie terminée !'
-                      : isTwoPlayer
-                          ? currentPlayer
-                          : (currentPlayer == 'Orange' ? "Votre tour" : "Tour de l'ordinateur"),
-                  style: const TextStyle(fontSize: 24),
                 ),
               ),
             ],
