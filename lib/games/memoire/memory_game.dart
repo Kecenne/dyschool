@@ -178,16 +178,15 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
 
           // Overlay
           if (showGameEndOverlay) ...[
-            ModalBarrier(color: Colors.black.withOpacity(0.5)), // Blocks interaction
+            ModalBarrier(color: Colors.black.withOpacity(0.5)),
             GameEndOverlay(
               message: endMessage,
               onRestart: resetGame,
               onQuit: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/main',
-                  (route) => false,
-                );
+                Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
               },
+              gameName: 'Memory Game',
+              result: 60 - timeLeft,
             ),
           ],
         ],

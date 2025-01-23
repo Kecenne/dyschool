@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../widgets/game_end_overlay.dart';
 
@@ -26,6 +27,9 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
   bool showGameEndOverlay = false;
   String endMessage = '';
 
+  int gameTime = 0; 
+  Timer? gameTimer;
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +52,14 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
     rightDeck = deck.sublist(18, 24);
 
     drawPile = deck.sublist(24);
+
+    gameTime = 0;
+    gameTimer?.cancel();
+    gameTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        gameTime++;
+      });
+    });
 
     setState(() {
       statusMessage = 'Votre tour de jouer !';
@@ -148,8 +160,9 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
   bool checkForCompleteFamily(List<String> deck) {
     for (var family in families) {
       if (familyMembers.every((member) => deck.contains('$family - $member'))) {
+        gameTimer?.cancel();
         setState(() {
-          endMessage = '$family complétée par ${currentPlayer == 'User' ? "Vous" : "l\'ordinateur $currentPlayer"} !';
+          endMessage = '$family complétée par ${currentPlayer == 'User' ? "Vous" : "l\'ordinateur $currentPlayer"} en $gameTime secondes !';
           showGameEndOverlay = true;
         });
         return true;
@@ -187,6 +200,7 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
   }
 
   void resetGame() {
+    gameTimer?.cancel();
     initializeGame();
     setState(() {
       showGameEndOverlay = false;
@@ -469,19 +483,18 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
                 child: const Text("Sélectionner une carte", style: TextStyle(fontSize: 18)),
               ),
             ),
-                    if (showGameEndOverlay) ...[
-          ModalBarrier(color: Colors.black.withOpacity(0.5)),
-          GameEndOverlay(
-            message: endMessage,
-            onRestart: resetGame,
-            onQuit: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                '/main',
-                (route) => false,
-              );
-            },
-          ),
-        ],
+            if (showGameEndOverlay) ...[
+              ModalBarrier(color: Colors.black.withOpacity(0.5)),
+              GameEndOverlay(
+                message: endMessage,
+                onRestart: resetGame,
+                onQuit: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
+                },
+                gameName: 'Seven Families',
+                result: gameTime,
+              ),
+            ],
         ],
       ),
     );

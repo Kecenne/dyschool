@@ -286,11 +286,10 @@ class _GuessWhoGamePageState extends State<GuessWhoGamePage> {
               message: endMessage,
               onRestart: resetGame,
               onQuit: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/main',
-                  (route) => false,
-                );
+                Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
               },
+              gameName: 'Guess Who',
+              result: score,
             ),
           ],
         ],

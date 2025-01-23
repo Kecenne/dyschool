@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
                   : 'Roboto',
             ),
             getPages: AppRoutes.routes,
-            initialRoute: '/', // Assurez-vous que l'initialRoute est bien '/'
+            initialRoute: '/',
           );
         },
       ),
@@ -83,7 +83,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// SplashScreen qui vérifie l'état de l'utilisateur
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -96,15 +95,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    // Démarrer un timer pour simuler un écran de chargement
     Timer(const Duration(seconds: 2, milliseconds: 200), () {
-      // Vérifier l'état de l'utilisateur
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        // L'utilisateur est connecté, naviguer vers MainPage
         Get.offNamed('/main');
       } else {
-        // L'utilisateur n'est pas connecté, naviguer vers LoginPage
         Get.offNamed('/login');
       }
     });

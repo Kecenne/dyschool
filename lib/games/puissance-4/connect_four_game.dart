@@ -11,6 +11,8 @@ class ConnectFourGamePage extends StatefulWidget {
 class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
   static const int rows = 6;
   static const int cols = 7;
+  int playerMoveCount = 0;
+  int computerMoveCount = 0; 
 
   List<List<String>> grid = List.generate(rows, (_) => List.filled(cols, ''));
   String currentPlayer = 'Orange';
@@ -67,9 +69,18 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
       if (grid[row][col] == '') {
         setState(() {
           grid[row][col] = currentPlayer == 'Orange' ? 'X' : 'O';
+
+          if (currentPlayer == 'Orange') {
+            playerMoveCount++; 
+          } else if (!isTwoPlayer && currentPlayer == 'Computer') {
+            computerMoveCount++; 
+          } else if (isTwoPlayer && currentPlayer == 'Bleu') {
+            playerMoveCount++;
+          }
         });
+
         if (checkVictory(row, col)) {
-          _endGame('${currentPlayer} a gagné !');
+          _endGame('${currentPlayer} a gagné en ${playerMoveCount} coups !');
         } else if (isGridFull()) {
           _endGame('Égalité !');
         } else {
@@ -154,6 +165,8 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
       currentPlayer = 'Orange';
       isGameOver = false;
       showGameEndOverlay = false;
+      playerMoveCount = 0;
+      computerMoveCount = 0;
     });
     _showGameModeDialog();
   }
@@ -218,11 +231,10 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
               message: endMessage,
               onRestart: resetGame,
               onQuit: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/main',
-                  (route) => false,
-                );
+                Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
               },
+              gameName: 'Connect Four',
+              result: playerMoveCount, 
             ),
           ],
         ],

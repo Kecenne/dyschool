@@ -234,11 +234,10 @@ class _SimonGamePageState extends State<SimonGamePage> {
               message: endMessage,
               onRestart: _startGame,
               onQuit: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/main',
-                  (route) => false,
-                );
+                Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
               },
+              gameName: 'Simon',
+              result: currentLevel + 1, 
             ),
           ],
         ],

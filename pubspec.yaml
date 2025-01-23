@@ -83,6 +83,9 @@ flutter:
     - assets/audio/simon/simon_bleu.mp3
     - assets/audio/simon/simon_vert.mp3
     - assets/audio/simon/simon_jaune.mp3
+    - assets/images/rewards/Bronze.png
+    - assets/images/rewards/Silver.png
+    - assets/images/rewards/Gold.png
   fonts:
     - family: OpenDyslexic
       fonts:
