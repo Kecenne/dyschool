@@ -40,6 +40,7 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
     super.initState();
     final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
     gameTimeTracker.startTimer();
+    
     List<String> tempImages = List.from(images);
     images.addAll(tempImages);
     images.shuffle();
@@ -52,6 +53,7 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
 
   void startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return; 
       setState(() {
         if (timeLeft > 0) {
           timeLeft--;
@@ -64,6 +66,7 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
   }
 
   void endGame(String message) {
+    if (!mounted) return;
     setState(() {
       timer?.cancel();
       showGameEndOverlay = true;
@@ -72,6 +75,7 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
   }
 
   void resetGame() {
+    if (!mounted) return;
     setState(() {
       cardFlips = List<bool>.filled(cardData.length, false);
       images.shuffle();
@@ -86,6 +90,7 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
     if (selectedCards.length < 2) return;
 
     if (cardData[selectedCards[0]] == cardData[selectedCards[1]]) {
+      if (!mounted) return;
       setState(() {
         score++;
       });
@@ -93,12 +98,14 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
         endGame('Bravo ! Vous avez gagné.');
       }
     } else {
+      if (!mounted) return;
       setState(() {
         isProcessing = true;
       });
 
       await Future.delayed(const Duration(milliseconds: 500));
 
+      if (!mounted) return;
       setState(() {
         cardFlips[selectedCards[0]] = false;
         cardFlips[selectedCards[1]] = false;
@@ -116,10 +123,13 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
 
   @override
   void dispose() {
+    timer?.cancel(); 
     if (_playtimeManager != null) {
       int minutesPlayed = (_elapsedSeconds / 60).ceil();
       Future.delayed(Duration.zero, () {
-        _playtimeManager!.addPlaytime(minutesPlayed);
+        if (mounted) {
+          _playtimeManager!.addPlaytime(minutesPlayed);
+        }
       });
     }
     super.dispose();
@@ -133,14 +143,23 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
       ),
       body: Stack(
         children: [
-          // Main game content
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Temps restant : $timeLeft secondes',
-                  style: const TextStyle(fontSize: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black, width: 1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    'Temps restant : $timeLeft secondes',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
               Expanded(
@@ -177,17 +196,11 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: cardFlips[index]
-                            ? Image.asset(cardData[index], fit: BoxFit.cover)
-                            : const Center(
-                                child: Text(
-                                  "?",
-                                  style: TextStyle(
-                                    fontSize: 36,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
+                          ? Image.asset(cardData[index], fit: BoxFit.cover)
+                          : Image.asset(
+                              'assets/images/memory/memory-returned-card.png',
+                              fit: BoxFit.cover,
+                            ),
                       ),
                     );
                   },
@@ -196,7 +209,6 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
             ],
           ),
 
-          // Overlay
           if (showGameEndOverlay) ...[
             ModalBarrier(color: Colors.black.withOpacity(0.5)),
             GameEndOverlay(

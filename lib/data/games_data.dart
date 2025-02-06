@@ -59,7 +59,7 @@ const List<Map<String, dynamic>> gamesList = [
   ],
   "tags": ["Dyslexie", "Dyspraxie"],
   "objectives": "Développer la logique et la réflexion stratégique.",
-  "imagePath": "assets/images/placeholder.png",
+  "imagePath": "assets/images/puissance/puissance-banner.png",
   },
   {
   "id": "qui-est-ce",
@@ -106,6 +106,6 @@ const List<Map<String, dynamic>> gamesList = [
   "tags": ["Dyslexie", "Dyspraxie", "Dysphasie"],
   "objectives":
       "Renforcer la mémoire auditive et visuelle, ainsi que la concentration et la rapidité de réaction.",
-  "imagePath": "assets/images/placeholder.png",
+  "imagePath": "assets/images/simon/simon-banner.png",
 }
 ];  

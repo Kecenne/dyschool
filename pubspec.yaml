@@ -82,6 +82,8 @@ flutter:
     - assets/images/rewards/Gold.png
     - assets/images/memory/memory-banner.png
     - assets/images/seven-family/seven-family-banner.png
+    - assets/images/puissance/puissance-banner.png
+    - assets/images/simon/simon-banner.png
     - assets/images/who/who-is-banner.png
     - assets/images/memory/memory-carte-1.png
     - assets/images/memory/memory-carte-2.png
@@ -102,6 +104,7 @@ flutter:
     - assets/images/who/thierry.png
     - assets/images/who/valerie.png
     - assets/images/who/who-is-returned-card.png
+    - assets/images/memory/memory-returned-card.png
 
   fonts:
     - family: OpenDyslexic

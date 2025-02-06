@@ -214,8 +214,8 @@ Widget build(BuildContext context) {
                 padding: EdgeInsets.all(32),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: Colors.black, width: 2),
-                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.black, width: 1),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
                   _currentMessage.isNotEmpty

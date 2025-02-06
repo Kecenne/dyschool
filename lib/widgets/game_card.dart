@@ -58,7 +58,7 @@ class GameCard extends StatelessWidget {
                   imagePath,
                   width: 150,
                   height: 150,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
               ),
               const SizedBox(width: 16.0),

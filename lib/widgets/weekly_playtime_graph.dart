@@ -3,14 +3,13 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../services/playtime_manager.dart';
 
-
 class WeeklyPlaytimeGraph extends StatelessWidget {
   final Map<String, int> weeklyData;
 
   const WeeklyPlaytimeGraph({Key? key, required this.weeklyData}) : super(key: key);
 
-  static const int maxPlaytime = 30; 
-  static const double graphHeight = 200.0; 
+  static const int maxPlaytime = 30;
+  static const double graphHeight = 200.0;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +33,6 @@ class WeeklyPlaytimeGraph extends StatelessWidget {
           height: graphHeight + 50,
           child: Stack(
             children: [
-              // Lignes de repère (0, 10, 20, 30+ min)
               Positioned.fill(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,6 +50,7 @@ class WeeklyPlaytimeGraph extends StatelessWidget {
                 alignment: Alignment.bottomLeft,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: weeklyData.entries.map((entry) {
                     double height = (entry.value > maxPlaytime ? maxPlaytime : entry.value) / maxPlaytime * graphHeight;
                     return _buildPlaytimeColumn(entry.key, height, entry.value);
@@ -83,33 +82,34 @@ class WeeklyPlaytimeGraph extends StatelessWidget {
   }
 
   Widget _buildGraphLine(String label) {
-    return Expanded(
-      child: Row(
-        children: [
-          const SizedBox(width: 4),
-          Text(label, style: const TextStyle(color: Colors.black54, fontSize: 12)),
-          const SizedBox(width: 8),
-          const Expanded(child: Divider(color: Colors.black26)),
-        ],
-      ),
+    return Row(
+      children: [
+        const SizedBox(width: 4),
+        Text(label, style: const TextStyle(color: Colors.black54, fontSize: 12)),
+        const SizedBox(width: 8),
+        const Expanded(child: Divider(color: Colors.black26)),
+      ],
     );
   }
 
   Widget _buildPlaytimeColumn(String day, double barHeight, int playtime) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Container(
-          width: 30,
-          height: barHeight,
-          decoration: BoxDecoration(
-            color: Colors.grey[600],
-            borderRadius: BorderRadius.circular(8),
+    return SizedBox(
+      width: 30, 
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            width: 30,
+            height: barHeight.clamp(0, graphHeight - 10), 
+            decoration: BoxDecoration(
+              color: Colors.grey[600],
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(day.substring(0, 3), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-      ],
+          const SizedBox(height: 8),
+          Text(day.substring(0, 3), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+        ],
+      ),
     );
   }
 
