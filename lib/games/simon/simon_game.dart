@@ -192,6 +192,26 @@ class _SimonGamePageState extends State<SimonGamePage> {
     });
   }
 
+  Widget _buildMessageContainer(String message) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.black, width: 1),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          message,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -203,24 +223,13 @@ class _SimonGamePageState extends State<SimonGamePage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "Niveau : ${currentLevel + 1}/20",
-                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              _buildMessageContainer(
+                "Niveau : ${currentLevel + 1}/20\n" +
+                (isPlayerTurn
+                    ? "C'est à vous de jouer !"
+                    : "Regardez et mémorisez la séquence.")
               ),
               const SizedBox(height: 24.0),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  isPlayerTurn
-                      ? "C'est à vous de jouer !"
-                      : "Regardez et mémorisez la séquence.",
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
               Expanded(
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -267,4 +276,6 @@ class _SimonGamePageState extends State<SimonGamePage> {
       ),
     );
   }
+
+
 }
