@@ -190,17 +190,28 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
                           }
                         });
                       },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue[100],
-                          borderRadius: BorderRadius.circular(8.0),
+                      child: TweenAnimationBuilder<double>(
+                        duration: const Duration(milliseconds: 300),
+                        tween: Tween<double>(
+                          begin: cardFlips[index] ? 0 : 1,
+                          end: cardFlips[index] ? 1 : 0,
                         ),
-                        child: cardFlips[index]
-                          ? Image.asset(cardData[index], fit: BoxFit.cover)
-                          : Image.asset(
-                              'assets/images/memory/memory-returned-card.png',
-                              fit: BoxFit.cover,
-                            ),
+                        builder: (context, value, child) {
+                          final isFront = value >= 0.5;
+
+                          return Transform(
+                            alignment: Alignment.center,
+                            transform: Matrix4.identity()
+                              ..setEntry(3, 2, 0.001)
+                              ..rotateY(value * 3.14),
+                            child: isFront
+                                ? Image.asset(cardData[index], fit: BoxFit.cover)
+                                : Image.asset(
+                                    'assets/images/memory/memory-returned-card.png',
+                                    fit: BoxFit.cover,
+                                  ),
+                          );
+                        },
                       ),
                     );
                   },
