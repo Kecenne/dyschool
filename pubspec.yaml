@@ -73,14 +73,6 @@ flutter:
     - assets/images/logo.png
     - assets/images/placeholder.png
     - assets/svg/wave.svg
-    - assets/images/memory-1.png
-    - assets/images/memory-2.png
-    - assets/images/memory-3.jpeg
-    - assets/images/memory-4.jpeg
-    - assets/images/memory-5.png
-    - assets/images/memory-6.png
-    - assets/images/memory-7.png
-    - assets/images/memory-8.jpeg
     - assets/audio/simon/simon_rouge.mp3
     - assets/audio/simon/simon_bleu.mp3
     - assets/audio/simon/simon_vert.mp3
@@ -88,6 +80,16 @@ flutter:
     - assets/images/rewards/Bronze.png
     - assets/images/rewards/Silver.png
     - assets/images/rewards/Gold.png
+    - assets/images/memory/memory-banner.jpg
+    - assets/images/memory/memory-carte-1.png
+    - assets/images/memory/memory-carte-2.png
+    - assets/images/memory/memory-carte-3.png
+    - assets/images/memory/memory-carte-4.png
+    - assets/images/memory/memory-carte-5.png
+    - assets/images/memory/memory-carte-6.png
+    - assets/images/memory/memory-carte-7.png
+    - assets/images/memory/memory-carte-8.png
+
   fonts:
     - family: OpenDyslexic
       fonts:

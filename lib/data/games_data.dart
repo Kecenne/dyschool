@@ -17,7 +17,7 @@ const List<Map<String, dynamic>> gamesList = [
     ],
     "tags": ["Dyslexie", "Dyspraxie"],
     "objectives": "Travailler la mémoire visuelle et la concentration.",
-    "imagePath": "assets/images/memory-3.jpeg",
+    "imagePath": "assets/images/memory/memory-banner.jpg",
   },
   {
     "id": "jeu-des-7-familles",

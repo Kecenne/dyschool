@@ -12,14 +12,14 @@ class MemoryGamePage extends StatefulWidget {
 
 class _MemoryGamePageState extends State<MemoryGamePage> {
   List<String> images = [
-    'assets/images/memory-1.png',
-    'assets/images/memory-2.png',
-    'assets/images/memory-3.jpeg',
-    'assets/images/memory-4.jpeg',
-    'assets/images/memory-5.png',
-    'assets/images/memory-6.png',
-    'assets/images/memory-7.png',
-    'assets/images/memory-8.jpeg',
+    'assets/images/memory/memory-carte-1.png',
+    'assets/images/memory/memory-carte-2.png',
+    'assets/images/memory/memory-carte-3.png',
+    'assets/images/memory/memory-carte-4.png',
+    'assets/images/memory/memory-carte-5.png',
+    'assets/images/memory/memory-carte-6.png',
+    'assets/images/memory/memory-carte-7.png',
+    'assets/images/memory/memory-carte-8.png',
   ];
 
   List<bool> cardFlips = [];
