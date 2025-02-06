@@ -73,31 +73,53 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
   void dropPiece(int col) {
     if (isGameOver || grid[0][col] != '') return;
 
+    int finalRow = -1;
     for (int row = rows - 1; row >= 0; row--) {
       if (grid[row][col] == '') {
-        setState(() {
-          grid[row][col] = currentPlayer == 'Orange' ? 'X' : 'O';
-
-          if (currentPlayer == 'Orange') {
-            playerMoveCount++; 
-          } else if (!isTwoPlayer && currentPlayer == 'Computer') {
-            computerMoveCount++; 
-          } else if (isTwoPlayer && currentPlayer == 'Bleu') {
-            playerMoveCount++;
-          }
-        });
-
-        if (checkVictory(row, col)) {
-          _endGame('${currentPlayer} a gagné en ${playerMoveCount} coups !');
-        } else if (isGridFull()) {
-          _endGame('Égalité !');
-        } else {
-          switchTurn();
-        }
+        finalRow = row;
         break;
       }
     }
+
+    if (finalRow == -1) return;
+
+    _animateDrop(finalRow, col);
   }
+
+  void _animateDrop(int finalRow, int col) async {
+    for (int row = 0; row <= finalRow; row++) {
+      setState(() {
+        grid[row][col] = currentPlayer == 'Orange' ? 'X' : 'O';
+      });
+      await Future.delayed(const Duration(milliseconds: 100));
+      if (row != finalRow) {
+        setState(() {
+          grid[row][col] = '';
+        });
+      }
+    }
+
+    setState(() {
+      grid[finalRow][col] = currentPlayer == 'Orange' ? 'X' : 'O';
+
+      if (currentPlayer == 'Orange') {
+        playerMoveCount++;
+      } else if (!isTwoPlayer && currentPlayer == 'Computer') {
+        computerMoveCount++;
+      } else if (isTwoPlayer && currentPlayer == 'Bleu') {
+        playerMoveCount++;
+      }
+    });
+
+    if (checkVictory(finalRow, col)) {
+      _endGame('$currentPlayer a gagné en $playerMoveCount coups !');
+    } else if (isGridFull()) {
+      _endGame('Égalité !');
+    } else {
+      switchTurn();
+    }
+  }
+
 
   void switchTurn() {
     if (isTwoPlayer) {
@@ -207,45 +229,61 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  isGameOver
-                      ? 'Partie terminée !'
-                      : isTwoPlayer
-                          ? currentPlayer
-                          : (currentPlayer == 'Orange' ? "Votre tour" : "Tour de l'ordinateur"),
-                  style: const TextStyle(fontSize: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black, width: 1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    isGameOver
+                        ? 'Partie terminée !'
+                        : isTwoPlayer
+                            ? "Tour de $currentPlayer"
+                            : (currentPlayer == 'Orange' ? "Votre tour" : "Tour de l'ordinateur"),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
+              const SizedBox(height: 32),
               Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: cols,
-                  ),
-                  itemCount: rows * cols,
-                  itemBuilder: (context, index) {
-                    int row = index ~/ cols;
-                    int col = index % cols;
-                    return GestureDetector(
-                      onTap: () {
-                        if ((currentPlayer == 'Orange' || (isTwoPlayer && currentPlayer == 'Bleu')) &&
-                            !showGameEndOverlay) {
-                          dropPiece(col);
-                        }
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: grid[row][col] == ''
-                              ? Colors.grey[300]
-                              : (grid[row][col] == 'X'
-                                  ? AppColors.orangeColor
-                                  : AppColors.blueColor),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: cols,
+                      crossAxisSpacing: 8.0, 
+                      mainAxisSpacing: 8.0,
+                    ),
+                    itemCount: rows * cols,
+                    itemBuilder: (context, index) {
+                      int row = index ~/ cols;
+                      int col = index % cols;
+                      return GestureDetector(
+                        onTap: () {
+                          if ((currentPlayer == 'Orange' || (isTwoPlayer && currentPlayer == 'Bleu')) &&
+                              !showGameEndOverlay) {
+                            dropPiece(col);
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: grid[row][col] == ''
+                                ? Colors.grey[300]
+                                : (grid[row][col] == 'X'
+                                    ? AppColors.orangeColor
+                                    : AppColors.blueColor),
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
             ],
