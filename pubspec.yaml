@@ -80,7 +80,9 @@ flutter:
     - assets/images/rewards/Bronze.png
     - assets/images/rewards/Silver.png
     - assets/images/rewards/Gold.png
-    - assets/images/memory/memory-banner.jpg
+    - assets/images/memory/memory-banner.png
+    - assets/images/seven-family/seven-family-banner.png
+    - assets/images/who/who-is-banner.png
     - assets/images/memory/memory-carte-1.png
     - assets/images/memory/memory-carte-2.png
     - assets/images/memory/memory-carte-3.png
@@ -89,6 +91,17 @@ flutter:
     - assets/images/memory/memory-carte-6.png
     - assets/images/memory/memory-carte-7.png
     - assets/images/memory/memory-carte-8.png
+    - assets/images/who/benjamin.png
+    - assets/images/who/camille.png
+    - assets/images/who/daniel.png
+    - assets/images/who/fabienne.png
+    - assets/images/who/jean.png
+    - assets/images/who/jerome.png
+    - assets/images/who/lea.png
+    - assets/images/who/maya.png
+    - assets/images/who/thierry.png
+    - assets/images/who/valerie.png
+    - assets/images/who/who-is-returned-card.png
 
   fonts:
     - family: OpenDyslexic

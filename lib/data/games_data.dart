@@ -17,7 +17,7 @@ const List<Map<String, dynamic>> gamesList = [
     ],
     "tags": ["Dyslexie", "Dyspraxie"],
     "objectives": "Travailler la mémoire visuelle et la concentration.",
-    "imagePath": "assets/images/memory/memory-banner.jpg",
+    "imagePath": "assets/images/memory/memory-banner.png",
   },
   {
     "id": "jeu-des-7-familles",
@@ -39,7 +39,7 @@ const List<Map<String, dynamic>> gamesList = [
     ],
     "tags": ["Dyslexie", "Dyspraxie"],
     "objectives": "Développer les compétences sociales et la planification stratégique.",
-    "imagePath": "assets/images/placeholder.png",
+    "imagePath": "assets/images/seven-family/seven-family-banner.png",
   },
   {
   "id": "puissance-4",
@@ -78,7 +78,7 @@ const List<Map<String, dynamic>> gamesList = [
   ],
   "tags": ["Dyslexie", "Dysphasie"],
   "objectives": "Améliorer les capacités d'inférence et de compréhension.",
-  "imagePath": "assets/images/placeholder.png",
+  "imagePath": "assets/images/who/who-is-banner.png",
   },
   {
   "id": "jeu-du-simon",
