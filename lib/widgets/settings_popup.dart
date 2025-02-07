@@ -18,7 +18,7 @@ class SettingsPopup extends StatelessWidget {
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
           TextStyle dynamicTextStyle = state.selectedFontChoice == 1
-              ? const TextStyle(fontFamily: 'Roboto', color: AppColors.primaryColor)
+              ? const TextStyle(fontFamily: 'Poppins', color: AppColors.primaryColor)
               : const TextStyle(fontFamily: 'OpenDyslexic', color: AppColors.primaryColor);
 
           return Center(
@@ -73,7 +73,6 @@ class SettingsPopup extends StatelessWidget {
                             IconButton(
                               icon: const Icon(Icons.add, size: 32),
                               onPressed: () {
-                                // Logique pour augmenter l'unité
                               },
                             ),
                             const SizedBox(width: 16),
@@ -131,19 +130,19 @@ class SettingsPopup extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                context.read<SettingsBloc>().add(ChangeFontEvent(1)); // Roboto
+                                context.read<SettingsBloc>().add(ChangeFontEvent(1)); 
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Checkbox(
-                                    value: state.selectedFontChoice == 1, // Utiliser uniquement selectedFontChoice pour la coche
+                                    value: state.selectedFontChoice == 1,
                                     onChanged: (value) {
-                                      context.read<SettingsBloc>().add(ChangeFontEvent(1)); // Roboto
+                                      context.read<SettingsBloc>().add(ChangeFontEvent(1)); 
                                     },
                                   ),
                                   Text(
-                                    "Roboto",
+                                    "Poppins",
                                     style: dynamicTextStyle,
                                   ),
                                   const SizedBox(width: 16),

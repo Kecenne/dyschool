@@ -1,92 +1,65 @@
 import 'package:flutter/material.dart';
-import '../theme/app_color.dart';
 
 class GameSelectionButtons extends StatelessWidget {
-  final bool showFavoritesOnly;
-  final VoidCallback onShowAll;
-  final VoidCallback onShowFavorites;
+  final String selectedTab;
+  final ValueChanged<String> onTabSelected;
 
   const GameSelectionButtons({
     Key? key,
-    required this.showFavoritesOnly,
-    required this.onShowAll,
-    required this.onShowFavorites,
+    required this.selectedTab,
+    required this.onTabSelected,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        // Nouveau bouton "Mes jeux" (inactif pour l'instant)
-        ElevatedButton(
-          onPressed: () {
-            // Action à définir plus tard
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.backgroundColor,
-            foregroundColor: AppColors.primaryColor,
-            side: BorderSide(color: AppColors.primaryColor),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-          child: const Text(
-            "Mes jeux",
-            style: TextStyle(color: AppColors.primaryColor),
-          ),
-        ),
-
-        // Bouton "Tous les jeux"
-        ElevatedButton(
-          onPressed: onShowAll,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: showFavoritesOnly
-                ? AppColors.backgroundColor
-                : AppColors.primaryColor,
-            foregroundColor: showFavoritesOnly
-                ? AppColors.primaryColor
-                : AppColors.backgroundColor,
-            side: BorderSide(color: AppColors.primaryColor),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-          child: Text(
-            "Tous les jeux",
-            style: TextStyle(
-              color: showFavoritesOnly
-                  ? AppColors.primaryColor
-                  : AppColors.backgroundColor,
-            ),
-          ),
-        ),
-
-        // Bouton "Favoris"
-        ElevatedButton(
-          onPressed: onShowFavorites,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: showFavoritesOnly
-                ? AppColors.primaryColor
-                : AppColors.backgroundColor,
-            foregroundColor: showFavoritesOnly
-                ? AppColors.backgroundColor
-                : AppColors.primaryColor,
-            side: BorderSide(color: AppColors.primaryColor),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-          child: Text(
-            "Favoris",
-            style: TextStyle(
-              color: showFavoritesOnly
-                  ? AppColors.backgroundColor
-                  : AppColors.primaryColor,
-            ),
-          ),
-        ),
+        _buildTabButton("Les jeux"),
+        const SizedBox(width: 24),
+        _buildTabButton("Favoris"),
+        const SizedBox(width: 24),
+        _buildTabButton("Mes jeux"),
       ],
     );
+  }
+
+  Widget _buildTabButton(String title) {
+    final bool isSelected = selectedTab == title;
+    return GestureDetector(
+      onTap: () => onTabSelected(title),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 32.0, // Assure que la taille ne change pas
+              fontWeight: FontWeight.w700,
+              color: isSelected ? const Color(0xFF565656) : const Color(0xFFD6D6D6),
+            ),
+          ),
+          if (isSelected)
+            Container(
+              margin: const EdgeInsets.only(top: 4.0),
+              height: 2.0,
+              width: _calculateTextWidth(title, const TextStyle(
+                fontSize: 32.0,
+                fontWeight: FontWeight.w700,
+              )),
+              color: const Color(0xFF565656),
+            ),
+        ],
+      ),
+    );
+  }
+
+  double _calculateTextWidth(String text, TextStyle style) {
+    final textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout();
+    return textPainter.width;
   }
 }

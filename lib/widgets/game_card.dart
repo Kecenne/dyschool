@@ -12,23 +12,23 @@ class GameCard extends StatelessWidget {
   final List<String> tags;
   final String imagePath;
   final VoidCallback? onFavoriteRemove;
-  final GlobalKey favoriteIconKey; 
+  final GlobalKey favoriteIconKey;
+  final GlobalKey iconKey = GlobalKey();
 
-  const GameCard({
+  GameCard({
     Key? key,
     required this.title,
     required this.route,
     required this.description,
     required this.tags,
     required this.imagePath,
-    required this.favoriteIconKey, 
+    required this.favoriteIconKey,
     this.onFavoriteRemove,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final favoriteController = Get.find<FavoriteController>();
-    final GlobalKey iconKey = GlobalKey(); 
 
     return GestureDetector(
       onTap: () {
@@ -43,7 +43,7 @@ class GameCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
         ),
-        elevation: 5,
+        elevation: 4,
         child: Container(
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
@@ -51,17 +51,30 @@ class GameCard extends StatelessWidget {
             color: Colors.white,
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(22.0),
-                child: Image.asset(
-                  imagePath,
-                  width: 150,
-                  height: 150,
-                  fit: BoxFit.contain,
+              Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFBDFD2),
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: Image.asset(
+                      imagePath,
+                      width: 180,
+                      height: 180,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(width: 16.0),
+              
+              const SizedBox(width: 24.0), 
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,15 +82,26 @@ class GameCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          title,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        Obx(() => IconButton(
-                              key: iconKey, 
+                        Obx(
+                          () => Container(
+                            padding: const EdgeInsets.all(2.0), 
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF9DBEC2), 
+                              shape: BoxShape.circle, 
+                            ),
+                            child: IconButton(
+                              key: iconKey,
+                              iconSize: 28.0,
                               icon: Icon(
                                 favoriteController.isFavorite(title)
                                     ? Icons.favorite
@@ -85,7 +109,7 @@ class GameCard extends StatelessWidget {
                               ),
                               color: favoriteController.isFavorite(title)
                                   ? Colors.red
-                                  : Colors.grey,
+                                  : Colors.white,
                               onPressed: () {
                                 if (favoriteController.isFavorite(title)) {
                                   showRemoveFavoriteDialog(
@@ -96,14 +120,18 @@ class GameCard extends StatelessWidget {
                                     },
                                   );
                                 } else {
-                                  startFavoriteAnimation(iconKey, favoriteIconKey, context); 
+                                  startFavoriteAnimation(iconKey, favoriteIconKey, context);
                                   favoriteController.toggleFavorite(title);
                                 }
                               },
-                            )),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
+
                     const SizedBox(height: 8.0),
+
                     Text(
                       description,
                       style: const TextStyle(
@@ -113,7 +141,8 @@ class GameCard extends StatelessWidget {
                       maxLines: 4,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 12.0),
+
+                    const SizedBox(height: 40.0),
 
                     TagList(tags: tags),
                   ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_color.dart';
 
 class TagList extends StatelessWidget {
   final List<String> tags;
@@ -16,14 +17,21 @@ class TagList extends StatelessWidget {
       children: tags
           .map(
             (tag) => Chip(
-              label: Text(tag),
-              backgroundColor: Colors.cyan.shade50,
+              label: Text(
+                tag,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20,
+                ),
+              ),
+              backgroundColor: AppColors.orangeClairColor,
               shape: RoundedRectangleBorder(
                 side: BorderSide(
-                  color: Colors.cyan.shade50,
+                  color: AppColors.orangeClairColor,
                   width: 1.0,
                 ),
-                borderRadius: BorderRadius.circular(16.0),
+                borderRadius: BorderRadius.circular(50.0),
               ),
             ),
           )

@@ -4,7 +4,7 @@ const List<Map<String, dynamic>> gamesList = [
     "title": "Jeu de mémoire",
     "route": "/jeu/jeu-de-memoire",
     "description":
-        "C'est un jeu qui permet de travailler la mémoire. Tout est dans le nom enfaite.",
+        "C'est un jeu qui permet de travailler la mémoire. Tout est dans le nom enfaite. Il suffit simplement de lire.",
     "rules": [
       {
         "title": "Introduction",
@@ -65,7 +65,7 @@ const List<Map<String, dynamic>> gamesList = [
   "id": "qui-est-ce",
   "title": "Qui-est-ce ?",
   "route": "/jeu/qui-est-ce",
-  "description": "Devinez qui est décrit en choisissant parmi les cartes proposées.",
+  "description": "Devinez qui est décrit en choisissant parmi les cartes proposées. C'est assez facile puisque c'est toujours pareil.",
   "rules": [
     {
       "title": "Introduction",

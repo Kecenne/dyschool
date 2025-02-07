@@ -52,6 +52,8 @@ class _FavoritePageBodyState extends State<FavoritePageBody> {
           ),
           const SizedBox(height: 16.0),
           GameFilters(
+            selectedTrouble: selectedTrouble, 
+            selectedGameType: selectedGameType,
             onTroubleChanged: (value) {
               setState(() {
                 selectedTrouble = value ?? "";

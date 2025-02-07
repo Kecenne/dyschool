@@ -22,19 +22,20 @@ class _GamesPageState extends State<GamesPage> {
   String searchQuery = "";
   String selectedTrouble = "";
   String selectedGameType = "";
-  bool showFavoritesOnly = false;
+  String selectedTab = "Les jeux"; // Onglet par défaut
 
   List<Map<String, dynamic>> get filteredGames {
-    final gamesToShow = showFavoritesOnly
-        ? gamesList.where((game) => favoriteController.favoriteGames.contains(game["title"])).toList()
-        : gamesList;
+    final List<Map<String, dynamic>> gamesToShow;
+    
+    if (selectedTab == "Favoris") {
+      gamesToShow = gamesList.where((game) => favoriteController.favoriteGames.contains(game["title"])).toList();
+    } else {
+      gamesToShow = gamesList;
+    }
 
     return gamesToShow.where((game) {
-      final matchesSearchQuery = game["title"]
-          .toLowerCase()
-          .contains(searchQuery.toLowerCase());
-      final matchesTrouble = selectedTrouble.isEmpty ||
-          game["tags"].contains(selectedTrouble);
+      final matchesSearchQuery = game["title"].toLowerCase().contains(searchQuery.toLowerCase());
+      final matchesTrouble = selectedTrouble.isEmpty || game["tags"].contains(selectedTrouble);
       return matchesSearchQuery && matchesTrouble;
     }).toList();
   }
@@ -48,20 +49,6 @@ class _GamesPageState extends State<GamesPage> {
           children: [
             const PageHeader(title: "Liste des Jeux"),
             const SizedBox(height: 16),
-            GameSelectionButtons(
-              showFavoritesOnly: showFavoritesOnly,
-              onShowAll: () {
-                setState(() {
-                  showFavoritesOnly = false;
-                });
-              },
-              onShowFavorites: () {
-                setState(() {
-                  showFavoritesOnly = true;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
             custom_widgets.SearchBar(
               onSearchChanged: (value) {
                 setState(() {
@@ -69,8 +56,19 @@ class _GamesPageState extends State<GamesPage> {
                 });
               },
             ),
+            const SizedBox(height: 32),
+            GameSelectionButtons(
+              selectedTab: selectedTab,
+              onTabSelected: (String tab) {
+                setState(() {
+                  selectedTab = tab;
+                });
+              },
+            ),
             const SizedBox(height: 16),
             GameFilters(
+              selectedTrouble: selectedTrouble, 
+              selectedGameType: selectedGameType, 
               onTroubleChanged: (value) {
                 setState(() {
                   selectedTrouble = value ?? "";
@@ -82,7 +80,7 @@ class _GamesPageState extends State<GamesPage> {
                 });
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 32),
             Expanded(
               child: GameList(
                 games: filteredGames,

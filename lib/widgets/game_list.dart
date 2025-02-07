@@ -12,13 +12,16 @@ class GameList extends StatelessWidget {
     return ListView(
       children: games
           .map(
-            (game) => GameCard(
-              title: game["title"],
-              route: game["route"],
-              description: game["description"],
-              tags: game["tags"].cast<String>(),
-              imagePath: game["imagePath"],
-              favoriteIconKey: favoriteIconKey,
+            (game) => Padding(
+              padding: const EdgeInsets.only(bottom: 16.0), 
+              child: GameCard(
+                title: game["title"],
+                route: game["route"],
+                description: game["description"],
+                tags: game["tags"].cast<String>(),
+                imagePath: game["imagePath"],
+                favoriteIconKey: favoriteIconKey,
+              ),
             ),
           )
           .toList(),
