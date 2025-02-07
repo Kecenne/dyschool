@@ -9,8 +9,8 @@ class RewardGraph extends StatelessWidget {
   Widget build(BuildContext context) {
     final medalManager = Provider.of<MedalManager>(context);
 
-    const int maxMedals = 90; // Échelle max du graphique
-    double graphHeight = 250; // 🔥 Augmenté pour être plus visible
+    const int maxMedals = 90;
+    double graphHeight = 250;
 
     double goldHeight = (medalManager.goldMedals / maxMedals) * graphHeight;
     double silverHeight = (medalManager.silverMedals / maxMedals) * graphHeight;
@@ -28,27 +28,27 @@ class RewardGraph extends StatelessWidget {
         // Bloc "Tous" + flèches + nombre de médailles
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey[300],
+            color: const Color(0xFF6B9DA4), // ✅ Bleu-gris
             borderRadius: BorderRadius.circular(16),
           ),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(Icons.arrow_left, size: 28, color: Colors.black.withOpacity(0.6)), // Flèche gauche
+              const Icon(Icons.arrow_left, size: 28, color: Colors.white), // ✅ Icône blanche
               Column(
                 children: [
                   const Text(
                     "Tous",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white), // ✅ Texte blanc
                   ),
                   Text(
                     "${medalManager.goldMedals + medalManager.silverMedals + medalManager.bronzeMedals} hérissons",
-                    style: const TextStyle(fontSize: 14, color: Colors.black54),
+                    style: const TextStyle(fontSize: 14, color: Colors.white70), // ✅ Texte gris clair
                   ),
                 ],
               ),
-              Icon(Icons.arrow_right, size: 28, color: Colors.black.withOpacity(0.6)), // Flèche droite
+              const Icon(Icons.arrow_right, size: 28, color: Colors.white), // ✅ Icône blanche
             ],
           ),
         ),
@@ -57,12 +57,12 @@ class RewardGraph extends StatelessWidget {
         // Graphique à barres
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey[800],
+            color: Colors.white, // ✅ Fond blanc
             borderRadius: BorderRadius.circular(16),
           ),
           padding: const EdgeInsets.all(16),
           width: double.infinity,
-          height: 300, // 🔥 Augmenté
+          height: 300,
           child: Stack(
             children: [
               // Lignes de repère
@@ -84,9 +84,9 @@ class RewardGraph extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    _buildMedalColumn("assets/images/rewards/Bronze.png", bronzeHeight),
+                    _buildMedalColumn("assets/images/rewards/Silver.png", silverHeight),
                     _buildMedalColumn("assets/images/rewards/Gold.png", goldHeight),
-                    _buildMedalColumn("assets/images/rewards//Silver.png", silverHeight),
-                    _buildMedalColumn("assets/images/rewards//Bronze.png", bronzeHeight),
                   ],
                 ),
               ),
@@ -102,9 +102,9 @@ class RewardGraph extends StatelessWidget {
       child: Row(
         children: [
           const SizedBox(width: 4),
-          Text(label, style: const TextStyle(color: Colors.white, fontSize: 12)),
+          Text(label, style: const TextStyle(color: Color(0xFF666666), fontSize: 12)), 
           const SizedBox(width: 8),
-          const Expanded(child: Divider(color: Colors.white54)),
+          const Expanded(child: Divider(color: Color(0xFFE0E0E0))),
         ],
       ),
     );
@@ -115,15 +115,15 @@ class RewardGraph extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-          width: 50, // 🔥 Légèrement agrandi
+          width: 50,
           height: barHeight,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.5),
+            color: const Color(0xFF6B9DA4),
             borderRadius: BorderRadius.circular(8),
           ),
         ),
         const SizedBox(height: 8),
-        Image.asset(imagePath, width: 55, height: 55), // 🔥 Médailles un peu plus grandes
+        Image.asset(imagePath, width: 55, height: 55),
       ],
     );
   }
