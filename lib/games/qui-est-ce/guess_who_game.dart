@@ -127,11 +127,13 @@ void handleAnswer(String selectedImage) {
     wrongChoices.shuffle();
     final toTurn = wrongChoices.take(count).toList();
 
-    setState(() {
-      for (var img in toTurn) {
-        cardStates[img] = "who-is-returned-card.png";
-      }
-    });
+    for (int i = 0; i < toTurn.length; i++) {
+      Future.delayed(Duration(milliseconds: i * 100), () {
+        setState(() {
+          cardStates[toTurn[i]] = "who-is-returned-card.png";
+        });
+      });
+    }
   }
 
   void _showMessage(String message, [VoidCallback? onComplete]) {
@@ -154,7 +156,9 @@ void handleAnswer(String selectedImage) {
   }
 
   void _nextQuestion() {
+    
     if (currentQuestionIndex < questions.length - 1) {
+      cardStates = {for (var img in _allImages) img: img}; 
       setState(() {
         currentQuestionIndex++;
         mistakeCount = 0;
@@ -238,8 +242,8 @@ Widget build(BuildContext context) {
                     GridView.builder(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 5,
-                        mainAxisSpacing: 8.0,
-                        crossAxisSpacing: 8.0,
+                        mainAxisSpacing: 10.0,
+                        crossAxisSpacing: 10.0,
                         childAspectRatio: 0.6,
                       ),
                       shrinkWrap: true,
@@ -251,14 +255,34 @@ Widget build(BuildContext context) {
                         final imageToShow = cardStates[imageName]!;
                         final isClickable = !_showContinueButton && imageToShow != "who-is-returned-card.png";
 
-                        return GestureDetector(
-                          onTap: isClickable ? () => handleAnswer(imageName) : null,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: Image.asset("assets/images/who/$imageToShow"),
-                          ),
+                        return TweenAnimationBuilder<double>(
+                          tween: Tween(begin: 0, end: cardStates[imageName] == "who-is-returned-card.png" ? 1 : 0),
+                          duration: Duration(milliseconds: 300),
+                          builder: (context, value, child) {
+                            final isFlipped = value >= 0.5;
+                            return GestureDetector(
+                              onTap: isClickable ? () => handleAnswer(imageName) : null,
+                              child: AspectRatio(
+                                aspectRatio: 0.75,
+                                child: Transform(
+                                  alignment: Alignment.center,
+                                  transform: Matrix4.rotationY(value * 3.1416), 
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0), 
+                                      child: Image.asset(
+                                        "assets/images/who/${isFlipped ? "who-is-returned-card.png" : imageName}",
+                                        fit: BoxFit.contain, 
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         );
                       },
                     ),
