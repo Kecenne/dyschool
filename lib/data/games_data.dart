@@ -16,6 +16,7 @@ const List<Map<String, dynamic>> gamesList = [
       },
     ],
     "tags": ["Dyslexie", "Dyspraxie"],
+    "types": ["Mémoire", "Réflexion"],
     "objectives": "Travailler la mémoire visuelle et la concentration.",
     "imagePath": "assets/images/memory/memory-banner.png",
   },
@@ -38,74 +39,78 @@ const List<Map<String, dynamic>> gamesList = [
       },
     ],
     "tags": ["Dyslexie", "Dyspraxie"],
+    "types": ["Stratégie", "Social"],
     "objectives": "Développer les compétences sociales et la planification stratégique.",
     "imagePath": "assets/images/seven-family/seven-family-banner.png",
   },
   {
-  "id": "puissance-4",
-  "title": "Puissance 4",
-  "route": "/jeu/puissance-4",
-  "description":
-      "Un jeu classique où le but est d'aligner 4 pions de sa couleur horizontalement, verticalement ou en diagonale.",
-  "rules": [
-    {
-      "title": "Introduction",
-      "content": "Les joueurs déposent tour à tour un pion dans une colonne de la grille.",
-    },
-    {
-      "title": "Objectif",
-      "content": "Être le premier à aligner 4 pions de sa couleur.",
-    },
-  ],
-  "tags": ["Dyslexie", "Dyspraxie"],
-  "objectives": "Développer la logique et la réflexion stratégique.",
-  "imagePath": "assets/images/puissance/puissance-banner.png",
+    "id": "puissance-4",
+    "title": "Puissance 4",
+    "route": "/jeu/puissance-4",
+    "description":
+        "Un jeu classique où le but est d'aligner 4 pions de sa couleur horizontalement, verticalement ou en diagonale.",
+    "rules": [
+      {
+        "title": "Introduction",
+        "content": "Les joueurs déposent tour à tour un pion dans une colonne de la grille.",
+      },
+      {
+        "title": "Objectif",
+        "content": "Être le premier à aligner 4 pions de sa couleur.",
+      },
+    ],
+    "tags": ["Dyslexie", "Dyspraxie"],
+    "types": ["Stratégie", "Réflexion"],
+    "objectives": "Développer la logique et la réflexion stratégique.",
+    "imagePath": "assets/images/puissance/puissance-banner.png",
   },
   {
-  "id": "qui-est-ce",
-  "title": "Qui-est-ce ?",
-  "route": "/jeu/qui-est-ce",
-  "description": "Devinez qui est décrit en choisissant parmi les cartes proposées. C'est assez facile puisque c'est toujours pareil.",
-  "rules": [
-    {
-      "title": "Introduction",
-      "content": "Une phrase décrit un personnage, sélectionnez la bonne carte.",
-    },
-    {
-      "title": "Objectif",
-      "content": "Répondre correctement aux 10 questions pour obtenir un score parfait.",
-    },
-  ],
-  "tags": ["Dyslexie", "Dysphasie"],
-  "objectives": "Améliorer les capacités d'inférence et de compréhension.",
-  "imagePath": "assets/images/who/who-is-banner.png",
+    "id": "qui-est-ce",
+    "title": "Qui-est-ce ?",
+    "route": "/jeu/qui-est-ce",
+    "description": "Devinez qui est décrit en choisissant parmi les cartes proposées. C'est assez facile puisque c'est toujours pareil.",
+    "rules": [
+      {
+        "title": "Introduction",
+        "content": "Une phrase décrit un personnage, sélectionnez la bonne carte.",
+      },
+      {
+        "title": "Objectif",
+        "content": "Répondre correctement aux 10 questions pour obtenir un score parfait.",
+      },
+    ],
+    "tags": ["Dyslexie", "Dysphasie"],
+    "types": ["Observation", "Réflexion"],
+    "objectives": "Améliorer les capacités d'inférence et de compréhension.",
+    "imagePath": "assets/images/who/who-is-banner.png",
   },
   {
-  "id": "jeu-du-simon",
-  "title": "Jeu du Simon",
-  "route": "/jeu/jeu-du-simon",
-  "description":
-      "Un jeu de mémoire et de concentration où il faut reproduire des séquences lumineuses de plus en plus longues.",
-  "rules": [
-    {
-      "title": "Introduction",
-      "content":
-          "Le Simon affiche une séquence de couleurs que vous devez mémoriser et reproduire dans le même ordre.",
-    },
-    {
-      "title": "Objectif",
-      "content":
-          "Répétez correctement les séquences pendant 20 manches pour gagner.",
-    },
-    {
-      "title": "Attention",
-      "content":
-          "Chaque manche ajoute une couleur à la séquence, et la vitesse augmente à certains paliers.",
-    }
-  ],
-  "tags": ["Dyslexie", "Dyspraxie", "Dysphasie"],
-  "objectives":
-      "Renforcer la mémoire auditive et visuelle, ainsi que la concentration et la rapidité de réaction.",
-  "imagePath": "assets/images/simon/simon-banner.png",
-}
-];  
+    "id": "jeu-du-simon",
+    "title": "Jeu du Simon",
+    "route": "/jeu/jeu-du-simon",
+    "description":
+        "Un jeu de mémoire et de concentration où il faut reproduire des séquences lumineuses de plus en plus longues.",
+    "rules": [
+      {
+        "title": "Introduction",
+        "content":
+            "Le Simon affiche une séquence de couleurs que vous devez mémoriser et reproduire dans le même ordre.",
+      },
+      {
+        "title": "Objectif",
+        "content":
+            "Répétez correctement les séquences pendant 20 manches pour gagner.",
+      },
+      {
+        "title": "Attention",
+        "content":
+            "Chaque manche ajoute une couleur à la séquence, et la vitesse augmente à certains paliers.",
+      }
+    ],
+    "tags": ["Dyslexie", "Dyspraxie", "Dysphasie"],
+    "types": ["Mémoire", "Rapidité"],
+    "objectives":
+        "Renforcer la mémoire auditive et visuelle, ainsi que la concentration et la rapidité de réaction.",
+    "imagePath": "assets/images/simon/simon-banner.png",
+  }
+];

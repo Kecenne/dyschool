@@ -34,7 +34,7 @@ class GameSelectionButtons extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: 32.0, // Assure que la taille ne change pas
+              fontSize: 32.0, 
               fontWeight: FontWeight.w700,
               color: isSelected ? const Color(0xFF565656) : const Color(0xFFD6D6D6),
             ),

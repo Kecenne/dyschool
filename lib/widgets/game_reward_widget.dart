@@ -48,12 +48,16 @@ class GameRewardWidget extends StatelessWidget {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final medalManager = Provider.of<MedalManager>(context, listen: false);
 
-        if (reward == 'Gold') {
-          medalManager.addGoldMedal();
-        } else if (reward == 'Silver') {
-          medalManager.addSilverMedal();
-        } else if (reward == 'Bronze') {
-          medalManager.addBronzeMedal();
+        switch (reward) {
+          case 'Gold':
+            medalManager.addGoldMedal();
+            break;
+          case 'Silver':
+            medalManager.addSilverMedal();
+            break;
+          case 'Bronze':
+            medalManager.addBronzeMedal();
+            break;
         }
       });
     }

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../widgets/search_bar.dart' as custom_widgets;
@@ -22,23 +24,77 @@ class _GamesPageState extends State<GamesPage> {
   String searchQuery = "";
   String selectedTrouble = "";
   String selectedGameType = "";
-  String selectedTab = "Les jeux"; // Onglet par défaut
+  String selectedTab = "Les jeux";
+  List<String> userTroubles = []; 
 
-  List<Map<String, dynamic>> get filteredGames {
-    final List<Map<String, dynamic>> gamesToShow;
-    
-    if (selectedTab == "Favoris") {
-      gamesToShow = gamesList.where((game) => favoriteController.favoriteGames.contains(game["title"])).toList();
-    } else {
-      gamesToShow = gamesList;
-    }
-
-    return gamesToShow.where((game) {
-      final matchesSearchQuery = game["title"].toLowerCase().contains(searchQuery.toLowerCase());
-      final matchesTrouble = selectedTrouble.isEmpty || game["tags"].contains(selectedTrouble);
-      return matchesSearchQuery && matchesTrouble;
-    }).toList();
+  @override
+  void initState() {
+    super.initState();
+    _loadUserTroubles();
   }
+
+Future<void> _loadUserTroubles() async {
+  String? userId = FirebaseAuth.instance.currentUser?.uid;
+  if (userId == null) return;
+
+  DocumentSnapshot<Map<String, dynamic>> userDoc =
+      await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+  if (userDoc.exists) {
+    Map<String, dynamic>? userData = userDoc.data();
+    if (userData != null && userData.containsKey("troubles")) {
+      Map<String, dynamic> troublesMap = userData["troubles"];
+
+      List<String> troubles = troublesMap.entries
+          .where((entry) => entry.value == true)
+          .map((entry) => entry.key)
+          .toList();
+
+      setState(() {
+        userTroubles = troubles;
+      });
+
+      // ✅ Vérification des troubles récupérés
+      print("Troubles récupérés depuis Firebase : $userTroubles");
+    } else {
+      print("⚠ Aucun champ 'troubles' trouvé pour l'utilisateur.");
+    }
+  } else {
+    print("⚠ Document utilisateur non trouvé dans Firestore.");
+  }
+}
+
+
+List<Map<String, dynamic>> get filteredGames {
+  final List<Map<String, dynamic>> gamesToShow;
+
+  if (selectedTab == "Favoris") {
+    gamesToShow = gamesList.where((game) => favoriteController.favoriteGames.contains(game["title"])).toList();
+  } else if (selectedTab == "Mes jeux") {
+    gamesToShow = gamesList.where((game) {
+      List<String> gameTagsLower = (game["tags"] as List<dynamic>).map((tag) => tag.toString().toLowerCase()).toList();
+      List<String> userTroublesLower = userTroubles.map((trouble) => trouble.toLowerCase()).toList();
+
+      bool match = gameTagsLower.any((tag) => userTroublesLower.contains(tag));
+      return match;
+    }).toList();
+
+  } else {
+    gamesToShow = gamesList;
+  }
+
+  return gamesToShow.where((game) {
+    final matchesSearchQuery = game["title"].toLowerCase().contains(searchQuery.toLowerCase());
+    final matchesTrouble = selectedTrouble.isEmpty || (game["tags"] as List<dynamic>).map((tag) => tag.toString()).contains(selectedTrouble);
+    final matchesGameType = selectedGameType.isEmpty || (game["types"] as List).contains(selectedGameType);
+    return matchesSearchQuery && matchesTrouble && matchesGameType;
+  }).toList();
+}
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {

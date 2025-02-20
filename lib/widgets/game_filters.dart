@@ -14,6 +14,27 @@ class GameFilters extends StatelessWidget {
     required this.onGameTypeChanged,
   }) : super(key: key);
 
+  static const List<String> troubleOptions = [
+    "",
+    "Dyslexie",
+    "Dyspraxie",
+    "Dysorthographie",
+    "Dysgraphie",
+    "Dyscalculie",
+    "Dysphasie",
+    "Dyséxécutif"
+  ];
+
+  static const List<String> gameTypeOptions = [
+    "",
+    "Mémoire",
+    "Stratégie",
+    "Réflexion",
+    "Observation",
+    "Rapidité",
+    "Social"
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -23,28 +44,14 @@ class GameFilters extends StatelessWidget {
           label: selectedTrouble.isEmpty ? "Troubles" : selectedTrouble,
           selectedValue: selectedTrouble,
           onChanged: onTroubleChanged,
-          items: [
-            "",
-            "Dyslexie",
-            "Dyspraxie",
-            "Dysorthographie",
-            "Dysgraphie",
-            "Dyscalculie",
-            "Dysphasie",
-            "Dyséxécutif"
-          ],
+          items: troubleOptions,
         ),
         const SizedBox(width: 16.0),
         _buildFilterButton(
           label: selectedGameType.isEmpty ? "Type de jeux" : selectedGameType,
           selectedValue: selectedGameType,
           onChanged: onGameTypeChanged,
-          items: [
-            "",
-            "Type 1",
-            "Type 2",
-            "Type 3"
-          ],
+          items: gameTypeOptions,
         ),
       ],
     );
@@ -66,9 +73,7 @@ class GameFilters extends StatelessWidget {
             width: 200,
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
             decoration: BoxDecoration(
-              color: index.isEven
-                  ? Colors.grey.shade200 
-                  : Colors.white,
+              color: index.isEven ? Colors.grey.shade200 : Colors.white,
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: Row(

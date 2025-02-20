@@ -17,11 +17,12 @@ class TroublesForm extends StatefulWidget {
 class _TroublesFormState extends State<TroublesForm> {
   // Variables pour les troubles
   bool dyslexie = false;
+  bool dyspraxie = false;
   bool dyscalculie = false;
   bool dysgraphie = false;
   bool dysphasie = false;
   bool dysorthographie = false;
-  bool troubleAttention = false;
+  bool dysexecutif = false;
 
   // Contrôleurs pour le nom et le prénom
   final TextEditingController nomController = TextEditingController();
@@ -36,11 +37,12 @@ class _TroublesFormState extends State<TroublesForm> {
         'prenom': prenomController.text,
         'troubles': {
           'dyslexie': dyslexie,
+          'dyspraxie': dyspraxie,
           'dyscalculie': dyscalculie,
           'dysgraphie': dysgraphie,
           'dysphasie': dysphasie,
           'dysorthographie': dysorthographie,
-          'troubleAttention': troubleAttention,
+          'dysexecutif': dysexecutif,
         },
       });
 
@@ -99,6 +101,11 @@ class _TroublesFormState extends State<TroublesForm> {
                       dyslexie = value ?? false;
                     });
                   }),
+                  _buildCheckbox("Dyspraxie", dyspraxie, (value) {
+                    setState(() {
+                      dyspraxie = value ?? false;
+                    });
+                  }),
                   _buildCheckbox("Dyscalculie", dyscalculie, (value) {
                     setState(() {
                       dyscalculie = value ?? false;
@@ -119,9 +126,9 @@ class _TroublesFormState extends State<TroublesForm> {
                       dysorthographie = value ?? false;
                     });
                   }),
-                  _buildCheckbox("Trouble de l'attention", troubleAttention, (value) {
+                  _buildCheckbox("Dysexecutif", dysexecutif, (value) {
                       setState(() {
-                        troubleAttention = value ?? false;
+                        dysexecutif = value ?? false;
                       });
                     }),
                 ],

@@ -31,9 +31,9 @@ class _FavoritePageBodyState extends State<FavoritePageBody> {
       final matchesSearchQuery = game["title"]
           .toLowerCase()
           .contains(searchQuery.toLowerCase());
-      final matchesTrouble = selectedTrouble.isEmpty ||
-          game["tags"].contains(selectedTrouble);
-      return matchesSearchQuery && matchesTrouble;
+      final matchesTrouble = selectedTrouble.isEmpty || game["tags"].contains(selectedTrouble);
+      final matchesGameType = selectedGameType.isEmpty || (game["types"] as List).contains(selectedGameType);
+      return matchesSearchQuery && matchesTrouble && matchesGameType;
     }).toList();
   }
 
@@ -72,7 +72,7 @@ class _FavoritePageBodyState extends State<FavoritePageBody> {
                 if (favoriteController.favoriteGames.isEmpty) {
                   return const Center(
                     child: Text(
-                      "Vous n'avez aucun jeu favoris",
+                      "Vous n'avez aucun jeu favori",
                       style: TextStyle(fontSize: 18, color: Colors.black54),
                     ),
                   );

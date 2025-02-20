@@ -24,11 +24,12 @@ class Auth {
         'nom': '',
         'prenom': '',
         'dyslexie': false,
+        'dyspraxie': false,
         'dyscalculie': false,
         'dysgraphie': false,
         'dysphasie': false,
         'dysorthographie': false,
-        'troubleAttention': false,
+        'dysexecutif': false,
       });
 
       await _firestore.collection('settings').doc(userCredential.user?.uid).set({
@@ -47,11 +48,12 @@ class Auth {
         'nom': nom,
         'prenom': prenom,
         'dyslexie': troublesDys['dyslexie'] ?? false,
+        'dyspraxie': troublesDys['dyspraxie'] ?? false,
         'dyscalculie': troublesDys['dyscalculie'] ?? false,
         'dysgraphie': troublesDys['dysgraphie'] ?? false,
         'dysphasie': troublesDys['dysphasie'] ?? false,
         'dysorthographie': troublesDys['dysorthographie'] ?? false,
-        'troubleAttention': troublesDys['troubleAttention'] ?? false,
+        'dysexecutif': troublesDys['dysexecutif'] ?? false,
       });
     } catch (e) {
       rethrow;
