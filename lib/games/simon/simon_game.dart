@@ -7,6 +7,8 @@ import '../../widgets/game_end_overlay.dart';
 import '../../services/game_time_tracker.dart';
 import 'package:provider/provider.dart';
 import '../../services/playtime_manager.dart';
+import '../../data/games_data.dart';
+
 
 class SimonGamePage extends StatefulWidget {
   @override
@@ -56,12 +58,26 @@ class _SimonGamePageState extends State<SimonGamePage> {
   void dispose() {
     if (_playtimeManager != null) {
       int minutesPlayed = (_elapsedSeconds / 60).ceil();
+
+      List<String> gameTypes = _getGameTypes("Jeu du Simon");
+
       Future.delayed(Duration.zero, () {
-        _playtimeManager!.addPlaytime(minutesPlayed);
+        _playtimeManager!.addPlaytime(minutesPlayed, gameTypes);
       });
     }
     super.dispose();
   }
+
+
+  List<String> _getGameTypes(String gameTitle) {
+    final game = gamesList.firstWhere(
+      (g) => g["title"] == gameTitle,
+      orElse: () => {"types": []}, 
+    );
+
+    return List<String>.from(game["types"] ?? []);
+  }
+
 
   void _showReadyDialog() {
     showDialog(
@@ -265,7 +281,10 @@ class _SimonGamePageState extends State<SimonGamePage> {
               onRestart: _startGame,
               onQuit: () {
                 final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
-                gameTimeTracker.stopTimer(context);
+
+                List<String> gameTypes = _getGameTypes("Jeu du Simon");
+                gameTimeTracker.stopTimer(context, gameTypes);
+
                 Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
               },
               gameName: 'Simon',

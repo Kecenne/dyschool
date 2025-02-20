@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class PlaytimeManager with ChangeNotifier {
@@ -5,17 +7,43 @@ class PlaytimeManager with ChangeNotifier {
     "Lun": 0, "Mar": 0, "Mer": 0, "Jeu": 0, "Ven": 0, "Sam": 0, "Dim": 0,
   };
 
-void addPlaytime(int minutes) {
-  String today = _getCurrentDay();
+  void addPlaytime(int minutes, List<String> gameTypes) async {
+    String today = _getCurrentDay();
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
 
-  if (!_weeklyPlaytime.containsKey(today)) {
-    _weeklyPlaytime[today] = 0;
+    if (!_weeklyPlaytime.containsKey(today)) {
+      _weeklyPlaytime[today] = 0;
+    }
+
+    _weeklyPlaytime[today] = _weeklyPlaytime[today]! + minutes;
+
+    // Mise à jour du temps de jeu global
+    await FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'totalPlaytime': FieldValue.increment(minutes),
+    });
+
+    // Mise à jour du temps de jeu par type de jeu
+    DocumentReference playtimeRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('playtime')
+        .doc('types');
+
+    DocumentSnapshot snapshot = await playtimeRef.get();
+    Map<String, dynamic> playtimeData = snapshot.exists ? snapshot.data() as Map<String, dynamic> : {};
+
+    for (String type in gameTypes) {
+      if (!playtimeData.containsKey(type)) {
+        playtimeData[type] = 0;
+      }
+      playtimeData[type] += minutes;
+    }
+
+    await playtimeRef.set(playtimeData);
+
+    notifyListeners();
   }
-
-  _weeklyPlaytime[today] = _weeklyPlaytime[today]! + minutes;
-
-  notifyListeners();
-}
 
   Map<String, int> getWeeklyPlaytime() => _weeklyPlaytime;
 

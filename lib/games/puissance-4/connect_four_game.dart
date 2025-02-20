@@ -5,6 +5,8 @@ import '../../widgets/game_end_overlay.dart';
 import '../../services/game_time_tracker.dart';
 import 'package:provider/provider.dart';
 import '../../services/playtime_manager.dart';
+import '../../data/games_data.dart';
+
 
 class ConnectFourGamePage extends StatefulWidget {
   @override
@@ -211,12 +213,25 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
   void dispose() {
     if (_playtimeManager != null) {
       int minutesPlayed = (_elapsedSeconds / 60).ceil();
+
+      List<String> gameTypes = _getGameTypes("Puissance 4");
+
       Future.delayed(Duration.zero, () {
-        _playtimeManager!.addPlaytime(minutesPlayed);
+        _playtimeManager!.addPlaytime(minutesPlayed, gameTypes);
       });
     }
     super.dispose();
   }
+
+  List<String> _getGameTypes(String gameTitle) {
+    final game = gamesList.firstWhere(
+      (g) => g["title"] == gameTitle,
+      orElse: () => {"types": []}, 
+    );
+
+    return List<String>.from(game["types"] ?? []);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -295,7 +310,10 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
               onRestart: resetGame,
               onQuit: () {
                 final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
-                gameTimeTracker.stopTimer(context);
+
+                List<String> gameTypes = _getGameTypes("Puissance 4");
+                gameTimeTracker.stopTimer(context, gameTypes);
+
                 Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
               },
               gameName: 'Connect Four',

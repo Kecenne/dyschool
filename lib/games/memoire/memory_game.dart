@@ -4,6 +4,7 @@ import '../../widgets/game_end_overlay.dart';
 import '../../services/game_time_tracker.dart';
 import 'package:provider/provider.dart';
 import '../../services/playtime_manager.dart';
+import '../../data/games_data.dart';
 
 class MemoryGamePage extends StatefulWidget {
   @override
@@ -126,14 +127,28 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
     timer?.cancel(); 
     if (_playtimeManager != null) {
       int minutesPlayed = (_elapsedSeconds / 60).ceil();
+
+      List<String> gameTypes = _getGameTypes("Jeu de mémoire");
+
       Future.delayed(Duration.zero, () {
         if (mounted) {
-          _playtimeManager!.addPlaytime(minutesPlayed);
+          _playtimeManager!.addPlaytime(minutesPlayed, gameTypes);
         }
       });
     }
     super.dispose();
   }
+
+  List<String> _getGameTypes(String gameTitle) {
+    final game = gamesList.firstWhere(
+      (g) => g["title"] == gameTitle,
+      orElse: () => {"types": []},
+    );
+
+    return List<String>.from(game["types"] ?? []);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -227,7 +242,10 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
               onRestart: resetGame,
               onQuit: () {
                 final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
-                gameTimeTracker.stopTimer(context);
+
+                List<String> gameTypes = _getGameTypes("Jeu de mémoire");
+                gameTimeTracker.stopTimer(context, gameTypes);
+
                 Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
               },
               gameName: 'Memory Game',

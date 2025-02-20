@@ -55,13 +55,8 @@ Future<void> _loadUserTroubles() async {
       });
 
       // ✅ Vérification des troubles récupérés
-      print("Troubles récupérés depuis Firebase : $userTroubles");
-    } else {
-      print("⚠ Aucun champ 'troubles' trouvé pour l'utilisateur.");
+    } 
     }
-  } else {
-    print("⚠ Document utilisateur non trouvé dans Firestore.");
-  }
 }
 
 

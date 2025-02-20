@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../widgets/game_end_overlay.dart';
 import '../../services/game_time_tracker.dart';
 import '../../services/playtime_manager.dart';
+import '../../data/games_data.dart';
 
 class GuessWhoGamePage extends StatefulWidget {
   @override
@@ -66,11 +67,26 @@ class _GuessWhoGamePageState extends State<GuessWhoGamePage> {
   @override
   void dispose() {
     int minutesPlayed = (_elapsedSeconds / 60).ceil();
+
+    List<String> gameTypes = _getGameTypes("Qui-est-ce ?");
+
     Future.delayed(Duration.zero, () {
-      _playtimeManager.addPlaytime(minutesPlayed);
+      _playtimeManager.addPlaytime(minutesPlayed, gameTypes);
     });
+
     super.dispose();
   }
+
+
+  List<String> _getGameTypes(String gameTitle) {
+    final game = gamesList.firstWhere(
+      (g) => g["title"] == gameTitle,
+      orElse: () => {"types": []}, 
+    );
+
+    return List<String>.from(game["types"] ?? []);
+  }
+
 
   void _shuffleQuestions() {
     setState(() {
@@ -312,7 +328,11 @@ Widget build(BuildContext context) {
             message: endMessage,
             onRestart: _shuffleQuestions,
             onQuit: () {
-              gameTimeTracker.stopTimer(context);
+              final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
+
+              List<String> gameTypes = _getGameTypes("Qui-est-ce ?");
+              gameTimeTracker.stopTimer(context, gameTypes);
+
               Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
             },
             gameName: 'Guess Who',

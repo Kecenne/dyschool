@@ -5,6 +5,7 @@ import '../../widgets/game_end_overlay.dart';
 import '../../services/game_time_tracker.dart';
 import 'package:provider/provider.dart';
 import '../../services/playtime_manager.dart';
+import '../../data/games_data.dart';
 
 class SevenFamilyGamePage extends StatefulWidget {
   @override
@@ -366,11 +367,25 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
   void dispose() {
     if (_playtimeManager != null) {
       int minutesPlayed = (_elapsedSeconds / 60).ceil();
+
+      // ✅ Récupérer les types du jeu dynamiquement depuis `games_data.dart`
+      List<String> gameTypes = _getGameTypes("Jeu des 7 familles");
+
       Future.delayed(Duration.zero, () {
-        _playtimeManager!.addPlaytime(minutesPlayed);
+        _playtimeManager!.addPlaytime(minutesPlayed, gameTypes);
       });
     }
+    
     super.dispose();
+  }
+
+  List<String> _getGameTypes(String gameTitle) {
+    final game = gamesList.firstWhere(
+      (g) => g["title"] == gameTitle,
+      orElse: () => {"types": []},
+    );
+
+    return List<String>.from(game["types"] ?? []);
   }
 
   @override
@@ -480,7 +495,7 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  if (statusMessage != 'Votre tour de jouer !') // Affiche le bouton "Continuer" sauf si c'est le tour du joueur
+                  if (statusMessage != 'Votre tour de jouer !') 
                     ElevatedButton(
                       onPressed: () {
                         if (currentPlayer != 'User') {
@@ -520,7 +535,10 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
                 onRestart: resetGame,
                 onQuit: () {
                   final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
-                  gameTimeTracker.stopTimer(context);
+                  
+                  List<String> gameTypes = _getGameTypes("Jeu des 7 familles");
+                  gameTimeTracker.stopTimer(context, gameTypes);
+
                   Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
                 },
                 gameName: 'Seven Families',

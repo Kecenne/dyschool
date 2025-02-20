@@ -20,13 +20,13 @@ class GameTimeTracker with ChangeNotifier {
     });
   }
 
-  void stopTimer(BuildContext context) {
+  void stopTimer(BuildContext context, List<String> gameTypes) {
     if (_startTime != null) {
       _timer?.cancel();
       int minutesPlayed = (_elapsedSeconds / 60).ceil();
 
       final playtimeManager = Provider.of<PlaytimeManager>(context, listen: false);
-      playtimeManager.addPlaytime(minutesPlayed);
+      playtimeManager.addPlaytime(minutesPlayed, gameTypes);
       
       _startTime = null;
       _elapsedSeconds = 0;
