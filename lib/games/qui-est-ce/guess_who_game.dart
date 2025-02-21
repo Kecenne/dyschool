@@ -152,25 +152,6 @@ void handleAnswer(String selectedImage) {
     }
   }
 
-  void _showMessage(String message, [VoidCallback? onComplete]) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Info"),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              if (onComplete != null) onComplete();
-            },
-            child: const Text("OK"),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _nextQuestion() {
     
     if (currentQuestionIndex < questions.length - 1) {
