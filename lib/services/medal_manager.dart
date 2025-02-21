@@ -117,12 +117,21 @@ class MedalManager with ChangeNotifier {
 
   /// Récupère les médailles totales
   Future<Map<String, int>> getTotalMedals() async {
-    return {
-      'gold': _goldMedals,
-      'silver': _silverMedals,
-      'bronze': _bronzeMedals,
-    };
+    String? userId = currentUserId;
+    if (userId == null) return {'gold': 0, 'silver': 0, 'bronze': 0};
+
+    DocumentSnapshot<Map<String, dynamic>> doc = await _getMedalCountsRef(userId).get();
+    if (doc.exists) {
+      return {
+        'gold': doc.data()?['gold'] ?? 0,
+        'silver': doc.data()?['silver'] ?? 0,
+        'bronze': doc.data()?['bronze'] ?? 0,
+      };
+    }
+
+    return {'gold': 0, 'silver': 0, 'bronze': 0};
   }
+
 
   /// Récupère les médailles pour un mois donné
   Future<Map<String, int>> getMedalsByMonth(DateTime month) async {

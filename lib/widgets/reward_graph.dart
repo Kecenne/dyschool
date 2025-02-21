@@ -18,7 +18,6 @@ class _RewardGraphState extends State<RewardGraph> {
   DateTime selectedMonth = DateTime.now();
   bool showAll = false;
   int touchedGroupIndex = -1;
-  int rotationTurns = 1;
 
   @override
   void initState() {
@@ -87,15 +86,7 @@ class _RewardGraphState extends State<RewardGraph> {
         int maxMedals = 90;
 
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Récompenses",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-
-            // Sélecteur de mois / Tous
             Container(
               decoration: BoxDecoration(
                 color: const Color(0xFF6B9DA4),
@@ -105,12 +96,7 @@ class _RewardGraphState extends State<RewardGraph> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_left, size: 28, color: Colors.white),
-                    onPressed: (showAll || firstMedalDate == null || selectedMonth.isAfter(firstMedalDate!))
-                        ? () => _changeMonth(-1)
-                        : null,
-                  ),
+                  _buildNavigationButton(Icons.arrow_back, () => _changeMonth(-1)),
                   Column(
                     children: [
                       Text(
@@ -125,83 +111,91 @@ class _RewardGraphState extends State<RewardGraph> {
                       ),
                     ],
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_right, size: 28, color: Colors.white),
-                    onPressed: showAll ? null : () => _changeMonth(1),
-                  ),
+                  _buildNavigationButton(Icons.arrow_forward, showAll ? null : () => _changeMonth(1)),
                 ],
               ),
             ),
             const SizedBox(height: 24),
 
-            AspectRatio(
-              aspectRatio: 2.5,
-              child: BarChart(
-                BarChartData(
-                  alignment: BarChartAlignment.spaceBetween,
-                  maxY: 90,
-                  borderData: FlBorderData(
-                    show: true,
-                    border: const Border.symmetric(
-                      horizontal: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                  ),
-                  gridData: FlGridData(
-                    show: true,
-                    drawVerticalLine: false,
-                    getDrawingHorizontalLine: (value) => FlLine(
-                      color: Colors.grey,
-                      strokeWidth: 1,
-                    ),
-                  ),
-                  titlesData: FlTitlesData(
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 40,
-                        getTitlesWidget: (value, meta) {
-                          if (value % 30 == 0) {
-                            return Text(value.toInt().toString(), style: const TextStyle(fontSize: 12));
-                          }
-                          return Container();
-                        },
+            Container(
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 32),
+                  AspectRatio(
+                    aspectRatio: 2.5,
+                    child: BarChart(
+                      BarChartData(
+                        alignment: BarChartAlignment.spaceEvenly,
+                        maxY: 90,
+                        borderData: FlBorderData(
+                          show: true,
+                          border: const Border.symmetric(
+                            horizontal: BorderSide(color: Color(0xFFE0E0E0), width: 1),
+                          ),
+                        ),
+                        gridData: FlGridData(
+                          show: true,
+                          drawVerticalLine: false,
+                          getDrawingHorizontalLine: (value) {
+                            if (value % 30 == 0) {
+                              return FlLine(
+                                color: Color(0xFFE0E0E0),
+                                strokeWidth: 1,
+                              );
+                            }
+                            return FlLine(color: Colors.transparent);
+                          },
+                        ),
+                        titlesData: FlTitlesData(
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 40,
+                              getTitlesWidget: (value, meta) {
+                                if (value % 30 == 0) {
+                                  return Text(value.toInt().toString(), style: const TextStyle(fontSize: 12));
+                                }
+                                return Container();
+                              },
+                            ),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 120,
+                              getTitlesWidget: (value, meta) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const SizedBox(height: 12),
+                                    Image.asset(
+                                      _getMedalImage(value.toInt()),
+                                      width: 60,
+                                      height: 60,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      _getMedalCount(value.toInt(), medals),
+                                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                          rightTitles: const AxisTitles(),
+                          topTitles: const AxisTitles(),
+                        ),
+                        barGroups: _buildBarGroups(medals, maxMedals),
                       ),
                     ),
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 60,
-                        getTitlesWidget: (value, meta) {
-                          return Image.asset(
-                            _getMedalImage(value.toInt()),
-                            width: 50,
-                            height: 50,
-                          );
-                        },
-                      ),
-                    ),
-                    rightTitles: const AxisTitles(),
-                    topTitles: const AxisTitles(),
                   ),
-                  barGroups: _buildBarGroups(medals, maxMedals),
-                  barTouchData: BarTouchData(
-                    enabled: true,
-                    handleBuiltInTouches: false,
-                    touchCallback: (event, response) {
-                      if (event.isInterestedForInteractions &&
-                          response != null &&
-                          response.spot != null) {
-                        setState(() {
-                          touchedGroupIndex = response.spot!.touchedBarGroupIndex;
-                        });
-                      } else {
-                        setState(() {
-                          touchedGroupIndex = -1;
-                        });
-                      }
-                    },
-                  ),
-                ),
+                ],
               ),
             ),
           ],
@@ -210,39 +204,48 @@ class _RewardGraphState extends State<RewardGraph> {
     );
   }
 
+  Widget _buildNavigationButton(IconData icon, VoidCallback? onPressed) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: Color(0xFF6B9DA4), size: 24),
+      ),
+    );
+  }
+
+  String _getMedalCount(int index, Map<String, int> medals) {
+    return [medals['bronze']!, medals['silver']!, medals['gold']!][index].toString();
+  }
+
   List<BarChartGroupData> _buildBarGroups(Map<String, int> medals, int maxMedals) {
     return [
-      _buildBarGroup(0, medals['bronze']!, Colors.brown, maxMedals),
-      _buildBarGroup(1, medals['silver']!, Colors.grey, maxMedals),
-      _buildBarGroup(2, medals['gold']!, Colors.amber, maxMedals),
+      _buildBarGroup(0, medals['bronze']!, maxMedals),
+      _buildBarGroup(1, medals['silver']!, maxMedals),
+      _buildBarGroup(2, medals['gold']!, maxMedals),
     ];
   }
 
-  BarChartGroupData _buildBarGroup(int x, int value, Color color, int maxMedals) {
-    double barHeight = (value / maxMedals) * maxMedals.toDouble();
+  BarChartGroupData _buildBarGroup(int x, int value, int maxMedals) {
     return BarChartGroupData(
       x: x,
       barRods: [
         BarChartRodData(
-          toY: barHeight,
-          color: color,
-          width: 30,
-          borderRadius: BorderRadius.circular(8),
+          toY: value.toDouble(),
+          color: const Color(0xFF6B9DA4),
+          width: 42,
+          borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
         ),
       ],
     );
   }
 
   String _getMedalImage(int index) {
-    switch (index) {
-      case 0:
-        return 'assets/images/rewards/Bronze.png';
-      case 1:
-        return 'assets/images/rewards/Silver.png';
-      case 2:
-        return 'assets/images/rewards/Gold.png';
-      default:
-        return 'assets/images/rewards/Bronze.png';
-    }
+    return ['assets/images/rewards/Bronze.png', 'assets/images/rewards/Silver.png', 'assets/images/rewards/Gold.png'][index];
   }
 }
