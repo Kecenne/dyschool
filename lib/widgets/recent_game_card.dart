@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../widgets/tag_list.dart'; // Assurez-vous que le chemin est correct
 
 class RecentGameCard extends StatelessWidget {
   final String title;
@@ -32,30 +33,35 @@ class RecentGameCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           child: Stack(
             children: [
-              Image.asset(imagePath, width: double.infinity, height: 450, fit: BoxFit.cover),
+              Image.asset(
+                imagePath,
+                width: double.infinity,
+                height: 450,
+                fit: BoxFit.cover,
+              ),
               Container(
                 width: double.infinity,
                 height: 450,
-                color: Colors.black.withOpacity(0.4), 
+                color: Colors.black.withOpacity(0.5),
               ),
-
               Positioned(
                 top: 12,
                 left: 12,
                 right: 12,
                 child: Text(
                   title,
-                  style: const TextStyle(color: Colors.white, fontSize: 64, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 64,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-
               Positioned(
                 bottom: 12,
                 left: 12,
-                child: Wrap(
-                  spacing: 8.0,
-                  children: tags.map((tag) => Chip(label: Text(tag, style: const TextStyle(color: Colors.white)), backgroundColor: Colors.black54)).toList(),
-                ),
+                right: 12,
+                child: TagList(tags: tags),
               ),
             ],
           ),

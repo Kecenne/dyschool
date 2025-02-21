@@ -53,8 +53,6 @@ Future<void> _loadUserTroubles() async {
       setState(() {
         userTroubles = troubles;
       });
-
-      // ✅ Vérification des troubles récupérés
     } 
     }
 }

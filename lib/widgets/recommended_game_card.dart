@@ -34,7 +34,7 @@ class RecommendedGameCard extends StatelessWidget {
               Container(
                 width: cardWidth,
                 height: cardWidth,
-                color: Colors.black.withOpacity(0.4),
+                color: Colors.black.withOpacity(0.5),
               ),
 
               Positioned(

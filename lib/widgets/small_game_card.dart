@@ -2,20 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SmallGameCard extends StatelessWidget {
-  final String title;
   final String imagePath;
   final String route;
 
   const SmallGameCard({
     Key? key,
-    required this.title,
     required this.imagePath,
     required this.route,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double cardWidth = MediaQuery.of(context).size.width * 0.4;
+    double cardWidth = MediaQuery.of(context).size.width * 0.35;
 
     return GestureDetector(
       onTap: () {
@@ -26,29 +24,14 @@ class SmallGameCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         elevation: 3,
+        color: const Color(0xFFFBDFD2), // Fond de la carte modifié
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
-          child: Stack(
-            children: [
-              Image.asset(imagePath, width: cardWidth, height: cardWidth, fit: BoxFit.cover),
-              Container(
-                width: cardWidth,
-                height: cardWidth,
-                color: Colors.black.withOpacity(0.4),
-              ),
-
-              Positioned(
-                bottom: 8,
-                left: 8,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
-                  child: Text(
-                    title,
-                    style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ],
+          child: Image.asset(
+            imagePath,
+            width: cardWidth,
+            height: cardWidth,
+            fit: BoxFit.cover,
           ),
         ),
       ),

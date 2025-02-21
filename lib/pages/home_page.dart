@@ -61,7 +61,6 @@ class HomePage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final game = recentGames[index];
                   return SmallGameCard(
-                    title: game['title'],
                     imagePath: game['imagePath'],
                     route: game['route'],
                   );
