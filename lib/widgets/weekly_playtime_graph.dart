@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../services/playtime_manager.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class WeeklyPlaytimeGraph extends StatelessWidget {
-  final Map<String, int> weeklyData;
-
-  const WeeklyPlaytimeGraph({Key? key, required this.weeklyData}) : super(key: key);
+  const WeeklyPlaytimeGraph({Key? key}) : super(key: key);
 
   static const int maxPlaytime = 30;
-  static const double graphHeight = 200.0;
 
   @override
   Widget build(BuildContext context) {
@@ -17,103 +14,152 @@ class WeeklyPlaytimeGraph extends StatelessWidget {
     final weeklyData = playtimeManager.getWeeklyPlaytime();
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Temps de Jeu", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "TEMPS DE JEU",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        ),
         const SizedBox(height: 16),
 
-        // Graphique
         Container(
+          padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: Colors.grey[300],
+            color: Colors.white,
             borderRadius: BorderRadius.circular(16),
           ),
-          padding: const EdgeInsets.all(16),
-          width: double.infinity,
-          height: graphHeight + 50,
-          child: Stack(
+          child: Column(
             children: [
-              Positioned.fill(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildGraphLine("30+ min"),
-                    _buildGraphLine("20 min"),
-                    _buildGraphLine("10 min"),
-                    _buildGraphLine("0 min"),
-                  ],
+              const SizedBox(height: 32),
+              AspectRatio(
+                aspectRatio: 2.5,
+                child: BarChart(
+                  BarChartData(
+                    maxY: maxPlaytime.toDouble(),
+                    borderData: FlBorderData(
+                      show: true,
+                      border: const Border.symmetric(
+                        horizontal: BorderSide(color: Color(0xFFE0E0E0), width: 1),
+                      ),
+                    ),
+                    gridData: FlGridData(
+                      show: true,
+                      drawVerticalLine: false,
+                      getDrawingHorizontalLine: (value) {
+                        if (value % 10 == 0 || value == maxPlaytime) {
+                          return FlLine(
+                            color: Color(0xFFE0E0E0),
+                            strokeWidth: 1,
+                          );
+                        }
+                        return FlLine(color: Colors.transparent);
+                      },
+                    ),
+                    titlesData: FlTitlesData(
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 40,
+                          getTitlesWidget: (value, meta) {
+                            if (value == 0 || value == 10 || value == 20 || value == 30) {
+                              return Text(
+                                value == 30 ? "30+ min" : "${value.toInt()} min",
+                                style: const TextStyle(fontSize: 12),
+                              );
+                            }
+                            return Container();
+                          },
+                        ),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 50,
+                          getTitlesWidget: (value, meta) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 15),
+                              child: Text(
+                                _getDayLabel(value.toInt()),
+                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      rightTitles: const AxisTitles(),
+                      topTitles: const AxisTitles(),
+                    ),
+                    barGroups: _buildBarGroups(weeklyData),
+                  ),
                 ),
               ),
 
-              // Barres du graphique
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: weeklyData.entries.map((entry) {
-                    double height = (entry.value > maxPlaytime ? maxPlaytime : entry.value) / maxPlaytime * graphHeight;
-                    return _buildPlaytimeColumn(entry.key, height, entry.value);
-                  }).toList(),
-                ),
+              const SizedBox(height: 24), // Espacement avant les statistiques
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "AUJOURD'HUI",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "${playtimeManager.getTodayPlaytime()} min",
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              
+              const SizedBox(height: 16), // Espacement entre les stats
+              
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "7 DERNIERS JOURS",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "${playtimeManager.getTotalWeeklyPlaytime()} min",
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             ],
           ),
         ),
         const SizedBox(height: 16),
-
-        // Résumé du temps de jeu
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text("AUJOURD'HUI", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text("${playtimeManager.getTodayPlaytime()} min"),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text("7 DERNIERS JOURS", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text("${playtimeManager.getTotalWeeklyPlaytime()} min"),
-          ],
-        ),
       ],
     );
   }
 
-  Widget _buildGraphLine(String label) {
-    return Row(
-      children: [
-        const SizedBox(width: 4),
-        Text(label, style: const TextStyle(color: Colors.black54, fontSize: 12)),
-        const SizedBox(width: 8),
-        const Expanded(child: Divider(color: Colors.black26)),
-      ],
-    );
-  }
-
-  Widget _buildPlaytimeColumn(String day, double barHeight, int playtime) {
-    return SizedBox(
-      width: 30, 
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
-            width: 30,
-            height: barHeight.clamp(0, graphHeight - 10), 
-            decoration: BoxDecoration(
-              color: Colors.grey[600],
-              borderRadius: BorderRadius.circular(8),
+  /// Génère les barres du graphe
+  List<BarChartGroupData> _buildBarGroups(Map<String, int> weeklyData) {
+    List<String> days = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+    return List.generate(days.length, (index) {
+      int playtime = weeklyData[days[index]] ?? 0;
+      return BarChartGroupData(
+        x: index,
+        barRods: [
+          BarChartRodData(
+            toY: playtime > maxPlaytime ? maxPlaytime.toDouble() : playtime.toDouble(),
+            color: const Color(0xFF6B9DA4),
+            width: 42,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
             ),
           ),
-          const SizedBox(height: 8),
-          Text(day.substring(0, 3), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
         ],
-      ),
-    );
+      );
+    });
   }
 
-  String _getCurrentDay() {
-    return DateFormat('E', 'fr_FR').format(DateTime.now()).substring(0, 3);
+  /// Récupère le label du jour en fonction de l’index
+  String _getDayLabel(int index) {
+    List<String> days = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+    return days[index % days.length];
   }
 }

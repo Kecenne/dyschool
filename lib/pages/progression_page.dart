@@ -17,11 +17,12 @@ class ProgressionPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const PageHeader(title: "Progression"),
-            const SizedBox(height: 16),
+            const SizedBox(height: 32),
 
             Consumer<PlaytimeManager>(
               builder: (context, playtimeManager, child) {
-                return WeeklyPlaytimeGraph(weeklyData: playtimeManager.getWeeklyPlaytime());
+                return const WeeklyPlaytimeGraph();
+
               },
             ),
             const SizedBox(height: 16),

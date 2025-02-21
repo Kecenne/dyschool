@@ -115,23 +115,19 @@ class MedalManager with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Récupère les médailles totales
+  /// Récupère les médailles totales en comptant les entrées dans `history`
   Future<Map<String, int>> getTotalMedals() async {
     String? userId = currentUserId;
     if (userId == null) return {'gold': 0, 'silver': 0, 'bronze': 0};
 
-    DocumentSnapshot<Map<String, dynamic>> doc = await _getMedalCountsRef(userId).get();
-    if (doc.exists) {
-      return {
-        'gold': doc.data()?['gold'] ?? 0,
-        'silver': doc.data()?['silver'] ?? 0,
-        'bronze': doc.data()?['bronze'] ?? 0,
-      };
-    }
+    QuerySnapshot<Map<String, dynamic>> snapshot = await _getMedalHistoryRef(userId).get();
 
-    return {'gold': 0, 'silver': 0, 'bronze': 0};
+    return {
+      'gold': snapshot.docs.where((doc) => doc['type'] == 'gold').length,
+      'silver': snapshot.docs.where((doc) => doc['type'] == 'silver').length,
+      'bronze': snapshot.docs.where((doc) => doc['type'] == 'bronze').length,
+    };
   }
-
 
   /// Récupère les médailles pour un mois donné
   Future<Map<String, int>> getMedalsByMonth(DateTime month) async {
