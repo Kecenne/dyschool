@@ -50,9 +50,14 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
 
     // Section : Objectifs
     Widget buildObjectives() {
-      return _buildBlueBlock(
-        title: "Objectifs",
-        content: game['objectives'],
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: game['objectives']
+            .map<Widget>((objective) => _buildBlueBlock(
+                  title: objective['title'],
+                  content: objective['content'],
+                ))
+            .toList(),
       );
     }
 
@@ -275,11 +280,11 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
   Widget _buildBlueBlock({required String title, required String content}) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 24.0),
       margin: const EdgeInsets.only(bottom: 16.0),
       decoration: BoxDecoration(
         color: AppColors.lightGrey,
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(20.0),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
