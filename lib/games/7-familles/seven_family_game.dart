@@ -543,6 +543,8 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> {
                 },
                 gameName: 'Seven Families',
                 result: gameTime,
+              playtime: (_elapsedSeconds / 60).ceil(),
+              strengths: ["Prise de décision", "Mémoire visuelle", "Concentration"],
               ),
             ],
         ],

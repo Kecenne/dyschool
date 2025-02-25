@@ -318,6 +318,8 @@ Widget build(BuildContext context) {
             },
             gameName: 'Guess Who',
             result: score,
+              playtime: (_elapsedSeconds / 60).ceil(),
+              strengths: ["Prise de décision", "Mémoire visuelle", "Concentration"],
           ),
         ],
       ],

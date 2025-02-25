@@ -317,7 +317,9 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
                 Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
               },
               gameName: 'Connect Four',
-              result: playerMoveCount, 
+              result: playerMoveCount,
+              playtime: (_elapsedSeconds / 60).ceil(),
+              strengths: ["Prise de décision", "Mémoire visuelle", "Concentration"],
             ),
           ],
         ],

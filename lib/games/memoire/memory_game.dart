@@ -250,6 +250,8 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
               },
               gameName: 'Memory Game',
               result: 60 - timeLeft,
+              playtime: (_elapsedSeconds / 60).ceil(),
+              strengths: ["Prise de décision", "Mémoire visuelle", "Concentration"],
             ),
           ],
         ],

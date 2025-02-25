@@ -65,10 +65,6 @@ class GameRewardWidget extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          "Récompense : $reward",
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
         const SizedBox(height: 10),
         if (reward != 'No Reward')
           Image.asset('assets/images/rewards/$reward.png', width: 100, height: 100),

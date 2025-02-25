@@ -288,7 +288,9 @@ class _SimonGamePageState extends State<SimonGamePage> {
                 Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
               },
               gameName: 'Simon',
-              result: currentLevel + 1, 
+              result: currentLevel + 1,
+              playtime: (_elapsedSeconds / 60).ceil(),
+              strengths: ["Prise de décision", "Mémoire visuelle", "Concentration"],
             ),
           ],
         ],
