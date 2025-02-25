@@ -237,9 +237,9 @@ class _RewardGraphState extends State<RewardGraph> {
       barRods: [
         BarChartRodData(
           toY: value.toDouble(),
-          color: const Color(0xFF6B9DA4),
-          width: 42,
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+          color: const Color(0xFF3A7D85),
+          width: 50,
+          borderRadius: const BorderRadius.only(topLeft: Radius.circular(100), topRight: Radius.circular(100)),
         ),
       ],
     );

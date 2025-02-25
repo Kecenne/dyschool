@@ -96,7 +96,7 @@ class WeeklyPlaytimeGraph extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 24), // Espacement avant les statistiques
+              const SizedBox(height: 24), 
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,7 +112,7 @@ class WeeklyPlaytimeGraph extends StatelessWidget {
                 ],
               ),
               
-              const SizedBox(height: 16), // Espacement entre les stats
+              const SizedBox(height: 16), 
               
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -145,11 +145,11 @@ class WeeklyPlaytimeGraph extends StatelessWidget {
         barRods: [
           BarChartRodData(
             toY: playtime > maxPlaytime ? maxPlaytime.toDouble() : playtime.toDouble(),
-            color: const Color(0xFF6B9DA4),
-            width: 42,
+            color: const Color(0xFF3A7D85),
+            width: 50,
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
+              topLeft: Radius.circular(100),
+              topRight: Radius.circular(100),
             ),
           ),
         ],

@@ -19,7 +19,7 @@ const List<Map<String, dynamic>> gamesList = [
         "content": "La partie se termine lorsque toutes les paires ont été retrouvées. Le joueur avec le plus de paires gagne."
       }
     ],
-    "tags": ["Dyslexie", "Dyspraxie"],
+    "tags": ["Dyslexie", "Dyspraxie", "Dyséxécutif"],
     "types": ["Mémoire", "Réflexion"],
     "objectives": [
       {
@@ -57,7 +57,7 @@ const List<Map<String, dynamic>> gamesList = [
         "content": "La partie se termine lorsque toutes les familles sont complètes. Le joueur ayant complété le plus de familles gagne."
       }
     ],
-    "tags": ["Dyslexie", "Dyspraxie"],
+    "tags": ["Dyslexie", "Dysorthographie", "Dysphasie"],
     "types": ["Stratégie", "Social"],
     "objectives": [
       {
@@ -95,7 +95,7 @@ const List<Map<String, dynamic>> gamesList = [
         "content": "La partie s’arrête lorsqu’un joueur a aligné 4 pions ou que la grille est pleine."
       }
     ],
-    "tags": ["Dyslexie", "Dyspraxie"],
+    "tags": ["Dyscalculie", "Dyspraxie", "Dyséxécutif"],
     "types": ["Stratégie", "Réflexion"],
     "objectives": [
       {
@@ -128,7 +128,7 @@ const List<Map<String, dynamic>> gamesList = [
         "content": "Le premier à identifier correctement le personnage adverse remporte la manche."
       }
     ],
-    "tags": ["Dyslexie", "Dysphasie"],
+    "tags": ["Dyslexie", "Dysphasie", "Dyséxécutif"],
     "types": ["Observation", "Réflexion"],
     "objectives": [
       {
@@ -162,7 +162,7 @@ const List<Map<String, dynamic>> gamesList = [
         "content": "Chaque manche ajoute une nouvelle couleur à la séquence."
       }
     ],
-    "tags": ["Dyslexie", "Dyspraxie", "Dysphasie"],
+    "tags": ["Dysphasie", "Dyspraxie", "Dyséxécutif"],
     "types": ["Mémoire", "Rapidité"],
     "objectives": [
       {

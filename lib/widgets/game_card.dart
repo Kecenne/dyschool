@@ -54,8 +54,8 @@ class GameCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 200,
-                height: 200,
+                width: 250,
+                height: 250,
                 decoration: BoxDecoration(
                   color: const Color(0xFFFBDFD2),
                   borderRadius: BorderRadius.circular(16.0),
@@ -65,8 +65,8 @@ class GameCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12.0),
                     child: Image.asset(
                       imagePath,
-                      width: 180,
-                      height: 180,
+                      width: 250,
+                      height: 250,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -97,7 +97,7 @@ class GameCard extends StatelessWidget {
                             padding: const EdgeInsets.all(2.0), 
                             decoration: BoxDecoration(
                               color: const Color(0xFF9DBEC2), 
-                              shape: BoxShape.circle, 
+                              shape: BoxShape.circle,
                             ),
                             child: IconButton(
                               key: iconKey,
@@ -132,14 +132,17 @@ class GameCard extends StatelessWidget {
 
                     const SizedBox(height: 8.0),
 
-                    Text(
-                      description,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black54,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 24.0),
+                      child: Text(
+                        description,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black54,
+                        ),
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
                     ),
 
                     const SizedBox(height: 40.0),
