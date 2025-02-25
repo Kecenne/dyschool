@@ -7,7 +7,7 @@ import '../games/7-familles/seven_family_game.dart';
 import '../games/puissance-4/connect_four_game.dart';
 import '../games/qui-est-ce/guess_who_game.dart';
 import '../games/simon/simon_game.dart';
-
+import '../widgets/tag_list.dart';
 
 
 class TemplateJeuPage extends StatefulWidget {
@@ -39,9 +39,12 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
 
     // Section : Troubles
     Widget buildTroubles() {
-      return _buildBlueBlock(
-        title: "Troubles associés",
-        content: game['tags'].join(", "),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 16.0),
+          TagList(tags: game['tags']),
+        ],
       );
     }
 
@@ -77,19 +80,37 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image en haut de la page
             Stack(
               children: [
                 Container(
                   height: MediaQuery.of(context).size.height * 0.4,
                   width: double.infinity,
+                  color: Colors.white, 
+                ),
+
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  width: double.infinity,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(game['imagePath']),
+                    color: const Color(0xFFFBDFD2),
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(40.0),
+                      bottomRight: Radius.circular(40.0),
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(40.0),
+                      bottomRight: Radius.circular(40.0),
+                    ),
+                    child: Image.asset(
+                      game['imagePath'],
                       fit: BoxFit.contain,
+                      width: double.infinity,
                     ),
                   ),
                 ),
+
                 Positioned(
                   top: 50,
                   left: 20,
@@ -118,7 +139,7 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                   Center(
                     child: Text(
                       game['title'],
-                      style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(height: 24.0),
@@ -129,11 +150,11 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                     children: [
                       Icon(Icons.access_time, size: 20),
                       SizedBox(width: 8),
-                      Text("15 minutes", style: TextStyle(fontSize: 18)),
+                      Text("15 minutes", style: TextStyle(fontSize: 24)),
                       SizedBox(width: 24),
                       Icon(Icons.access_time, size: 20),
                       SizedBox(width: 8),
-                      Text("1h34", style: TextStyle(fontSize: 18)),
+                      Text("1h34", style: TextStyle(fontSize: 24)),
                     ],
                   ),
                   const SizedBox(height: 24.0),
@@ -200,37 +221,38 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
 
                   // Onglets
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: ['Règles', 'Jeu', 'Troubles', 'Objectifs']
                         .map(
-                          (section) => GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedSection = section;
-                              });
-                            },
-                            child: Column(
-                              children: [
-                                Text(
-                                  section,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: selectedSection == section
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                    color: selectedSection == section
-                                        ? Colors.deepPurple
-                                        : Colors.black,
+                          (section) => Padding(
+                            padding: const EdgeInsets.only(right: 42.0), 
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedSection = section;
+                                });
+                              },
+                              child: Column(
+                                children: [
+                                  Text(
+                                    section,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: selectedSection == section
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                      color: Colors.black,
+                                    ),
                                   ),
-                                ),
-                                if (selectedSection == section)
-                                  Container(
-                                    height: 3,
-                                    width: 60,
-                                    color: Colors.deepPurple,
-                                    margin: const EdgeInsets.only(top: 8),
-                                  ),
-                              ],
+                                  if (selectedSection == section)
+                                    Container(
+                                      height: 3,
+                                      width: 60,
+                                      color: Colors.black,
+                                      margin: const EdgeInsets.only(top: 8),
+                                    ),
+                                ],
+                              ),
                             ),
                           ),
                         )
@@ -256,7 +278,7 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
       margin: const EdgeInsets.only(bottom: 16.0),
       decoration: BoxDecoration(
-        color: AppColors.primaryColor,
+        color: AppColors.lightGrey,
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: Column(
@@ -267,7 +289,7 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: AppColors.black,
             ),
           ),
           const SizedBox(height: 8.0),
@@ -275,7 +297,7 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
             content,
             style: const TextStyle(
               fontSize: 16,
-              color: Colors.white,
+              color: AppColors.black,
               height: 1.5,
             ),
           ),
