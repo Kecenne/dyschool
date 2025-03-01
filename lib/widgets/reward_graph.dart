@@ -48,28 +48,34 @@ class _RewardGraphState extends State<RewardGraph> {
     }
   }
 
-  void _changeMonth(int offset) {
-    setState(() {
-      if (showAll) {
-        if (offset == -1) {
-          showAll = false;
-          selectedMonth = DateTime.now();
-        }
-      } else {
-        DateTime newMonth = DateTime(selectedMonth.year, selectedMonth.month + offset);
-
-        if (firstMedalDate != null && newMonth.isBefore(firstMedalDate!)) {
-          return;
-        }
-
-        if (offset == 1 && selectedMonth.year == DateTime.now().year && selectedMonth.month == DateTime.now().month) {
-          showAll = true;
-        } else {
-          selectedMonth = newMonth;
-        }
+void _changeMonth(int offset) {
+  setState(() {
+    if (showAll) {
+      if (offset == -1) {
+        showAll = false;
+        selectedMonth = DateTime.now();
       }
-    });
-  }
+    } else {
+      DateTime newMonth = DateTime(selectedMonth.year, selectedMonth.month + offset, 1);
+
+      print("firstMedalDate: $firstMedalDate");
+      print("selectedMonth: $selectedMonth");
+      print("newMonth: $newMonth");
+
+      if (firstMedalDate != null && newMonth.isBefore(DateTime(firstMedalDate!.year, firstMedalDate!.month, 1))) {
+        return;
+      }
+
+      if (offset == 1 &&
+          selectedMonth.year == DateTime.now().year &&
+          selectedMonth.month == DateTime.now().month) {
+        showAll = true;
+      } else {
+        selectedMonth = newMonth;
+      }
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
