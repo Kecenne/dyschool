@@ -135,14 +135,13 @@ class WeeklyPlaytimeGraph extends StatelessWidget {
     );
   }
 
-  /// Génère les barres du graphe
 List<BarChartGroupData> _buildBarGroups(Map<String, int> weeklyData) {
   List<String> days = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
   return List.generate(days.length, (index) {
     int playtime = weeklyData[days[index]] ?? 0;
 
-    // Alterne les couleurs : une sur deux
-    Color barColor = index.isEven ? const Color(0xFF3A7D85) : const Color(0xFFEF8149);
+    // ✅ Si le temps de jeu est < 10 minutes → orange, sinon vert
+    Color barColor = playtime < 10 ? const Color(0xFFEF8149) : const Color(0xFF3A7D85);
 
     return BarChartGroupData(
       x: index,
