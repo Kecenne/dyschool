@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
-import '../theme/app_color.dart';
 import "../widgets/recent_game_card.dart";
 import "../widgets/small_game_card.dart";
 import "../data/games_data.dart";
 import "../widgets/page_header.dart";
 import "../widgets/recommended_game_card.dart";
 import "../widgets/reward_graph.dart";
+import "../widgets/daily_task_section.dart";
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,23 +22,7 @@ class HomePage extends StatelessWidget {
             const PageHeader(title: "Accueil"),
             const SizedBox(height: 16),
 
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              color: Colors.grey[300],
-              child: Container(
-                height: 400,
-                width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                child: const Center(
-                  child: Text(
-                    "Récompenses quotidiennes",
-                    style: TextStyle(fontSize: 18, color: AppColors.primaryColor,),
-                  ),
-                ),
-              ),
-            ),
+            const DailyTasksSection(),
             const SizedBox(height: 16),
 
             // Jeu récent
