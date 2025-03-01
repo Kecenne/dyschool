@@ -25,7 +25,7 @@ class WeeklyPlaytimeGraph extends StatelessWidget {
         const SizedBox(height: 16),
 
         Container(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(32),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -136,26 +136,30 @@ class WeeklyPlaytimeGraph extends StatelessWidget {
   }
 
   /// Génère les barres du graphe
-  List<BarChartGroupData> _buildBarGroups(Map<String, int> weeklyData) {
-    List<String> days = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
-    return List.generate(days.length, (index) {
-      int playtime = weeklyData[days[index]] ?? 0;
-      return BarChartGroupData(
-        x: index,
-        barRods: [
-          BarChartRodData(
-            toY: playtime > maxPlaytime ? maxPlaytime.toDouble() : playtime.toDouble(),
-            color: const Color(0xFF3A7D85),
-            width: 50,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(100),
-              topRight: Radius.circular(100),
-            ),
+List<BarChartGroupData> _buildBarGroups(Map<String, int> weeklyData) {
+  List<String> days = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+  return List.generate(days.length, (index) {
+    int playtime = weeklyData[days[index]] ?? 0;
+
+    // Alterne les couleurs : une sur deux
+    Color barColor = index.isEven ? const Color(0xFF3A7D85) : const Color(0xFFEF8149);
+
+    return BarChartGroupData(
+      x: index,
+      barRods: [
+        BarChartRodData(
+          toY: playtime > maxPlaytime ? maxPlaytime.toDouble() : playtime.toDouble(),
+          color: barColor,
+          width: 50,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(100),
+            topRight: Radius.circular(100),
           ),
-        ],
-      );
-    });
-  }
+        ),
+      ],
+    );
+  });
+}
 
   /// Récupère le label du jour en fonction de l’index
   String _getDayLabel(int index) {

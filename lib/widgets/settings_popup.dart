@@ -17,22 +17,19 @@ class SettingsPopup extends StatelessWidget {
       backgroundColor: Colors.transparent,
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
-          TextStyle dynamicTextStyle = state.selectedFontChoice == 1
-              ? const TextStyle(fontFamily: 'Poppins', color: AppColors.primaryColor)
-              : const TextStyle(fontFamily: 'OpenDyslexic', color: AppColors.primaryColor);
 
           return Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.9,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+                color: AppColors.backgroundColor,
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+                    color: Colors.black.withOpacity(0.15),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
@@ -40,15 +37,16 @@ class SettingsPopup extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Titre + bouton de fermeture
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        "POP - UP ACCESSIBILITÉ",
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.primaryColor),
+                        "Accessibilité",
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.primaryColor),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.close),
+                        icon: const Icon(Icons.close, color: AppColors.black, size: 28),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -56,151 +54,50 @@ class SettingsPopup extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 16),
+
+                  // GridView des options
                   GridView.count(
                     crossAxisCount: isTablet ? 2 : 1,
-                    crossAxisSpacing: isTablet ? 20 : 0,
-                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     childAspectRatio: isTablet ? 2.0 : 2.5,
                     children: [
                       _buildOptionCard(
                         icon: Icons.text_fields,
-                        title: "Paramètre 1",
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.add, size: 32),
-                              onPressed: () {
-                              },
-                            ),
-                            const SizedBox(width: 16),
-                            const Text(
-                              "Unité",
-                              style: TextStyle(fontSize: 16, color: AppColors.primaryColor),
-                            ),
-                            const SizedBox(width: 16),
-                            IconButton(
-                              icon: const Icon(Icons.remove, size: 32),
-                              onPressed: () {
-                                // Logique pour diminuer l'unité
-                              },
-                            ),
-                          ],
-                        ),
+                        title: "Taille de la police",
+                        color: AppColors.orangeColor,
+                        child: _buildStepper("18"), // ✅ Taille de police affichée à 18
                       ),
                       _buildOptionCard(
                         icon: Icons.palette,
-                        title: "Paramètre 2",
+                        title: "Thème de l'application",
+                        color: AppColors.vifblueColor,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildCheckboxRow(
-                              context: context,
-                              title: "Choix 1",
-                              value: state.selectedParam2Choice == 1,
-                              onChanged: (value) {
-                                context.read<SettingsBloc>().add(ToggleCheckbox(2, 1, value!));
-                              },
-                            ),
-                            _buildCheckboxRow(
-                              context: context,
-                              title: "Choix 2",
-                              value: state.selectedParam2Choice == 2,
-                              onChanged: (value) {
-                                context.read<SettingsBloc>().add(ToggleCheckbox(2, 2, value!));
-                              },
-                            ),
-                            _buildCheckboxRow(
-                              context: context,
-                              title: "Choix 3",
-                              value: state.selectedParam2Choice == 3,
-                              onChanged: (value) {
-                                context.read<SettingsBloc>().add(ToggleCheckbox(2, 3, value!));
-                              },
-                            ),
+                            _buildRadioButton(context, "Clair", state.selectedParam2Choice == 1, 1),
+                            _buildRadioButton(context, "Sombre", state.selectedParam2Choice == 2, 2),
+                            _buildRadioButton(context, "Automatique", state.selectedParam2Choice == 3, 3),
                           ],
                         ),
                       ),
                       _buildOptionCard(
-                        icon: Icons.format_size,
+                        icon: Icons.font_download,
                         title: "Type de police",
+                        color: AppColors.secondaryColor,
                         child: Column(
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                context.read<SettingsBloc>().add(ChangeFontEvent(1)); 
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Checkbox(
-                                    value: state.selectedFontChoice == 1,
-                                    onChanged: (value) {
-                                      context.read<SettingsBloc>().add(ChangeFontEvent(1)); 
-                                    },
-                                  ),
-                                  Text(
-                                    "Poppins",
-                                    style: dynamicTextStyle,
-                                  ),
-                                  const SizedBox(width: 16),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            GestureDetector(
-                              onTap: () {
-                                context.read<SettingsBloc>().add(ChangeFontEvent(2)); // OpenDyslexic
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Checkbox(
-                                    value: state.selectedFontChoice == 2, // Utiliser uniquement selectedFontChoice pour la coche
-                                    onChanged: (value) {
-                                      context.read<SettingsBloc>().add(ChangeFontEvent(2)); // OpenDyslexic
-                                    },
-                                  ),
-                                  Text(
-                                    "OpenDyslexic",
-                                    style: dynamicTextStyle,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            _buildRadioButton(context, "Poppins", state.selectedFontChoice == 1, 1, isFont: true),
+                            _buildRadioButton(context, "OpenDyslexic", state.selectedFontChoice == 2, 2, isFont: true),
                           ],
                         ),
                       ),
-
-
                       _buildOptionCard(
                         icon: Icons.line_weight,
-                        title: "Paramètre 4",
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.add, size: 32),
-                              onPressed: () {
-                                // Logique pour augmenter l'unité
-                              },
-                            ),
-                            const SizedBox(width: 16),
-                            const Text(
-                              "Unité",
-                              style: TextStyle(fontSize: 16, color: AppColors.primaryColor),
-                            ),
-                            const SizedBox(width: 16),
-                            IconButton(
-                              icon: const Icon(Icons.remove, size: 32),
-                              onPressed: () {
-                                // Logique pour diminuer l'unité
-                              },
-                            ),
-                          ],
-                        ),
+                        title: "Interlignage",
+                        color: AppColors.lightPink,
+                        child: _buildStepper("1.2"), // ✅ Interlignage affiché à 1.2
                       ),
                     ],
                   ),
@@ -213,62 +110,100 @@ class SettingsPopup extends StatelessWidget {
     );
   }
 
-  Widget _buildCheckboxRow({required BuildContext context, required String title, required bool value, required Function(bool?) onChanged}) {
-    return InkWell(
+    /// ✅ Widget pour l'interlignage et la taille de police (boutons + / -)
+    Widget _buildStepper(String value) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.remove_circle, size: 32, color: AppColors.orangeColor),
+            onPressed: () {},
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              value, // ✅ Affiche la valeur factice
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textColor),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.add_circle, size: 32, color: AppColors.orangeColor),
+            onPressed: () {},
+          ),
+        ],
+      );
+    }
+
+  /// ✅ Boutons radio stylisés
+  Widget _buildRadioButton(BuildContext context, String title, bool isSelected, int value, {bool isFont = false}) {
+    return GestureDetector(
       onTap: () {
-        onChanged(!value);
+        if (isFont) {
+          context.read<SettingsBloc>().add(ChangeFontEvent(value));
+        } else {
+          context.read<SettingsBloc>().add(ToggleCheckbox(2, value, true));
+        }
       },
       child: Row(
         children: [
-          Checkbox(
+          Radio(
             value: value,
-            onChanged: onChanged,
+            groupValue: isFont ? context.read<SettingsBloc>().state.selectedFontChoice : context.read<SettingsBloc>().state.selectedParam2Choice,
+            onChanged: (val) {
+              if (isFont) {
+                context.read<SettingsBloc>().add(ChangeFontEvent(value));
+              } else {
+                context.read<SettingsBloc>().add(ToggleCheckbox(2, value, true));
+              }
+            },
           ),
-          Text(title, style: const TextStyle(color: AppColors.primaryColor)),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textColor,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildOptionCard({required IconData icon, required String title, required Widget child}) {
+  Widget _buildOptionCard({required IconData icon, required String title, required Widget child, required Color color}) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.lightGrey, width: 1),
       ),
-      child: GestureDetector(
-        onTap: () {
-        },
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, size: 24),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.2),
+              shape: BoxShape.circle,
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.primaryColor),
-                  ),
-                  const SizedBox(height: 8),
-                  child,
-                ],
-              ),
+            child: Icon(icon, size: 28, color: color),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textColor),
+                ),
+                const SizedBox(height: 12),
+                child,
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
-
 }
