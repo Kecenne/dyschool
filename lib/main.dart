@@ -173,43 +173,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-
-    Timer(const Duration(seconds: 2, milliseconds: 200), () {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        Get.offNamed('/main');
-      } else {
-        Get.offNamed('/login');
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: Center(
-        child: Image.asset(
-          "assets/images/placeholder.png",
-          width: 150,
-          height: 150,
-        ),
-      ),
-    );
-  }
-}
-
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
 

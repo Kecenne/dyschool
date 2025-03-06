@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import '../pages/login_page.dart';
 import '../pages/games_page.dart';
 import '../pages/template_jeu.dart';
+import '../pages/splash_screen.dart';
 import '../main.dart';
 
 class AppRoutes {
