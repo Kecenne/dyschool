@@ -20,7 +20,7 @@ class LoginHeader extends StatelessWidget {
         Container(
           height: 350,
           width: double.infinity,
-          color: AppColors.primaryColor,
+          color: AppColors.blueColor,
           child: Stack(
             children: [
               const Center(
