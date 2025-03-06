@@ -15,7 +15,7 @@ class LoginButton extends StatelessWidget {
     Key? key,
     required this.text,
     required this.onPressed,
-    this.backgroundColor = AppColors.primaryColor,
+    this.backgroundColor = AppColors.blueColor,
     this.textColor = Colors.white,
     this.isOutlined = false,
     this.width = 600, // Ajusté la largeur par défaut à 600

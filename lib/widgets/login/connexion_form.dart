@@ -65,7 +65,7 @@ class ConnexionForm extends StatelessWidget {
                 "Inscris-toi",
                 style: TextStyle(
                   decoration: TextDecoration.underline,
-                  color: AppColors.primaryColor,
+                  color: AppColors.blueColor,
                   fontSize: 20,
                 ),
               ),

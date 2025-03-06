@@ -75,7 +75,7 @@ class SignupForm extends StatelessWidget {
                 "Connecte-toi",
                 style: TextStyle(
                   decoration: TextDecoration.underline,
-                  color: AppColors.primaryColor,
+                  color: AppColors.blueColor,
                   fontSize: 20,
                 ),
               ),
