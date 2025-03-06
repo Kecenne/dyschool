@@ -106,6 +106,7 @@ flutter:
     - assets/images/who/valerie.png
     - assets/images/who/who-is-returned-card.png
     - assets/images/memory/memory-returned-card.png
+    - assets/videos/dyschool-splash.mp4
 
   fonts:
     - family: OpenDyslexic
