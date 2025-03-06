@@ -6,7 +6,17 @@ import '../services/settings_service.dart';
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final SettingsService _settingsService;
 
-  SettingsBloc(this._settingsService) : super(SettingsState()) {
+  SettingsBloc(this._settingsService) : super(SettingsState(
+    selectedFontChoice: 1,
+    selectedParam2Choice: 1,
+    selectedParam3Choice: 1,
+    fontSize: 16.0,
+    lineHeight: 1.5,
+    isDarkMode: false,
+  )) {
+    // Charger les préférences initiales immédiatement
+    _loadInitialPreferences();
+
     on<ToggleCheckbox>((event, emit) {
       print("ToggleCheckbox reçu : paramIndex = ${event.paramIndex}, choiceIndex = ${event.choiceIndex}");
       if (event.paramIndex == 2) {
@@ -29,20 +39,62 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       await _settingsService.saveUserFontPreference(selectedFont);
     });
 
-    on<LoadFontPreferenceEvent>((event, emit) async {
-      print("LoadFontPreferenceEvent reçu");
-      String fontPreference = await _settingsService.getUserFontPreference();
-      print("Police chargée depuis Firestore : $fontPreference");
-      emit(state.copyWith(selectedFontChoice: fontPreference == 'OpenDyslexic' ? 2 : 1));
+    on<ChangeFontSizeEvent>((event, emit) async {
+      print("ChangeFontSizeEvent reçu : newSize = ${event.newSize}");
+      emit(state.copyWith(fontSize: event.newSize));
+      await _settingsService.saveUserFontSize(event.newSize);
     });
 
-    on<ResetSettingsEvent>((event, emit) {
+    on<ChangeLineHeightEvent>((event, emit) async {
+      print("ChangeLineHeightEvent reçu : newHeight = ${event.newHeight}");
+      emit(state.copyWith(lineHeight: event.newHeight));
+      await _settingsService.saveUserLineHeight(event.newHeight);
+    });
+
+    on<ToggleDarkModeEvent>((event, emit) async {
+      print("ToggleDarkModeEvent reçu");
+      final newDarkMode = !state.isDarkMode;
+      emit(state.copyWith(isDarkMode: newDarkMode));
+      await _settingsService.saveUserDarkMode(newDarkMode);
+    });
+
+    on<LoadFontPreferenceEvent>((event, emit) async {
+      await _loadInitialPreferences();
+    });
+
+    on<ResetSettingsEvent>((event, emit) async {
       print("ResetSettingsEvent reçu");
+      // Réinitialiser les valeurs dans Firestore
+      await _settingsService.saveUserFontPreference('Roboto');
+      await _settingsService.saveUserFontSize(16.0);
+      await _settingsService.saveUserLineHeight(1.5);
+      await _settingsService.saveUserDarkMode(false);
+      
+      // Réinitialiser l'état
       emit(SettingsState(
         selectedFontChoice: 1, 
+        selectedParam2Choice: 1,
         selectedParam3Choice: 1,
+        fontSize: 16.0,
+        lineHeight: 1.5,
+        isDarkMode: false,
       ));
       print("Bloc réinitialisé à l'état par défaut");
     });
+  }
+
+  Future<void> _loadInitialPreferences() async {
+    print("Chargement des préférences initiales");
+    String fontPreference = await _settingsService.getUserFontPreference();
+    double fontSize = await _settingsService.getUserFontSize();
+    double lineHeight = await _settingsService.getUserLineHeight();
+    bool isDarkMode = await _settingsService.getUserDarkMode();
+    print("Police chargée depuis Firestore : $fontPreference");
+    emit(state.copyWith(
+      selectedFontChoice: fontPreference == 'OpenDyslexic' ? 2 : 1,
+      fontSize: fontSize,
+      lineHeight: lineHeight,
+      isDarkMode: isDarkMode,
+    ));
   }
 }

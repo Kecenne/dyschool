@@ -3,9 +3,8 @@ abstract class SettingsEvent {}
 class ToggleCheckbox extends SettingsEvent {
   final int paramIndex;
   final int choiceIndex;
-  final bool newValue;
 
-  ToggleCheckbox(this.paramIndex, this.choiceIndex, this.newValue);
+  ToggleCheckbox({required this.paramIndex, required this.choiceIndex});
 }
 
 class ChangeFontEvent extends SettingsEvent {
@@ -13,6 +12,20 @@ class ChangeFontEvent extends SettingsEvent {
 
   ChangeFontEvent(this.selectedFontChoice);
 }
+
+class ChangeFontSizeEvent extends SettingsEvent {
+  final double newSize;
+
+  ChangeFontSizeEvent(this.newSize);
+}
+
+class ChangeLineHeightEvent extends SettingsEvent {
+  final double newHeight;
+
+  ChangeLineHeightEvent(this.newHeight);
+}
+
+class ToggleDarkModeEvent extends SettingsEvent {}
 
 class LoadFontPreferenceEvent extends SettingsEvent {}
 

@@ -4,6 +4,7 @@ import '../controllers/favorite_controller.dart';
 import 'favorite_animation.dart';
 import 'favorite_remove_popup.dart';
 import 'tag_list.dart';
+import '../theme/app_color.dart';
 
 class GameCard extends StatelessWidget {
   final String title;
@@ -85,9 +86,9 @@ class GameCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             title,
-                            style: const TextStyle(
-                              fontSize: 24,
+                            style: Theme.of(context).textTheme.displaySmall?.copyWith(
                               fontWeight: FontWeight.bold,
+                              color: AppColors.textColor,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -136,9 +137,8 @@ class GameCard extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 24.0),
                       child: Text(
                         description,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.black54,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textColor,
                         ),
                         maxLines: 4,
                         overflow: TextOverflow.ellipsis,

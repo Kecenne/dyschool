@@ -31,13 +31,21 @@ void main() async {
 
   Get.put(FavoriteController());
   final settingsService = SettingsService();
+  final gameTimeTracker = GameTimeTracker();
+  
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => MedalManager()),
-        ChangeNotifierProvider(create: (context) => PlaytimeManager()),
-        ChangeNotifierProvider(create: (context) => GameTimeTracker()),
-        BlocProvider(create: (context) => SettingsBloc(settingsService)..add(LoadFontPreferenceEvent())),
+        ChangeNotifierProvider<GameTimeTracker>.value(
+          value: gameTimeTracker,
+        ),
+        ChangeNotifierProvider<PlaytimeManager>(
+          create: (context) => PlaytimeManager(gameTimeTracker),
+        ),
+        BlocProvider(
+          create: (context) => SettingsBloc(settingsService),
+        ),
       ],
       child: MyApp(settingsService: settingsService),
     ),
@@ -50,52 +58,117 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settingsService = SettingsService();
+    return BlocBuilder<SettingsBloc, SettingsState>(
+      buildWhen: (previous, current) {
+        return previous.fontSize != current.fontSize ||
+               previous.lineHeight != current.lineHeight ||
+               previous.selectedFontChoice != current.selectedFontChoice ||
+               previous.isDarkMode != current.isDarkMode;
+      },
+      builder: (context, state) {
+        final isDark = state.isDarkMode;
+        final backgroundColor = isDark ? const Color(0xFF121212) : AppColors.backgroundColor;
+        final textColor = isDark ? Colors.white : AppColors.textColor;
+        final surfaceColor = isDark ? const Color(0xFF1E1E1E) : Colors.white;
 
-    return BlocProvider(
-      create: (context) => SettingsBloc(settingsService)..add(LoadFontPreferenceEvent()),
-      child: BlocBuilder<SettingsBloc, SettingsState>(
-        builder: (context, state) {
-          return GetMaterialApp(
-            title: "Dyschool",
-            theme: ThemeData(
-              primaryColor: AppColors.primaryColor,
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: AppColors.primaryColor,
-                primary: AppColors.primaryColor,
-                secondary: AppColors.secondaryColor,
-              ),
-              scaffoldBackgroundColor: AppColors.backgroundColor,
-              textTheme: TextTheme(
-                bodyLarge: TextStyle(
-                  color: AppColors.textColor,
-                  fontFamily: state.selectedFontChoice == 2
-                      ? 'OpenDyslexic'
-                      : 'Roboto',
-                ),
-                bodyMedium: TextStyle(
-                  color: AppColors.textColor,
-                  fontFamily: state.selectedFontChoice == 2
-                      ? 'OpenDyslexic'
-                      : 'Roboto',
-                ),
-                titleLarge: TextStyle(
-                  color: AppColors.textColor,
-                  fontFamily: state.selectedFontChoice == 2
-                      ? 'OpenDyslexic'
-                      : 'Roboto',
-                ),
-              ),
-              useMaterial3: true,
-              fontFamily: state.selectedFontChoice == 2
-                  ? 'OpenDyslexic'
-                  : 'Roboto',
+        return GetMaterialApp(
+          title: "Dyschool",
+          theme: ThemeData(
+            primaryColor: AppColors.primaryColor,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: AppColors.primaryColor,
+              primary: AppColors.primaryColor,
+              secondary: AppColors.secondaryColor,
+              background: backgroundColor,
+              surface: surfaceColor,
+              onBackground: textColor,
             ),
-            getPages: AppRoutes.routes,
-            initialRoute: '/',
-          );
-        },
-      ),
+            scaffoldBackgroundColor: backgroundColor,
+            textTheme: TextTheme(
+              bodyLarge: TextStyle(
+                color: textColor,
+                fontFamily: state.selectedFontChoice == 2
+                    ? 'OpenDyslexic'
+                    : 'Roboto',
+                fontSize: state.fontSize,
+                height: state.lineHeight,
+              ),
+              bodyMedium: TextStyle(
+                color: textColor,
+                fontFamily: state.selectedFontChoice == 2
+                    ? 'OpenDyslexic'
+                    : 'Roboto',
+                fontSize: state.fontSize,
+                height: state.lineHeight,
+              ),
+              titleLarge: TextStyle(
+                color: textColor,
+                fontFamily: state.selectedFontChoice == 2
+                    ? 'OpenDyslexic'
+                    : 'Roboto',
+                fontSize: state.fontSize * 1.5,
+                height: state.lineHeight,
+              ),
+              displayLarge: TextStyle(
+                color: textColor,
+                fontFamily: state.selectedFontChoice == 2
+                    ? 'OpenDyslexic'
+                    : 'Roboto',
+                fontSize: state.fontSize * 2.0,
+                height: state.lineHeight,
+              ),
+              displayMedium: TextStyle(
+                color: textColor,
+                fontFamily: state.selectedFontChoice == 2
+                    ? 'OpenDyslexic'
+                    : 'Roboto',
+                fontSize: state.fontSize * 1.75,
+                height: state.lineHeight,
+              ),
+              displaySmall: TextStyle(
+                color: textColor,
+                fontFamily: state.selectedFontChoice == 2
+                    ? 'OpenDyslexic'
+                    : 'Roboto',
+                fontSize: state.fontSize * 1.5,
+                height: state.lineHeight,
+              ),
+              labelLarge: TextStyle(
+                color: textColor,
+                fontFamily: state.selectedFontChoice == 2
+                    ? 'OpenDyslexic'
+                    : 'Roboto',
+                fontSize: state.fontSize * 0.875,
+                height: state.lineHeight,
+              ),
+            ),
+            useMaterial3: true,
+            fontFamily: state.selectedFontChoice == 2
+                ? 'OpenDyslexic'
+                : 'Roboto',
+            appBarTheme: AppBarTheme(
+              backgroundColor: surfaceColor,
+              foregroundColor: textColor,
+            ),
+            cardTheme: CardTheme(
+              color: surfaceColor,
+            ),
+            dialogTheme: DialogTheme(
+              backgroundColor: surfaceColor,
+              titleTextStyle: TextStyle(
+                color: textColor,
+                fontFamily: state.selectedFontChoice == 2
+                    ? 'OpenDyslexic'
+                    : 'Roboto',
+                fontSize: state.fontSize * 1.25,
+                height: state.lineHeight,
+              ),
+            ),
+          ),
+          getPages: AppRoutes.routes,
+          initialRoute: '/',
+        );
+      },
     );
   }
 }

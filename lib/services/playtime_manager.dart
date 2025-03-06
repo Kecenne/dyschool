@@ -1,13 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'game_time_tracker.dart';
 
 class PlaytimeManager with ChangeNotifier {
   final Map<String, int> _weeklyPlaytime = {
     "Lun": 0, "Mar": 0, "Mer": 0, "Jeu": 0, "Ven": 0, "Sam": 0, "Dim": 0,
   };
 
-  PlaytimeManager() {
+  final GameTimeTracker _timeTracker;
+
+  PlaytimeManager(this._timeTracker) {
     loadWeeklyPlaytime();
     checkForNewWeek();
   }
@@ -40,7 +44,7 @@ class PlaytimeManager with ChangeNotifier {
     await FirebaseFirestore.instance.collection('users').doc(userId).collection('playtime').doc('weekly').set(_weeklyPlaytime);
   }
 
-  /// Ajoute du temps de jeu pour aujourd’hui et enregistre dans Firestore
+  /// Ajoute du temps de jeu pour aujourd'hui et enregistre dans Firestore
   void addPlaytime(int minutes, List<String> gameTypes) async {
     String today = _getCurrentDay();
     String? userId = FirebaseAuth.instance.currentUser?.uid;
@@ -114,7 +118,7 @@ class PlaytimeManager with ChangeNotifier {
 
   Map<String, int> getWeeklyPlaytime() => _weeklyPlaytime;
 
-  /// Retourne le temps de jeu d’aujourd’hui
+  /// Retourne le temps de jeu d'aujourd'hui
   int getTodayPlaytime() {
     return _weeklyPlaytime[_getCurrentDay()] ?? 0;
   }
@@ -124,8 +128,6 @@ class PlaytimeManager with ChangeNotifier {
     return _weeklyPlaytime.values.fold(0, (sum, minutes) => sum + minutes);
   }
 
-  
-
   /// Retourne le jour actuel sous le format "Lun", "Mar", etc.
   String _getCurrentDay() {
     Map<int, String> dayMap = {
@@ -134,5 +136,20 @@ class PlaytimeManager with ChangeNotifier {
     };
 
     return dayMap[DateTime.now().weekday] ?? "Lun";
+  }
+
+  // Obtenir la liste des mois disponibles (format "MMMM YYYY")
+  Future<List<String>> getAvailableMonths() async {
+    return _timeTracker.getAvailableMonths();
+  }
+
+  // Obtenir le temps de jeu total pour un jeu
+  Future<Duration> getTotalPlaytime(String gameId) async {
+    return _timeTracker.getTotalPlaytime(gameId);
+  }
+
+  // Obtenir le temps de jeu pour un mois spécifique
+  Future<Duration> getMonthlyPlaytime(String gameId, String month) async {
+    return _timeTracker.getMonthlyPlaytime(gameId, month);
   }
 }
