@@ -136,6 +136,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const SizedBox(height: 150),
           // Bouton "Se connecter"
           LoginButton(
             text: "SE CONNECTER",
@@ -155,15 +156,6 @@ class _LoginPageState extends State<LoginPage> {
               });
             },
             isOutlined: true,
-          ),
-          const SizedBox(height: 30),
-          // Bouton pour accéder directement à HomePage (pour le développement)
-          LoginButton(
-            text: "ACCÉDER À LA HOME PAGE",
-            onPressed: () {
-              Get.to(() => const MainPage());
-            },
-            backgroundColor: Colors.green,
           ),
         ],
       ),
