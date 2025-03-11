@@ -81,13 +81,7 @@ class SettingsPopup extends StatelessWidget {
                         icon: Icons.dark_mode,
                         title: "Thème sombre",
                         color: AppColors.vifblueColor,
-                        child: Switch(
-                          value: state.isDarkMode,
-                          onChanged: (value) {
-                            context.read<SettingsBloc>().add(ToggleDarkModeEvent());
-                          },
-                          activeColor: AppColors.primaryColor,
-                        ),
+                        child: _buildCustomSwitch(context, state.isDarkMode),
                       ),
                       _buildOptionCard(
                         context,
@@ -138,7 +132,7 @@ class SettingsPopup extends StatelessWidget {
 
   Widget _buildOptionCard(BuildContext context, {required IconData icon, required String title, required Widget child, required Color color}) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(30),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
@@ -169,7 +163,7 @@ class SettingsPopup extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           // Contrôles centrés
           Center(child: child),
         ],
@@ -177,7 +171,6 @@ class SettingsPopup extends StatelessWidget {
     );
   }
 
-  /// ✅ Widget pour l'interlignage et la taille de police (boutons + / -)
   Widget _buildStepper(BuildContext context, double value, bool isLineHeight) {
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -228,7 +221,6 @@ class SettingsPopup extends StatelessWidget {
     );
   }
 
-  /// ✅ Boutons radio stylisés
   Widget _buildRadioButton(BuildContext context, String title, bool isSelected, int value, {bool isFont = false}) {
     return GestureDetector(
       onTap: () {
@@ -271,6 +263,37 @@ class SettingsPopup extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildCustomSwitch(BuildContext context, bool isDarkMode) {
+    return SizedBox(
+      width: 120,
+      height: 55,
+      child: GestureDetector(
+        onTap: () {
+          context.read<SettingsBloc>().add(ToggleDarkModeEvent());
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFFF5F5F5),
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: AnimatedAlign(
+            duration: const Duration(milliseconds: 200),
+            alignment: isDarkMode ? Alignment.centerRight : Alignment.centerLeft,
+            child: Container(
+              margin: const EdgeInsets.all(4),
+              width: 50,
+              height: 50,
+              decoration: const BoxDecoration(
+                color: Color(0xFFCEDEE1),
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
