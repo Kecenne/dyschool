@@ -41,49 +41,47 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBLneQsBMq9jPfXBmTFZzeP-YeBpz50UGI',
-    appId: '1:23606384393:web:0d547805e21fc64a80e5d8',
-    messagingSenderId: '23606384393',
-    projectId: 'dyschool-4ca88',
-    authDomain: 'dyschool-4ca88.firebaseapp.com',
-    storageBucket: 'dyschool-4ca88.appspot.com',
-    measurementId: 'G-XTFC5B4656',
+    apiKey: 'AIzaSyCdiR9A9bckusWos7IVJn30b8ONA-u4JPQ',
+    appId: '1:469399030001:web:840c027282b208ff1dc150',
+    messagingSenderId: '469399030001',
+    projectId: 'dyschool-1a25a',
+    authDomain: 'dyschool-1a25a.firebaseapp.com',
+    storageBucket: 'dyschool-1a25a.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDWFKfFkhhZPjz7fFyd5tfwiYAJ1I_5OQA',
-    appId: '1:23606384393:android:109ffecb3c0e90ee80e5d8',
-    messagingSenderId: '23606384393',
-    projectId: 'dyschool-4ca88',
-    storageBucket: 'dyschool-4ca88.appspot.com',
+    apiKey: 'AIzaSyCEqR9c-bJDNDL1t8erwHtyvBi6jHbXC08',
+    appId: '1:469399030001:android:73e5019f38dca3a81dc150',
+    messagingSenderId: '469399030001',
+    projectId: 'dyschool-1a25a',
+    storageBucket: 'dyschool-1a25a.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC7VrrqYFuWomESUqTBIfpMQu8FBZ9W19M',
-    appId: '1:23606384393:ios:ba2ba415a67cb91f80e5d8',
-    messagingSenderId: '23606384393',
-    projectId: 'dyschool-4ca88',
-    storageBucket: 'dyschool-4ca88.appspot.com',
+    apiKey: 'AIzaSyAK6tUaBoz_7LOubVbkjAPCDx3O4Yzh-po',
+    appId: '1:469399030001:ios:85717a80c77f14f41dc150',
+    messagingSenderId: '469399030001',
+    projectId: 'dyschool-1a25a',
+    storageBucket: 'dyschool-1a25a.firebasestorage.app',
     iosBundleId: 'com.example.dyschool',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyC7VrrqYFuWomESUqTBIfpMQu8FBZ9W19M',
-    appId: '1:23606384393:ios:ba2ba415a67cb91f80e5d8',
-    messagingSenderId: '23606384393',
-    projectId: 'dyschool-4ca88',
-    storageBucket: 'dyschool-4ca88.appspot.com',
+    apiKey: 'AIzaSyAK6tUaBoz_7LOubVbkjAPCDx3O4Yzh-po',
+    appId: '1:469399030001:ios:85717a80c77f14f41dc150',
+    messagingSenderId: '469399030001',
+    projectId: 'dyschool-1a25a',
+    storageBucket: 'dyschool-1a25a.firebasestorage.app',
     iosBundleId: 'com.example.dyschool',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBLneQsBMq9jPfXBmTFZzeP-YeBpz50UGI',
-    appId: '1:23606384393:web:b86abbdbfb9c0ded80e5d8',
-    messagingSenderId: '23606384393',
-    projectId: 'dyschool-4ca88',
-    authDomain: 'dyschool-4ca88.firebaseapp.com',
-    storageBucket: 'dyschool-4ca88.appspot.com',
-    measurementId: 'G-RCC2732LWE',
+    apiKey: 'AIzaSyCdiR9A9bckusWos7IVJn30b8ONA-u4JPQ',
+    appId: '1:469399030001:web:ee33094256edc8ee1dc150',
+    messagingSenderId: '469399030001',
+    projectId: 'dyschool-1a25a',
+    authDomain: 'dyschool-1a25a.firebaseapp.com',
+    storageBucket: 'dyschool-1a25a.firebasestorage.app',
   );
 
 }
