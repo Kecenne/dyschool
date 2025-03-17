@@ -86,6 +86,49 @@ flutter:
     - assets/images/puissance/puissance-banner.png
     - assets/images/simon/simon-banner.png
     - assets/images/who/who-is-banner.png
+    - assets/images/seven-family/who-is-returned-card.png
+    - assets/images/seven-family/nottebaert-pere.png
+    - assets/images/seven-family/nottebaert-mere.png
+    - assets/images/seven-family/nottebaert-grand-pere.png
+    - assets/images/seven-family/nottebaert-grand-mere.png
+    - assets/images/seven-family/nottebaert-fils.png
+    - assets/images/seven-family/nottebaert-fille.png
+    - assets/images/seven-family/durand-pere.png
+    - assets/images/seven-family/durand-mere.png
+    - assets/images/seven-family/durand-grand-pere.png
+    - assets/images/seven-family/durand-grand-mere.png
+    - assets/images/seven-family/durand-fils.png
+    - assets/images/seven-family/durand-fille.png
+    - assets/images/seven-family/dubois-pere.png
+    - assets/images/seven-family/dubois-mere.png
+    - assets/images/seven-family/dubois-grand-pere.png
+    - assets/images/seven-family/dubois-grand-mere.png
+    - assets/images/seven-family/dubois-fils.png
+    - assets/images/seven-family/dubois-fille.png
+    - assets/images/seven-family/charrier-pere.png
+    - assets/images/seven-family/charrier-mere.png
+    - assets/images/seven-family/charrier-grand-pere.png
+    - assets/images/seven-family/charrier-grand-mere.png
+    - assets/images/seven-family/charrier-fils.png
+    - assets/images/seven-family/charrier-fille.png
+    - assets/images/seven-family/carretero-pere.png
+    - assets/images/seven-family/carretero-mere.png
+    - assets/images/seven-family/carretero-grand-pere.png
+    - assets/images/seven-family/carretero-grand-mere.png
+    - assets/images/seven-family/carretero-fils.png
+    - assets/images/seven-family/carretero-fille.png
+    - assets/images/seven-family/briola-pere.png
+    - assets/images/seven-family/briola-mere.png
+    - assets/images/seven-family/briola-grand-pere.png
+    - assets/images/seven-family/briola-grand-mere.png
+    - assets/images/seven-family/briola-fils.png
+    - assets/images/seven-family/briola-fille.png
+    - assets/images/seven-family/bouffard-pere.png
+    - assets/images/seven-family/bouffard-mere.png
+    - assets/images/seven-family/bouffard-grand-pere.png
+    - assets/images/seven-family/bouffard-grand-mere.png
+    - assets/images/seven-family/bouffard-fils.png
+    - assets/images/seven-family/bouffard-fille.png
     - assets/images/memory/memory-carte-1.png
     - assets/images/memory/memory-carte-2.png
     - assets/images/memory/memory-carte-3.png
