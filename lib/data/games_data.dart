@@ -50,7 +50,7 @@ const List<Map<String, dynamic>> gamesList = [
       },
       {
         "title": "Tour de jeu",
-        "content": "À son tour, un joueur demande une carte spécifique à un autre joueur. Si ce dernier l’a, il doit la donner. Sinon, le premier joueur pioche une carte."
+        "content": "À son tour, un joueur demande une carte spécifique à un autre joueur. Si ce dernier l'a, il doit la donner. Sinon, le premier joueur pioche une carte."
       },
       {
         "title": "Victoire",
@@ -62,7 +62,7 @@ const List<Map<String, dynamic>> gamesList = [
     "objectives": [
       {
         "title": "Compétences sociales",
-        "content": "Favorise l’interaction et la communication entre joueurs."
+        "content": "Favorise l'interaction et la communication entre joueurs."
       },
       {
         "title": "Mémoire et attention",
@@ -84,15 +84,15 @@ const List<Map<String, dynamic>> gamesList = [
     "rules": [
       {
         "title": "Début de la partie",
-        "content": "Les joueurs jouent chacun leur tour en faisant tomber un pion dans l’une des colonnes de la grille."
+        "content": "Les joueurs jouent chacun leur tour en faisant tomber un pion dans l'une des colonnes de la grille."
       },
       {
         "title": "Alignement",
-        "content": "Le but est d’aligner 4 pions horizontalement, verticalement ou en diagonale."
+        "content": "Le but est d'aligner 4 pions horizontalement, verticalement ou en diagonale."
       },
       {
         "title": "Fin de partie",
-        "content": "La partie s’arrête lorsqu’un joueur a aligné 4 pions ou que la grille est pleine."
+        "content": "La partie s'arrête lorsqu'un joueur a aligné 4 pions ou que la grille est pleine."
       }
     ],
     "tags": ["Dyscalculie", "Dyspraxie", "Dyséxécutif"],
@@ -100,7 +100,7 @@ const List<Map<String, dynamic>> gamesList = [
     "objectives": [
       {
         "title": "Planification stratégique",
-        "content": "Permet de développer l’anticipation et la prise de décision."
+        "content": "Permet de développer l'anticipation et la prise de décision."
       },
       {
         "title": "Observation",
@@ -113,11 +113,11 @@ const List<Map<String, dynamic>> gamesList = [
     "id": "qui-est-ce",
     "title": "Qui-est-ce ?",
     "route": "/jeu/qui-est-ce",
-    "description": "Un jeu de déduction où chaque joueur doit deviner quel personnage l’autre a choisi en posant des questions éliminatoires.",
+    "description": "Un jeu de déduction où chaque joueur doit deviner quel personnage l'autre a choisi en posant des questions éliminatoires.",
     "rules": [
       {
         "title": "Mise en place",
-        "content": "Chaque joueur pioche une carte personnage que l’autre doit deviner."
+        "content": "Chaque joueur pioche une carte personnage que l'autre doit deviner."
       },
       {
         "title": "Déroulement",
@@ -133,7 +133,7 @@ const List<Map<String, dynamic>> gamesList = [
     "objectives": [
       {
         "title": "Déduction et logique",
-        "content": "Développe l’analyse et la capacité à formuler des hypothèses."
+        "content": "Développe l'analyse et la capacité à formuler des hypothèses."
       },
       {
         "title": "Expression orale",

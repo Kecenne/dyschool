@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controllers/game_history_controller.dart';
 
 class SmallGameCard extends StatelessWidget {
   final String imagePath;
@@ -17,6 +18,8 @@ class SmallGameCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
+        final gameHistoryController = Get.find<GameHistoryController>();
+        gameHistoryController.addGameToHistory(route);
         Get.toNamed(route);
       },
       child: Card(

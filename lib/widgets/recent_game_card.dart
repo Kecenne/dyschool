@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../widgets/tag_list.dart'; // Assurez-vous que le chemin est correct
+import '../controllers/game_history_controller.dart';
 
 class RecentGameCard extends StatelessWidget {
   final String title;
@@ -22,6 +23,8 @@ class RecentGameCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        final gameHistoryController = Get.find<GameHistoryController>();
+        gameHistoryController.addGameToHistory(route);
         Get.toNamed(route);
       },
       child: Card(

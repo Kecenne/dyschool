@@ -8,6 +8,8 @@ import "../widgets/page_header.dart";
 import "../widgets/recommended_game_card.dart";
 import "../widgets/reward_graph.dart";
 import "../widgets/daily_task_section.dart";
+import '../controllers/game_history_controller.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,6 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<String> userTroubles = [];
+  final gameHistoryController = Get.put(GameHistoryController());
 
   @override
   void initState() {
@@ -65,8 +68,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final firstGame = gamesList[0];
-    final recentGames = gamesList.sublist(1);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -78,32 +79,43 @@ class _HomePageState extends State<HomePage> {
             const DailyTasksSection(),
             const SizedBox(height: 16),
 
-            // Jeu récent
-            RecentGameCard(
-              title: firstGame['title'],
-              imagePath: firstGame['imagePath'],
-              description: firstGame['description'],
-              tags: List<String>.from(firstGame['tags']),
-              route: firstGame['route'],
-            ),
-            const SizedBox(height: 16),
+            Obx(() {
+              final recentGames = gameHistoryController.recentGames;
+              if (recentGames.isEmpty) return const SizedBox();
+              
+              final firstGame = recentGames[0];
+              return Column(
+                children: [
+                  RecentGameCard(
+                    title: firstGame['title'],
+                    imagePath: firstGame['imagePath'],
+                    description: firstGame['description'],
+                    tags: List<String>.from(firstGame['tags']),
+                    route: firstGame['route'],
+                  ),
+                  const SizedBox(height: 16),
 
-            // Jeux récents 2
-            SizedBox(
-              height: MediaQuery.of(context).size.width * 0.23 + 20,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: recentGames.length,
-                separatorBuilder: (context, index) => const SizedBox(width: 16),
-                itemBuilder: (context, index) {
-                  final game = recentGames[index];
-                  return SmallGameCard(
-                    imagePath: game['imagePath'],
-                    route: game['route'],
-                  );
-                },
-              ),
-            ),
+                  if (recentGames.length > 1)
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.23 + 20,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: recentGames.length - 1,
+                        separatorBuilder: (context, index) => 
+                            const SizedBox(width: 16),
+                        itemBuilder: (context, index) {
+                          final game = recentGames[index + 1];
+                          return SmallGameCard(
+                            imagePath: game['imagePath'],
+                            route: game['route'],
+                          );
+                        },
+                      ),
+                    ),
+                ],
+              );
+            }),
+
             const SizedBox(height: 64),
 
             const Align(
