@@ -78,11 +78,14 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> with TickerPr
   bool _isTransferring = false;
   String? _transferredCardImage;
 
+  GameTimeTracker? _timeTracker;
+
   @override
   void initState() {
     super.initState();
     final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
     gameTimeTracker.startTimer();
+    _timeTracker = gameTimeTracker;
     _loadPlayerName();
     initializeGame();
 
@@ -693,18 +696,16 @@ class _SevenFamilyGamePageState extends State<SevenFamilyGamePage> with TickerPr
   void didChangeDependencies() {
     super.didChangeDependencies();
     _playtimeManager ??= Provider.of<PlaytimeManager>(context, listen: false);
+    _timeTracker = Provider.of<GameTimeTracker>(context, listen: false);
   }
 
   @override
   void dispose() {
     _cardMoveController?.dispose();
     _cardFlipController?.dispose();
-    if (_playtimeManager != null) {
-      int minutesPlayed = (_elapsedSeconds / 60).ceil();
+    if (_timeTracker != null) {
       List<String> gameTypes = _getGameTypes("Jeu des 7 familles");
-      Future.delayed(Duration.zero, () {
-        _playtimeManager!.addPlaytime(minutesPlayed, gameTypes);
-      });
+      _timeTracker!.stopTimer(context, gameTypes);
     }
     super.dispose();
   }

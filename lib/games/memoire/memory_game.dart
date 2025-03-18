@@ -33,7 +33,7 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
   bool showGameEndOverlay = false;
   String endMessage = '';
 
-  PlaytimeManager? _playtimeManager;
+  GameTimeTracker? _timeTracker;
   int _elapsedSeconds = 0;
 
   @override
@@ -41,6 +41,7 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
     super.initState();
     final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
     gameTimeTracker.startTimer();
+    _timeTracker = gameTimeTracker;
     
     List<String> tempImages = List.from(images);
     images.addAll(tempImages);
@@ -119,22 +120,15 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _playtimeManager ??= Provider.of<PlaytimeManager>(context, listen: false);
+    _timeTracker ??= Provider.of<GameTimeTracker>(context, listen: false);
   }
 
   @override
   void dispose() {
     timer?.cancel(); 
-    if (_playtimeManager != null) {
-      int minutesPlayed = (_elapsedSeconds / 60).ceil();
-
+    if (_timeTracker != null) {
       List<String> gameTypes = _getGameTypes("Jeu de mémoire");
-
-      Future.delayed(Duration.zero, () {
-        if (mounted) {
-          _playtimeManager!.addPlaytime(minutesPlayed, gameTypes);
-        }
-      });
+      _timeTracker!.stopTimer(context, gameTypes);
     }
     super.dispose();
   }
@@ -147,8 +141,6 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
 
     return List<String>.from(game["types"] ?? []);
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +242,7 @@ class _MemoryGamePageState extends State<MemoryGamePage> {
               },
               gameName: 'Memory Game',
               result: 60 - timeLeft,
-              playtime: (_elapsedSeconds / 60).ceil(),
+              playtime: _timeTracker?.elapsedSeconds ?? 0,
               strengths: ["Prise de décision", "Mémoire visuelle", "Concentration"],
             ),
           ],

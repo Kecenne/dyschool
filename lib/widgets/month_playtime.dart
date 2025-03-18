@@ -25,15 +25,26 @@ class _MonthPlaytimeState extends State<MonthPlaytime> {
   Future<void> _loadData() async {
     setState(() => isLoading = true);
     
-    final playtimeManager = Provider.of<PlaytimeManager>(context, listen: false);
-    final months = await playtimeManager.getAvailableMonths();
-    
-    setState(() {
-      availableMonths = months;
-      isLoading = false;
-    });
-
-    _loadPlaytimes();
+    try {
+      final playtimeManager = Provider.of<PlaytimeManager>(context, listen: false);
+      final months = await playtimeManager.getAvailableMonths();
+      
+      if (mounted) {
+        setState(() {
+          availableMonths = months;
+        });
+        
+        // Charger les temps de jeu après avoir récupéré les mois
+        await _loadPlaytimes();
+      }
+    } catch (e) {
+      debugPrint('Error loading months: $e');
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 
   Future<void> _loadPlaytimes() async {
@@ -42,25 +53,53 @@ class _MonthPlaytimeState extends State<MonthPlaytime> {
     try {
       final playtimeManager = Provider.of<PlaytimeManager>(context, listen: false);
       Map<String, Duration> newTypePlaytimes = {};
-      Set<String> gameTypes = getAllGameTypes();
-
-      // Traiter chaque type de jeu séquentiellement pour éviter les problèmes de concurrence
-      for (String type in gameTypes) {
-        Duration totalTime = Duration.zero;
-        for (var game in gamesList) {
-          if (game['types'].contains(type)) {
-            String gameId = game['id'];
-            Duration gameTime = selectedMonth != null 
-              ? await playtimeManager.getMonthlyPlaytime(gameId, selectedMonth!)
-              : await playtimeManager.getTotalPlaytime(gameId);
-            totalTime += gameTime;
+      Map<String, Set<String>> typeToGames = {};
+      
+      // 1. Construire un index des types vers les jeux
+      for (var game in gamesList) {
+        String gameId = game['id'];
+        List<String> types = List<String>.from(game['types']);
+        
+        for (String type in types) {
+          if (!typeToGames.containsKey(type)) {
+            typeToGames[type] = {};
           }
-        }
-        if (totalTime > Duration.zero) {
-          newTypePlaytimes[type] = totalTime;
+          typeToGames[type]!.add(gameId);
         }
       }
-
+      
+      // 2. Pour chaque type, récupérer le temps de jeu pour chaque jeu associé
+      for (String type in typeToGames.keys) {
+        Duration totalForType = Duration.zero;
+        
+        for (String gameId in typeToGames[type]!) {
+          // Récupérer le temps de jeu pour ce jeu
+          Duration gameTime = selectedMonth != null 
+              ? await playtimeManager.getMonthlyPlaytime(gameId, selectedMonth!)
+              : await playtimeManager.getTotalPlaytime(gameId);
+              
+          if (gameTime > Duration.zero) {
+            // Obtenir le nombre de types pour ce jeu
+            int typeCount = 0;
+            for (var game in gamesList) {
+              if (game['id'] == gameId) {
+                typeCount = List<String>.from(game['types']).length;
+                break;
+              }
+            }
+            
+            // Diviser le temps de jeu par le nombre de types
+            if (typeCount > 0) {
+              totalForType += Duration(seconds: gameTime.inSeconds ~/ typeCount);
+            }
+          }
+        }
+        
+        if (totalForType > Duration.zero) {
+          newTypePlaytimes[type] = totalForType;
+        }
+      }
+      
       if (mounted) {
         setState(() {
           typePlaytimes = newTypePlaytimes;

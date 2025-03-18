@@ -26,7 +26,7 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
   String endMessage = '';
   bool showGameEndOverlay = false;
 
-  PlaytimeManager? _playtimeManager;
+  GameTimeTracker? _timeTracker;
   int _elapsedSeconds = 0;
 
   @override
@@ -206,19 +206,14 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _playtimeManager ??= Provider.of<PlaytimeManager>(context, listen: false);
+    _timeTracker ??= Provider.of<GameTimeTracker>(context, listen: false);
   }
 
   @override
   void dispose() {
-    if (_playtimeManager != null) {
-      int minutesPlayed = (_elapsedSeconds / 60).ceil();
-
+    if (_timeTracker != null) {
       List<String> gameTypes = _getGameTypes("Puissance 4");
-
-      Future.delayed(Duration.zero, () {
-        _playtimeManager!.addPlaytime(minutesPlayed, gameTypes);
-      });
+      _timeTracker!.stopTimer(context, gameTypes);
     }
     super.dispose();
   }
@@ -318,7 +313,7 @@ class _ConnectFourGamePageState extends State<ConnectFourGamePage> {
               },
               gameName: 'Connect Four',
               result: playerMoveCount,
-              playtime: (_elapsedSeconds / 60).ceil(),
+              playtime: _timeTracker?.elapsedSeconds ?? 0,
               strengths: ["Prise de décision", "Mémoire visuelle", "Concentration"],
             ),
           ],

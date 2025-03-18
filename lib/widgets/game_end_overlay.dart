@@ -67,7 +67,9 @@ class GameEndOverlay extends StatelessWidget {
                     const Icon(Icons.access_time, color: Colors.white, size: 24),
                     const SizedBox(width: 8),
                     Text(
-                      "$playtime min",
+                      playtime > 60 
+                          ? "${playtime ~/ 60} min ${playtime % 60 > 0 ? '${playtime % 60} sec' : ''}"
+                          : "$playtime sec",
                       style: const TextStyle(fontSize: 20, color: Colors.white),
                     ),
                   ],

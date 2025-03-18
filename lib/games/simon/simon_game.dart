@@ -35,7 +35,7 @@ class _SimonGamePageState extends State<SimonGamePage> {
   bool showGameEndOverlay = false;
   String endMessage = '';
 
-  PlaytimeManager? _playtimeManager;
+  GameTimeTracker? _timeTracker;
   int _elapsedSeconds = 0;
 
   @override
@@ -43,6 +43,7 @@ class _SimonGamePageState extends State<SimonGamePage> {
     super.initState();
     final gameTimeTracker = Provider.of<GameTimeTracker>(context, listen: false);
     gameTimeTracker.startTimer();
+    _timeTracker = gameTimeTracker;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showReadyDialog();
     });
@@ -51,19 +52,14 @@ class _SimonGamePageState extends State<SimonGamePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _playtimeManager ??= Provider.of<PlaytimeManager>(context, listen: false);
+    _timeTracker = Provider.of<GameTimeTracker>(context, listen: false);
   }
 
   @override
   void dispose() {
-    if (_playtimeManager != null) {
-      int minutesPlayed = (_elapsedSeconds / 60).ceil();
-
+    if (_timeTracker != null) {
       List<String> gameTypes = _getGameTypes("Jeu du Simon");
-
-      Future.delayed(Duration.zero, () {
-        _playtimeManager!.addPlaytime(minutesPlayed, gameTypes);
-      });
+      _timeTracker!.stopTimer(context, gameTypes);
     }
     super.dispose();
   }
@@ -289,7 +285,7 @@ class _SimonGamePageState extends State<SimonGamePage> {
               },
               gameName: 'Simon',
               result: currentLevel + 1,
-              playtime: (_elapsedSeconds / 60).ceil(),
+              playtime: _timeTracker?.elapsedSeconds ?? 0,
               strengths: ["Prise de décision", "Mémoire visuelle", "Concentration"],
             ),
           ],
