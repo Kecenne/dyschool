@@ -8,10 +8,16 @@ import '../controllers/auth_controller.dart';
 import '../bloc/settings_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/page_header.dart';
+import '../widgets/custom_accordion.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   void _logout(BuildContext context) async {
     final authController = Auth();
 
@@ -23,6 +29,39 @@ class ProfilePage extends StatelessWidget {
   String _generateRandomId() {
     var rng = Random();
     return 'User_${rng.nextInt(100000)}';
+  }
+
+  String _formatTroubles(Map<String, dynamic>? troubles) {
+    if (troubles == null) return 'Non renseigné';
+    
+    List<String> activeTroubles = [];
+    troubles.forEach((key, value) {
+      if (value == true) {
+        String capitalizedTrouble = key[0].toUpperCase() + key.substring(1);
+        activeTroubles.add(capitalizedTrouble);
+      }
+    });
+    
+    return activeTroubles.isEmpty ? 'Aucun trouble' : activeTroubles.join(', ');
+  }
+
+  String _formatAbonnement(Map<String, dynamic>? abonnement) {
+    if (abonnement == null) return 'Non renseigné';
+    return abonnement['type']?.toString() ?? 'Non renseigné';
+  }
+
+  Future<void> _updateParentalControl(bool value) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+          'controleParental': value,
+        });
+        setState(() {});
+      }
+    } catch (e) {
+      print("Erreur lors de la mise à jour du contrôle parental: $e");
+    }
   }
 
   @override
@@ -39,117 +78,182 @@ class ProfilePage extends StatelessWidget {
     }
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const PageHeader(title: "Profil"),
-            const SizedBox(height: 16),
-            FutureBuilder<DocumentSnapshot>(
-              future: FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Erreur : ${snapshot.error}'));
-                } else if (snapshot.hasData && snapshot.data != null) {
-                  var userData = snapshot.data!.data() as Map<String, dynamic>?;
-
-                  String displayName;
-                  if (userData != null && userData.containsKey('nom') && userData.containsKey('prenom')) {
-                    String nom = userData['nom'] ?? '';
-                    String prenom = userData['prenom'] ?? '';
-                    displayName = '$prenom $nom';
-                  } else {
-                    displayName = _generateRandomId();
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const PageHeader(title: "Mon compte"),
+              const SizedBox(height: 32),
+              FutureBuilder<List<DocumentSnapshot>>(
+                future: Future.wait([
+                  FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
+                  FirebaseFirestore.instance.collection('settings').doc(user.uid).get(),
+                ]),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
                   }
 
-                  return SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 40),
-                        CircleAvatar(
-                          radius: 60,
-                          backgroundColor: Colors.grey.shade200,
-                          child: Icon(Icons.person, size: 60, color: Colors.grey.shade800),
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          displayName,
-                          style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          user.email ?? '',
-                          style: const TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                        const SizedBox(height: 40),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            children: [
-                              buildMenuOption(context, "Paiement"),
-                              const SizedBox(height: 20),
-                              buildMenuOption(context, "Informations personnelles"),
-                              const SizedBox(height: 20),
-                              buildMenuOption(context, "Personnalisation de l'interface"),
-                            ],
+                  var userData = snapshot.data?[0].data() as Map<String, dynamic>?;
+                  var settingsData = snapshot.data?[1].data() as Map<String, dynamic>?;
+                  String prenom = userData?['prenom'] ?? '';
+                  String nom = userData?['nom'] ?? '';
+                  String displayName = '$prenom $nom'.trim();
+                  if (displayName.isEmpty) {
+                    displayName = _generateRandomId();
+                  }
+                  String? photoUrl = userData?['photoURL'];
+                  bool parentalControl = userData?['controleParental'] ?? false;
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
+                            child: photoUrl == null ? const Icon(Icons.person) : null,
                           ),
+                          const SizedBox(width: 24),
+                          Text(
+                            displayName,
+                            style: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      const Divider(),
+                      const SizedBox(height: 24),
+                      const Text(
+                        "Paramètres",
+                        style: TextStyle(
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(height: 40),
-                        ElevatedButton(
+                      ),
+                      const SizedBox(height: 16),
+                      CustomAccordion(
+                        title: "Informations personnelles",
+                        content: Column(
+                          children: [
+                            _buildInfoRow("Nom", userData?['nom']?.toString() ?? 'Non renseigné'),
+                            _buildInfoRow("Prénom", userData?['prenom']?.toString() ?? 'Non renseigné'),
+                            _buildInfoRow("Âge", userData?['age']?.toString() ?? 'Non renseigné'),
+                            _buildInfoRow(
+                              "Troubles", 
+                              _formatTroubles(userData?['troubles'] as Map<String, dynamic>?),
+                            ),
+                            _buildInfoRow(
+                              "Abonnement", 
+                              _formatAbonnement(userData?['abonnement'] as Map<String, dynamic>?),
+                            ),
+                          ],
+                        ),
+                      ),
+                      CustomAccordion(
+                        title: "Accessibilité",
+                        content: Column(
+                          children: [
+                            _buildInfoRow(
+                              "Taille de la police", 
+                              "${settingsData?['fontSize']?.toString() ?? '16'}"
+                            ),
+                            _buildInfoRow(
+                              "Thème sombre", 
+                              (settingsData?['isDarkMode'] ?? false) ? "Activé" : "Désactivé"
+                            ),
+                            _buildInfoRow(
+                              "Type de police", 
+                              settingsData?['selectedFontChoice'] == 2 ? "OpenDyslexic" : "Poppins"
+                            ),
+                            _buildInfoRow(
+                              "Interlignage", 
+                              "${settingsData?['lineHeight']?.toString() ?? '1.0'}"
+                            ),
+                          ],
+                        ),
+                      ),
+                      CustomAccordion(
+                        title: "Login et Sécurité",
+                        content: Column(
+                          children: [
+                            _buildInfoRow("Email", user.email ?? 'Non renseigné'),
+                            _buildInfoRow("Mot de passe", "••••••••"),
+                          ],
+                        ),
+                      ),
+                      CustomAccordion(
+                        title: "Contrôle parental",
+                        isToggle: true,
+                        value: parentalControl,
+                        onChanged: (value) {
+                          _updateParentalControl(value);
+                        },
+                      ),
+                      const SizedBox(height: 40),
+                      Center(
+                        child: ElevatedButton(
                           onPressed: () => _logout(context),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryColor,
-                            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(8),
+                              side: const BorderSide(color: Colors.black),
                             ),
-                            elevation: 5,
+                            elevation: 0,
                           ),
                           child: const Text(
-                            "Se déconnecter",
-                            style: TextStyle(fontSize: 18, color: Colors.white),
+                            "SE DÉCONNECTER",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 40),
-                      ],
-                    ),
+                      ),
+                    ],
                   );
-                } else {
-                  return Center(child: Text('Aucune donnée disponible'));
-                }
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget buildMenuOption(BuildContext context, String title) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade300,
-            blurRadius: 15,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            label,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          const Icon(Icons.arrow_forward_ios, color: Colors.grey),
+          const SizedBox(width: 16),
+          Flexible(
+            child: Text(
+              value,
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ),
         ],
       ),
     );
