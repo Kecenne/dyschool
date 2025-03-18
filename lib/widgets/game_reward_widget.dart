@@ -67,7 +67,9 @@ class GameRewardWidget extends StatelessWidget {
       children: [
         const SizedBox(height: 10),
         if (reward != 'No Reward')
-          Image.asset('assets/images/rewards/$reward.png', width: 100, height: 100),
+          Image.asset('assets/images/rewards/$reward.png', width: 100, height: 100)
+        else
+          const Icon(Icons.sentiment_dissatisfied, size: 100, color: Colors.white),
       ],
     );
   }
