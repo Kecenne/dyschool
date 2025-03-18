@@ -150,6 +150,7 @@ class GameTimeTracker with ChangeNotifier {
       batch.set(totalGameRef, {
         'duration': FieldValue.increment(seconds),
         'lastUpdate': FieldValue.serverTimestamp(),
+        'playCount': FieldValue.increment(1),
       }, SetOptions(merge: true));
 
       // Mise à jour du temps pour le jeu spécifique (hebdomadaire)
@@ -322,5 +323,36 @@ class GameTimeTracker with ChangeNotifier {
     } else {
       return "$seconds sec";
     }
+  }
+
+  // Ajouter cette nouvelle méthode
+  Future<Map<String, dynamic>> getGameStats(String gameId) async {
+    String? userId = _auth.currentUser?.uid;
+    if (userId == null) return {'duration': Duration.zero, 'playCount': 0};
+
+    try {
+      DocumentSnapshot doc = await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('playtime')
+          .doc('total')
+          .collection('games')
+          .doc(gameId)
+          .get();
+
+      if (doc.exists && doc.data() != null) {
+        final data = doc.data() as Map<String, dynamic>;
+        final seconds = (data['duration'] as num?)?.toInt() ?? 0;
+        final count = (data['playCount'] as num?)?.toInt() ?? 0;
+        return {
+          'duration': Duration(seconds: seconds),
+          'playCount': count
+        };
+      }
+    } catch (e) {
+      debugPrint('Error getting game stats: $e');
+    }
+    
+    return {'duration': Duration.zero, 'playCount': 0};
   }
 }

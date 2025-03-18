@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import '../data/games_data.dart';
 import '../theme/app_color.dart';
 import '../games/memoire/memory_game.dart';
@@ -8,6 +9,7 @@ import '../games/puissance-4/connect_four_game.dart';
 import '../games/qui-est-ce/guess_who_game.dart';
 import '../games/simon/simon_game.dart';
 import '../widgets/tag_list.dart';
+import '../services/playtime_manager.dart';
 
 
 class TemplateJeuPage extends StatefulWidget {
@@ -150,17 +152,39 @@ class _TemplateJeuPageState extends State<TemplateJeuPage> {
                   const SizedBox(height: 24.0),
 
                   // Temps de jeu
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.access_time, size: 20),
-                      SizedBox(width: 8),
-                      Text("15 minutes", style: TextStyle(fontSize: 24)),
-                      SizedBox(width: 24),
-                      Icon(Icons.access_time, size: 20),
-                      SizedBox(width: 8),
-                      Text("1h34", style: TextStyle(fontSize: 24)),
-                    ],
+                  FutureBuilder<Map<String, dynamic>>(
+                    future: context.read<PlaytimeManager>().getGameStats(game['id']),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      final stats = snapshot.data ?? {'duration': Duration.zero, 'playCount': 0};
+                      final Duration totalTime = stats['duration'] as Duration;
+                      final int playCount = stats['playCount'] as int;
+
+                      String formattedTime = '';
+                      if (totalTime.inHours > 0) {
+                        formattedTime = '${totalTime.inHours}h${(totalTime.inMinutes % 60).toString().padLeft(2, '0')}';
+                      } else if (totalTime.inMinutes > 0) {
+                        formattedTime = '${totalTime.inMinutes} minutes';
+                      } else {
+                        formattedTime = '${totalTime.inSeconds} secondes';
+                      }
+
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.access_time, size: 20),
+                          const SizedBox(width: 8),
+                          Text(formattedTime, style: const TextStyle(fontSize: 24)),
+                          const SizedBox(width: 24),
+                          const Icon(Icons.games, size: 20),
+                          const SizedBox(width: 8),
+                          Text('$playCount parties', style: const TextStyle(fontSize: 24)),
+                        ],
+                      );
+                    },
                   ),
                   const SizedBox(height: 24.0),
 

@@ -58,4 +58,9 @@ class PlaytimeManager with ChangeNotifier {
     };
     return dayMap[DateTime.now().weekday] ?? "Lun";
   }
+
+  // Ajouter cette nouvelle méthode
+  Future<Map<String, dynamic>> getGameStats(String gameId) async {
+    return _timeTracker.getGameStats(gameId);
+  }
 }
