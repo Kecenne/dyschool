@@ -11,10 +11,10 @@ class SettingsService {
     if (user != null) {
       DocumentSnapshot snapshot = await _firestore.collection('settings').doc(user.uid).get();
       if (snapshot.exists && snapshot.data() != null) {
-        return snapshot['fontPreference'] ?? 'Roboto';
+        return snapshot['fontPreference'] ?? 'Inter';
       }
     }
-    return 'Roboto';  // Valeur par défaut si non connecté ou préférence non définie
+    return 'Inter';  // Valeur par défaut si non connecté ou préférence non définie
   }
 
   // Sauvegarde les préférences de police dans Firestore

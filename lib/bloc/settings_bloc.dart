@@ -40,7 +40,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
           selectedFont = 'OpenDyslexic';
           break;
         case 3:
-          selectedFont = 'Roboto';
+          selectedFont = 'Inter';
           break;
         default:
           selectedFont = 'Poppins';
@@ -75,7 +75,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<ResetSettingsEvent>((event, emit) async {
       print("ResetSettingsEvent reçu");
       // Réinitialiser les valeurs dans Firestore
-      await _settingsService.saveUserFontPreference('Roboto');
+      await _settingsService.saveUserFontPreference('Inter');
       await _settingsService.saveUserFontSize(16.0);
       await _settingsService.saveUserLineHeight(1.5);
       await _settingsService.saveUserDarkMode(false);

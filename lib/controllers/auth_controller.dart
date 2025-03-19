@@ -33,7 +33,7 @@ class Auth {
       });
 
       await _firestore.collection('settings').doc(userCredential.user?.uid).set({
-        'fontPreference': 'Roboto',
+        'fontPreference': 'Inter',
       });
 
       settingsBloc.add(LoadFontPreferenceEvent());

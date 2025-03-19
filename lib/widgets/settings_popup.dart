@@ -94,7 +94,7 @@ class SettingsPopup extends StatelessWidget {
                             const SizedBox(height: 4),
                             _buildRadioButton(context, "OpenDyslexic", state.selectedFontChoice == 2, 2, isFont: true),
                             const SizedBox(height: 4),
-                            _buildRadioButton(context, "Roboto", state.selectedFontChoice == 3, 3, isFont: true),
+                            _buildRadioButton(context, "Inter", state.selectedFontChoice == 3, 3, isFont: true),
                           ],
                         ),
                       ),
