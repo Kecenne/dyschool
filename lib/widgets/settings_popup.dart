@@ -58,16 +58,16 @@ class SettingsPopup extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 24),
 
                   // GridView des options
                   GridView.count(
                     crossAxisCount: isTablet ? 2 : 1,
                     crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
+                    mainAxisSpacing: 20,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    childAspectRatio: isTablet ? 2.0 : 2.2,
+                    childAspectRatio: isTablet ? 1.6 : 1.4,
                     children: [
                       _buildOptionCard(
                         context,
@@ -91,8 +91,10 @@ class SettingsPopup extends StatelessWidget {
                         child: Column(
                           children: [
                             _buildRadioButton(context, "Poppins", state.selectedFontChoice == 1, 1, isFont: true),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 4),
                             _buildRadioButton(context, "OpenDyslexic", state.selectedFontChoice == 2, 2, isFont: true),
+                            const SizedBox(height: 4),
+                            _buildRadioButton(context, "Roboto", state.selectedFontChoice == 3, 3, isFont: true),
                           ],
                         ),
                       ),
@@ -105,7 +107,7 @@ class SettingsPopup extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
                   Center(
                     child: TextButton(
                       onPressed: () {
@@ -253,7 +255,7 @@ class SettingsPopup extends StatelessWidget {
                   )
                 : null,
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           Text(
             title,
             style: TextStyle(

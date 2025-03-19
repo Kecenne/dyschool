@@ -34,7 +34,17 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         selectedParam3Choice: event.selectedFontChoice,
       ));
 
-      String selectedFont = event.selectedFontChoice == 2 ? 'OpenDyslexic' : 'Poppins';
+      String selectedFont;
+      switch (event.selectedFontChoice) {
+        case 2:
+          selectedFont = 'OpenDyslexic';
+          break;
+        case 3:
+          selectedFont = 'Roboto';
+          break;
+        default:
+          selectedFont = 'Poppins';
+      }
       print("Sauvegarde de la police dans Firestore : $selectedFont");
       await _settingsService.saveUserFontPreference(selectedFont);
     });
